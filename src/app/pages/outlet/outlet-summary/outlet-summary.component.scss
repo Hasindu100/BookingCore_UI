@@ -1,0 +1,116 @@
+.outlet-summary {
+    .card {
+        max-height: calc(100vh - 158px);
+        overflow-y: auto;
+        box-shadow: 0px 1px 10px 2px rgba(87, 87, 87, 0.15);
+        border-radius: 5px;
+        border: none;
+    }
+    .card-body {
+        width: fit-content;
+    }
+    h2 {
+        font-size: 16px;
+        font-weight: 600;
+        color: var(--main-text-color);
+        line-height: 24.2px;
+    }
+    h3 {
+        font-size: 16px;
+        font-weight: 700;
+        color: var(--inner-box-text-color);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .outlet-title {
+        font-size: 18px;
+        font-weight: 500;
+        line-height: 29.05px;
+        color: var(--label-color);
+        padding-bottom: 20px;
+    }
+    .outlet-description, .footer-details span {
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 21.78px;
+        color: var(--label-color);
+    }
+    .outlet-information, .shop-details, .outlet-image-details {
+        border-bottom: 1px solid var(--border-color);
+    }
+    .shop-details, .outlet-image-details {
+        padding: 20px 0;
+    }
+    .shop-details {
+        .row {
+            margin-bottom: 20px;
+        }
+        span {
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 21.78px;
+            color: var(--label-color);
+        }
+    }
+    .footer-details {
+        padding-top: 20px;
+    }
+    .outlet-images{
+        display: flex;
+    }
+    .img-item{
+        margin: 0.3rem;
+        width: 120px;
+        margin-right: 20px;
+    }
+    img{
+        width: 30%;
+        min-width: 120px;
+        display: block;
+    }
+    .price-detail {
+        font-size: 16px;
+        font-weight: 500;
+        color: var(--add-btn-color);
+        line-height: 24.2px;
+    }
+    .footer-btn {
+        padding-top: 50px;
+        display: flex;
+        justify-content: space-between;
+        .btn-section {
+            float: right;
+        }
+        .btn-complete {
+            width: 144px;
+            font-size: 14px;
+            color: var(--inner-btn-color);
+            background-color: var(--add-btn-color);
+        }
+        .btn-back {
+            width: 144px;
+            font-size: 14px;
+            color: var(--inner-btn-color);
+            background-color: var(--sub-ele-text-color);
+            margin-right: 20px;
+
+            i {
+                margin-right: 10px;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .category-details {
+        .col-md-6:nth-child(2) {
+            margin-top: 10px;
+        }
+    }
+    .footer-details {
+        h3 {
+            margin-top: 10px;
+        }
+    }
+}

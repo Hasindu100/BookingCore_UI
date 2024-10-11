@@ -1,0 +1,147 @@
+header {
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: 100%;
+    z-index: 100;
+    height: 60px;
+    box-shadow: 0px 5px 5px -5px rgb(0 0 0 /10%);
+    background: #343A40;
+    color: #fff;
+    transition: left 300ms;
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+}
+
+.header-content {
+    justify-content: space-between;
+    padding: 0rem 1rem;
+}
+
+.header-content label:first-child span {
+    font-size: 1.3rem;
+}
+
+.header-content label {
+    cursor: pointer;
+}
+
+.header-menu {
+    display: block;
+    width: 100%;
+    padding-top: .5rem;
+}
+
+.header-menu label,
+.header-menu .notify-icon {
+    margin-right: 2rem;
+    position: relative;
+}
+
+.header-menu label span,
+.notify-icon span:first-child {
+    font-size: 1.3rem;
+}
+
+.notify-icon span:last-child {
+    position: absolute;
+    background: red;
+    height: 16px;
+    width: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    right: -5px;
+    top: -5px;
+    color: #fff;
+    font-size: .8rem;
+    font-weight: 500;
+}
+
+.user, .settings {
+    display: flex;
+    align-items: center;
+}
+
+.user img, .client-img {
+    height: 40px;
+    width: 40px;
+    margin-right: 0.1rem;
+}
+
+.user span:last-child {
+    display: inline-block;
+    margin-left: .3rem;
+    font-size: .8rem;
+}
+
+.user-info {
+    display: -webkit-box;
+}
+
+.profile-menu .overlay {
+    margin-top: 20px;
+    background-color: #fff;
+    border: 1px solid var(--border-color);
+    border-radius: 3px;
+    ul {
+        list-style: none;
+        padding: 0;
+        width: 110px;
+        margin-bottom: 0 !important;
+        background-color: #343A40;
+
+        li {
+            padding: 8px 10px;
+            a {
+                color: #fff;
+                font-size: 14px;
+                font-weight: 500;
+                text-decoration: none;
+            }
+        }
+        li:not(:last-child) {
+            border-bottom: 1px solid var(--border-color);
+        }
+        li a:hover {
+            color: var(--add-btn-color);
+        }
+        .logout::after {
+            content: url(../../../assets/icons/logout.svg);
+            height: 20px;
+            width: 20px;
+            position: absolute;
+            margin-left: 10px;
+            filter: invert(1);
+        }
+    }
+}
+
+.settings {
+    margin-left: 15px;
+}
+
+.right-side {
+    display: flex;
+    align-items: center;
+    float: right;
+}
+
+.left-side {
+    position: relative;
+    float: left;
+    left: 133px;
+
+    .company-name {
+        top: 17px;
+        font-size: 20px;
+        font-weight: 400;
+        line-height: 35.12px;
+        font-family: "Pacifico", cursive;
+        cursor: pointer;
+    }
+}

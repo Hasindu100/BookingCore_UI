@@ -1,0 +1,26 @@
+.breadcrumb {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0;
+    height: 32px;
+}
+
+.left-section {
+    h3 {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--main-text-color);
+    }
+}
+
+.right-section {
+    span {
+        font-size: 14px;
+        font-weight: 600;
+        color: var( --sub-ele-text-color);
+    }
+    .fa-angle-right {
+        margin-left: 3px;
+        margin-right: 3px;
+    }
+}

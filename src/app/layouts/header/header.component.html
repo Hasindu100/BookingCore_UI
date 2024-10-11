@@ -1,0 +1,51 @@
+<header>
+    <div class="header-content">
+        <label for="menu-toggle">
+            <span class="las la-bars"></span>
+        </label>
+        
+        <div class="header-menu">
+            <div class="left-side">
+                <span class="company-name" [routerLink]="'/dashboard'">BookingCore</span>
+            </div>
+
+            
+            
+            <div class="right-side">
+                <div class="notify-icon">
+                    <span class="fa-solid fa-bell"></span>
+                    <span class="notify">3</span>
+                </div>
+                
+                <div class="user">
+                    <img class="bg-img" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSppkoKsaYMuIoNLDH7O8ePOacLPG1mKXtEng&s" alt="">
+                    <div class="user-info" [cdkMenuTriggerFor]="searchOverlay">
+                        <div class="user-name">
+                            <span>Evony Jeniffer</span>
+                        </div>
+                        <span class="fa-solid fa-chevron-down"></span>
+                    </div>
+                </div>
+    
+                <div class="settings">
+                    <span class="fa-solid fa-gear"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <ng-template #searchOverlay>
+        <div class="profile-menu">
+            <div class="overlay" cdkMenu>
+                <ul>
+                    <li class="profile-menu-list">
+                        <a [routerLink]="'/profile'"><div class="menu-item">Profile</div></a>
+                    </li>
+                    <li class="profile-menu-list">
+                        <a [routerLink]="'/login'"><div class="menu-item logout">Log out</div></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </ng-template>
+</header>

@@ -1,0 +1,60 @@
+section .contentBx {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+}
+section .contentBx .formBx {
+    width: 360px;
+    text-align: center;
+}
+section .contentBx .formBx .iconBx {
+    display: flex;
+    justify-content: center;
+    .letter-icon {
+        content: url(../../../../assets/icons/sms.svg);
+        height: 120px;
+    }
+    .success-icon {
+        content:  url(../../../../assets/icons/success.svg);
+        height: 120px;
+        padding-bottom: 15px;
+    }
+}
+section .contentBx .formBx h2 {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--main-text-color);
+}
+section .contentBx .formBx p {
+    font-size: 16px;
+    font-weight: 400;
+    color: var(--ele-text-color);
+}
+section .contentBx .formBx .inputBx {
+    margin-bottom: 20px;
+}
+section .contentBx .formBx input[type=number] {
+    width: 30px;
+    height: 40px;
+    margin-right: 20px;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    font-size: 16px;
+    color: var(--inner-box-text-color);
+    text-align: center;
+}
+section .contentBx .formBx .inputBx input[type=submit] {
+    background: var(--add-btn-color);
+    color: #fff;
+    outline: none;
+    border: none;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+    padding: 10px 20px;
+    outline: none;
+    border-radius: 30px;
+    width: 100%;
+}

@@ -1,0 +1,25 @@
+<section>
+    <div class="contentBx">
+        <div class="formBx">
+            <div class="iconBx">
+                <div [ngClass]="!isVerified ? 'letter-icon' : 'success-icon'"></div>
+            </div>
+            <h2>{{title}}</h2>
+            <p *ngIf="!isVerified">Enter the six digit code we sent to your email address to verify your new account</p>
+            <p *ngIf="isVerified">You are now successfully sign up.</p>
+            <form *ngIf="!isVerified" #OTPForm="ngForm" (ngSubmit)="verify(OTPForm)">
+                <div class="inputBx">
+                    <input type="number" name="">
+                    <input type="number" name="">
+                    <input type="number" name="">
+                    <input type="number" name="">
+                    <input type="number" name="">
+                    <input type="number" name="">
+                </div>
+                <div class="inputBx">
+                    <input type="submit" value="Verify & Continue" name="">
+                </div>
+            </form>
+        </div>
+    </div>
+</section>

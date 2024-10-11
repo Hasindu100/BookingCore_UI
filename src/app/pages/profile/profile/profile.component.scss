@@ -1,0 +1,88 @@
+.profile {
+    height: 100vh;
+    max-height: calc(100vh - 148px);
+    overflow-y: scroll;
+    width: 100%;
+    padding: 32px;
+    box-shadow: 0px 1px 10px 2px rgba(87, 87, 87, 0.15);
+    border-radius: 5px;
+}
+
+.profile h2.title {
+    font-size: 18px !important;
+    font-weight: 600;
+    color: var(--main-text-color);
+    line-height: 24.2px;
+}
+
+.profile-img{
+    text-align: center;
+    padding: 2rem 0rem;
+}
+
+.bg-img {
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius: 50%;
+    background-size: cover;
+}
+
+.profile-img {
+    img {
+        height: 80px;
+        width: 80px;
+        display: inline-block;
+        margin: 0 auto .5rem auto;
+        border: 3px solid #899DC1;
+    }
+    .btn-change {
+        height: 28px;
+        width: 100px;
+        font-size: 14px;
+        color: var(--inner-btn-color);
+        background-color: rgba(41, 45, 50, 1);
+        border-radius: 20px;
+        line-height: 1;
+    }
+}
+
+.btn-update {
+    height: 28px;
+    width: 100px;
+    font-size: 14px;
+    color: var(--inner-btn-color);
+    background-color: rgba(41, 45, 50, 1);
+    border-radius: 5px;
+    line-height: 1;
+}
+
+fieldset {
+    .row:not(.row:last-child) {
+        margin-bottom: 10px;
+    }
+}
+
+label {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--label-color);
+    line-height: 21.78px;
+    padding-bottom: 10px;
+}
+
+input[type=text], input[type=number], input[type=email], input[type=password] {
+    outline: none;
+    width: 100%;
+    border-radius: 5px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: var(--border-color);
+    margin-right: 30px;
+    color: var(--inner-box-text-color);
+    font-size: 14px;
+}
+
+input[type=text], input[type=number], input[type=email], select {
+    height: 32px;
+    padding: 0rem 0.5rem;
+}

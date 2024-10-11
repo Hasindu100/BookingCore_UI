@@ -1,0 +1,126 @@
+<div class="container">
+    <div class="profile">
+        <div *ngIf="step == 1" class="account-information">
+            <h2 class="title">Account Information</h2>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="profile-img">
+                        <img class="bg-img" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSppkoKsaYMuIoNLDH7O8ePOacLPG1mKXtEng&s" alt=""><br>
+                        <button class="btn btn-change">Change</button>
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    <form [formGroup]="accountInfo">
+                        <fieldset>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label>First Name</label><br>
+                                    <input 
+                                        type="text"
+                                        class="form-control"
+                                        formControlName="firstName"
+                                        [ngClass]="{'is-invalid' : FirstName?.touched && FirstName?.invalid}"
+                                        placeholder="First Name"/>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label>Last Name</label><br>
+                                    <input 
+                                        type="text"
+                                        class="form-control"
+                                        formControlName="lastName"
+                                        [ngClass]="{'is-invalid' : LastName?.touched && LastName?.invalid}"
+                                        placeholder="Last Name"/>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label>Email address</label><br>
+                                    <input 
+                                        type="email"
+                                        class="form-control"
+                                        formControlName="email"
+                                        [ngClass]="{'is-invalid' : Email?.touched && Email?.invalid}"
+                                        placeholder="Email Address"/>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label>Mobile Number</label><br>
+                                    <input 
+                                        type="number"
+                                        class="form-control"
+                                        formControlName="mobile"
+                                        [ngClass]="{'is-invalid' : Mobile?.touched && Mobile?.invalid}"
+                                        placeholder="Mobile Number"/>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label>Current Address</label><br>
+                                    <input 
+                                        type="number"
+                                        class="form-control"
+                                        formControlName="address"
+                                        [ngClass]="{'is-invalid' : Address?.touched && Address?.invalid}"
+                                        placeholder="Enter current address"/>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <button class="btn btn-update">Update</button>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="step == 2" class="change-password">
+            <h2 class="title">Change Password</h2>
+            <form [formGroup]="changePWD">
+                <fieldset>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label>Current Password*</label><br>
+                            <input 
+                                type="password"
+                                class="form-control"
+                                formControlName="currentPWD"
+                                [ngClass]="{'is-invalid' : CurrentPWD?.touched && CurrentPWD?.invalid}"
+                                placeholder="Current Password"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label>New Password*</label><br>
+                            <input 
+                                type="password"
+                                class="form-control"
+                                formControlName="newPWD"
+                                [ngClass]="{'is-invalid' : NewPWD?.touched && NewPWD?.invalid}"
+                                placeholder="New Password"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label>Confirm Password*</label><br>
+                            <input 
+                                type="password"
+                                class="form-control"
+                                formControlName="confirmPWD"
+                                [ngClass]="{'is-invalid' : ConfirmPWD?.touched && ConfirmPWD?.invalid}"
+                                placeholder="Confirm Password"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <button class="btn btn-update">Update</button>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>

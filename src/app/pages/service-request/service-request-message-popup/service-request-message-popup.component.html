@@ -1,0 +1,27 @@
+<div class="container">
+    <div id="message-popup" class="card">
+        <div class="card-header">
+            Message From Service Summery
+            <div class="close-btn">
+                <i class="fa-solid fa-xmark" (click)="close()"></i>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="content-section">
+                <p *ngIf="!isRejectClicked">Are you accepting this order? Do you want to proceed?</p>
+                <div *ngIf="isRejectClicked" class="reject-reason">
+                    <label>Please Select the Reason</label><br>
+                    <select class="reason" name="" id="">
+                        <option value="">Select the Reason</option>
+                    </select>
+                </div>
+            </div>
+            <footer>
+                <div class="btn-section">
+                    <button *ngIf="!isRejectClicked" class="btn btn-accept">Accept</button>
+                    <button class="btn btn-reject" (click)="reject()">Reject</button>
+                </div>    
+            </footer>
+        </div>
+    </div>
+</div>

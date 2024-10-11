@@ -1,0 +1,111 @@
+.container {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+.card {
+    width: 480px;
+    border-radius: 20px;
+    border: none;
+}
+
+.card-body {
+    p {
+        font-size: 14px;
+        font-weight: 600;
+        line-height: 24.2px;
+    }
+}
+
+.card-header {
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--inner-btn-color);
+    line-height: 24.2px;
+    background-color: var(--main-text-color);
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+
+    .close-btn {
+        position: absolute;
+        right: 16px;
+        top: 10px;
+        cursor: pointer;
+    }
+}
+
+.content-section {
+    text-align: center;
+    margin-bottom: 10px;
+    min-height: 60px;
+    .reject-reason {
+        padding: 0 40px;
+        label {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--label-color);
+            margin-bottom: 10px;
+        }
+        .reason {
+            height: 30px;
+            width: 100%;
+            border-radius: 15px;
+            border-width: 1px;
+            border-style: solid;
+            border-color: var(--border-color);
+            padding: 0rem .5rem;
+            color: var(--sub-ele-text-color);
+        }
+    }
+}
+
+.btn-section {
+    display: flex;
+    justify-content: center;
+}
+
+.btn {
+    display: flex;
+    width: 120px;
+    height: 30px;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1rem;
+    color: var(--inner-btn-color);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    i {
+        color: rgba(255, 255, 255, 1);
+        border: 1px solid rgba(255, 255, 255, 1);
+        padding: 0px 2px;
+        border-radius: 5px;
+        margin-right: 5px;
+    }
+}
+
+.btn-accept {
+    background-color: var(--add-btn-color);
+    margin-right: 60px;
+}
+
+.btn-accept::before {
+    content: url(../../../../assets/icons/tick-square.svg);
+    position: relative;
+    margin-top: -1px;
+    margin-right: 5px;
+    filter: invert(1);
+}
+
+.btn-reject {
+    background-color: var(--inner-box-text-color);
+}
+
+.btn-reject::before {
+    content: url(../../../../assets/icons/close-square.svg);
+    position: relative;
+    margin-top: -1px;
+    margin-right: 5px;
+    filter: invert(1);
+}

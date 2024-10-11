@@ -1,0 +1,90 @@
+.container {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+.card {
+    width: 480px;
+    border-radius: 20px;
+    border: none;
+}
+
+.card-body {
+    padding: 20px 80px;
+    p {
+        font-size: 14px;
+        font-weight: 600;
+        line-height: 24.2px;
+    }
+}
+
+.card-header {
+    text-align: center;
+    font-size: 18px;
+    font-weight: 600;
+    color: rgba(51, 51, 51, 1);
+    line-height: 24.2px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-bottom: none;
+    background-color: #fff;
+
+    .close-btn {
+        position: absolute;
+        right: 16px;
+        top: 10px;
+        cursor: pointer;
+    }
+}
+
+.content-section {
+    margin-bottom: 10px;
+    min-height: 60px;
+    .row {
+        margin-bottom: 10px;
+    }
+    label {
+        font-size: 14px;
+        font-weight: 400;
+        color: rgba(51, 51, 51, 1);
+        margin-bottom: 10px;
+    }
+    input[type=text] {
+        height: 28px;
+        width: 100%;
+        background-color: rgba(236, 236, 236, 1);
+        font-size: 12px;
+        font-weight: 400;
+        color: rgba(128, 128, 124, 1);
+        line-height: 14.52px;
+        border-radius: 10px;
+        border: none;
+        padding: 5px 20px;
+    }
+    input[type=text]:focus {
+        outline: none !important;
+    }
+}
+
+.btn-section {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.btn {
+    height: 30px;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1rem;
+    color: var(--inner-btn-color);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 5px 30px;
+}
+
+.btn-save {
+    background-color: rgba(41, 45, 50, 1);
+    border-radius: 35px;
+}

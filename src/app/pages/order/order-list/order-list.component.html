@@ -1,0 +1,94 @@
+<div class="container">
+    <div class="service-list">
+        <div class="services table-responsive">
+            <div class="service-menu-bar">
+                <div class="browse">
+                    <input type="search" placeholder="Search" class="record-search">
+                </div>
+                <div class="filter-section">
+                    <label>Date</label>
+                    <input type="date" class="date">
+                    <label>Status</label>
+                    <select class="drp-sort" name="" id="">
+                        <option value="">Choose</option>
+                    </select>
+                    <label>Type</label>
+                    <select class="drp-sort" name="" id="">
+                        <option value="">Choose</option>
+                    </select>
+                </div>
+                <div class="btn-section">
+                    <button class="btn btn-add" (click)="addOrder()">
+                        <i class="fa-solid fa-plus"></i> Add New Order
+                    </button>
+                </div>
+            </div>
+            <div class="service-table">
+                <table width="100%">
+                    <thead>
+                        <tr>
+                            <th style="width: 100px;"><span class="las la-sort"></span> Order Type</th>
+                            <th style="width: 140px;"><span class="las la-sort"></span> Billing Name</th>
+                            <th style="width: 180px;"><span class="las la-sort"></span> Date</th>
+                            <th style="width: 120px;"><span class="las la-sort"></span> Payment Status</th>
+                            <th style="width: 120px;"><span class="las la-sort"></span> Total(LKR)</th>
+                            <th style="width: 130px;"><span class="las la-sort"></span> Payment Method</th>
+                            <th style="width: 100px;"><span class="las la-sort"></span> Order Status</th>
+                            <th style="width: 70px;"><span class="las la-sort"></span> Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Item</td>
+                            <td>Kathryn McCann</td>
+                            <td>10-06-2024 10.25AM</td>
+                            <td>
+                                <span class="rate regular">Pending</span>
+                            </td>
+                            <td>2859.00</td>
+                            <td>Mastercard</td>
+                            <td>
+                                <span class="processing">Processing</span>
+                            </td>
+                            <td>
+                                <span class="action-icon">View</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Service</td>
+                            <td>Robin Hill</td>
+                            <td>10-06-2024 10.25AM</td>
+                            <td>
+                                <span class="rate positive">Paid</span>
+                            </td>
+                            <td>2859.00</td>
+                            <td>Mastercard</td>
+                            <td>
+                                <span class="processing">Processing</span>
+                            </td>
+                            <td>
+                                <span class="action-icon">View</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="footer-section">
+                <div class="table-data-size">
+                    <label>Showing Products 1 to 5 of 12</label>
+                    <label>Display</label>
+                    <select class="drp-table-size" name="" id="">
+                        <option value="">5</option>
+                        <option value="">10</option>
+                        <option value="">15</option>
+                    </select>
+                </div>
+                <div class="btn-section">
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,111 @@
+<div class="container">
+  <div class="card-wrapper">
+      <div class = "card">
+        <!-- card left -->
+        <div class = "product-imgs">
+          <div class = "img-display">
+            <div class = "img-showcase">
+              <img src="{{selectedImage}}" alt = "shoe image">
+            </div>
+          </div>
+          <div class = "img-select">
+            <div class = "img-item">
+              <img src="../../../../assets/images/bag1.jpg" alt="shoe image" (click)="changeImage('../../../../assets/images/bag1.jpg')">
+            </div>
+            <div class = "img-item">
+              <img src="../../../../assets/images/bag2.jpg" alt="shoe image" (click)="changeImage('../../../../assets/images/bag2.jpg')">
+            </div>
+            <div class = "img-item">
+              <img src="../../../../assets/images/bag3.jpg" alt="shoe image" (click)="changeImage('../../../../assets/images/bag3.jpg')">
+            </div>
+            <div class = "img-item">
+              <img src="../../../../assets/images/bag4.jpg" alt ="shoe image" (click)="changeImage('../../../../assets/images/bag4.jpg')">
+            </div>
+          </div>
+        </div>
+        <!-- card right -->
+        <div class = "product-content">
+          <h2 class = "product-title">Product Name</h2>
+          <div class = "product-rating">
+            <i class = "fas fa-star"></i>
+            <i class = "fas fa-star"></i>
+            <i class = "fas fa-star"></i>
+            <i class = "fas fa-star"></i>
+            <i class = "fas fa-star-half-alt"></i>
+          </div>
+  
+          <div class = "product-price">
+              <p class="discount">10% OFF (Discount)</p>
+              <p>Price: <span class="last-price">LKR 3000.00</span><span class="new-price">LKR 2700.00</span></p>
+          </div>
+  
+          <div class = "product-detail">
+            <p>Establishment that offers professional hair styling services for men and women. Hair
+              salons offer hair services including professional hair styling.</p>
+            <div class="specification">
+              <h4>Specifications</h4>
+              <ul>
+                  <div class="row">
+                      <div class="col-md-6">
+                          <li>Place Of Origin : <span>Sri Lanka</span></li>
+                          <li>Manufacturer: <span>Company 1</span></li>
+                          <li>Features: <div class="features"><span>feature1</span><span>feature2</span></div></li>
+                      </div>
+                      <div class="col-md-6">
+                          <li>Brand: <span>Brand 1</span></li>
+                          <li>Materials: <div class="materials"><span>material1</span><span>material2</span></div>
+                          </li>
+                      </div>
+                  </div>
+                </ul>
+            </div>
+            <div class="functionality">
+              <h4>Product Functionality</h4>
+              <p>Establishment that offers professional hair styling services for men and women. Hair
+                  salons offer hair services including professional hair styling.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  <div class="btn-add-section">
+    <button class="btn btn-add">
+      <i class="fa-solid fa-plus"></i> Add
+    </button>
+  </div>
+
+  <div class="pricing-details table-responsive">
+    <div class="pricing-data-section">
+      <div class="pricing-item">
+        <label>Unit Price</label>
+        <span>LKR 3000</span>
+      </div>
+      <div class="pricing-item">
+        <label>Batch Name</label>
+        <span>Pink 24</span>
+      </div>
+      <div class="pricing-item">
+        <label>Batch Number</label>
+        <span>250-H-34656-V124</span>
+      </div>
+      <div class="pricing-item">
+        <label>Quantity</label>
+        <span>250</span>
+      </div>
+      <div class="pricing-item">
+        <label>Line Discount</label>
+        <span>10%</span>
+      </div>
+      <div class="pricing-item">
+        <label>Trade Discount</label>
+        <span>0%</span>
+      </div>
+      <div class="btn-section">
+          <button class="btn btn-edit" [routerLink]="['/product/price/edit']">
+            <i class="fa-solid fa-arrow-left"></i> Edit
+          </button>
+      </div>
+    </div>
+  </div>
+</div>

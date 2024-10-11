@@ -1,0 +1,55 @@
+<div class="container">
+    <div id="message-popup" class="card">
+        <div class="card-header">
+            Enter Your Card Details
+            <div class="close-btn">
+                <i class="fa-solid fa-xmark" (click)="close()"></i>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="content-section">
+                <form #cardDetailsForm='ngForm' (ngSubmit)="onSubmit(cardDetailsForm)">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label>Card Number</label><br>
+                            <input 
+                                type="text"
+                                class="form-control"
+                                name="cardNum"
+                                #cardNum='ngModel'
+                                [(ngModel)]="cardNumber"
+                                required />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>CVC</label><br>
+                            <input 
+                                type="text"
+                                class="form-control"
+                                name="cvc"
+                                #cvc='ngModel'
+                                [(ngModel)]="CVC"
+                                required />
+                        </div>
+                        <div class="col-md-6">
+                            <label>Expired Date</label><br>
+                            <input 
+                                type="text"
+                                class="form-control"
+                                name="expiredDt"
+                                #expiredDt='ngModel'
+                                [(ngModel)]="expiredDate"
+                                required />
+                        </div>
+                    </div>
+                    <footer>
+                        <div class="btn-section">
+                            <button class="btn btn-save">Save and Continue</button>
+                        </div>    
+                    </footer>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

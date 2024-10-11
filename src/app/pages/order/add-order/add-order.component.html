@@ -1,0 +1,503 @@
+<div class="container">
+    <div class="add-order">
+        <div class="order-header">
+            <div class="order-info">
+                <label>Order ID</label>
+                <span>ORID0025800001</span>
+            </div>
+            <div class="order-info">
+                <label>Date and time</label>
+                <span>01-08-2024   10:55AM</span>
+            </div>
+            <div class="order-info">
+                <label>Type</label>
+                <span>Buy a Product</span>
+            </div>
+            <div>
+                <button class="btn btn-change-type" (click)="addOrder()">Change Type</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <form [formGroup]="generalInformation">
+                    <!-- progressbar -->
+                    <ul id="titlebar">
+                        <li [ngClass]="step==1 ? 'active' : 'inactive'">Customer Information</li>
+                        <li [ngClass]="step==2 ? 'active' : 'inactive'">Product and Time  Selection</li>
+                        <li [ngClass]="step==3 ? 'active' : 'inactive'">Summery</li>
+                    </ul>
+                    
+                    <div class="general-info" *ngIf="step == 1">
+                        <div class="hint-text">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M21.6602 10.44L20.6802 14.62C19.8402 18.23 18.1802 19.69 15.0602 19.39C14.5602 19.35 14.0202 19.26 13.4402 19.12L11.7602 18.72C7.59018 17.73 6.30018 15.67 7.28018 11.49L8.26018 7.30001C8.46018 6.45001 8.70018 5.71001 9.00018 5.10001C10.1702 2.68001 12.1602 2.03001 15.5002 2.82001L17.1702 3.21001C21.3602 4.19001 22.6402 6.26001 21.6602 10.44Z" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path opacity="0.4" d="M15.0603 19.3901C14.4403 19.8101 13.6603 20.1601 12.7103 20.4701L11.1303 20.9901C7.16034 22.2701 5.07034 21.2001 3.78034 17.2301L2.50034 13.2801C1.22034 9.3101 2.28034 7.2101 6.25034 5.9301L7.83034 5.4101C8.24034 5.2801 8.63034 5.1701 9.00034 5.1001C8.70034 5.7101 8.46034 6.4501 8.26034 7.3001L7.28034 11.4901C6.30034 15.6701 7.59034 17.7301 11.7603 18.7201L13.4403 19.1201C14.0203 19.2601 14.5603 19.3501 15.0603 19.3901Z" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path opacity="0.4" d="M12.6406 8.52979L17.4906 9.75979" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path opacity="0.4" d="M11.6602 12.3999L14.5602 13.1399" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span>Fill all information below</span>
+                        </div>
+
+                        <fieldset *ngIf="step == 1">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label>Customer Name</label><br>
+                                    <input 
+                                        type="text"
+                                        class="form-control"
+                                        formControlName="customerName"
+                                        [ngClass]="{'is-invalid' : CustomerName?.touched && CustomerName?.invalid}"
+                                        placeholder="Customer Name"/>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>Mobile Number</label><br>
+                                    <input
+                                        type="number"
+                                        class="form-control"
+                                        formControlName="mobileNumber"
+                                        [ngClass]="{'is-invalid' : MobileNumber?.touched && MobileNumber?.invalid}"
+                                        placeholder="Enter Your Customer’s Number"/>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label>Customer Address</label><br>
+                                    <input
+                                        type="number"
+                                        class="form-control"
+                                        formControlName="customerAddress"
+                                        [ngClass]="{'is-invalid' : CustomerAddress?.touched && CustomerAddress?.invalid}"
+                                        placeholder="Enter Your Customer Address"/>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>City</label><br>
+                                    <select>
+                                        <option value="">Customer City</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label>Province</label><br>
+                                    <select>
+                                        <option value="">Customer Province</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>District</label><br>
+                                    <select>
+                                        <option value="">Customer District</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="footer-btn">
+                                    <div></div>
+                                    <div class="btn-section">
+                                        <button class="btn btn-next" (click)="next()">Next
+                                            <i class="fa-solid fa-arrow-right"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                </form>
+
+                <form [formGroup]="productDetails">
+                    <div class="time-selection-section" *ngIf="step == 2">
+                        <div class="hint-text">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M21.6602 10.44L20.6802 14.62C19.8402 18.23 18.1802 19.69 15.0602 19.39C14.5602 19.35 14.0202 19.26 13.4402 19.12L11.7602 18.72C7.59018 17.73 6.30018 15.67 7.28018 11.49L8.26018 7.30001C8.46018 6.45001 8.70018 5.71001 9.00018 5.10001C10.1702 2.68001 12.1602 2.03001 15.5002 2.82001L17.1702 3.21001C21.3602 4.19001 22.6402 6.26001 21.6602 10.44Z" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path opacity="0.4" d="M15.0603 19.3901C14.4403 19.8101 13.6603 20.1601 12.7103 20.4701L11.1303 20.9901C7.16034 22.2701 5.07034 21.2001 3.78034 17.2301L2.50034 13.2801C1.22034 9.3101 2.28034 7.2101 6.25034 5.9301L7.83034 5.4101C8.24034 5.2801 8.63034 5.1701 9.00034 5.1001C8.70034 5.7101 8.46034 6.4501 8.26034 7.3001L7.28034 11.4901C6.30034 15.6701 7.59034 17.7301 11.7603 18.7201L13.4403 19.1201C14.0203 19.2601 14.5603 19.3501 15.0603 19.3901Z" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path opacity="0.4" d="M12.6406 8.52979L17.4906 9.75979" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path opacity="0.4" d="M11.6602 12.3999L14.5602 13.1399" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span>Add a Product/Services</span>
+                        </div>
+
+                        <fieldset *ngIf="step == 2">
+                            <div class="row">
+                                <div class="col-md-10">
+                                    <label>Product/Services</label><br>
+                                    <input
+                                        type="text"
+                                        class="form-control"
+                                        placeholder="Choose Product"/>
+                                </div>
+                                <div class="col-md-2">
+                                    <br>
+                                    <button class="btn btn-add-new-cat" (click)="next()">
+                                        Add
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="added-outlets">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <label>Added Product</label>
+                                    </div>
+                                </div>
+                                <div class="added-outlet-table">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <table width="100%">
+                                                <thead>
+                                                    <tr>
+                                                        <th><span class="las la-sort"></span> Image</th>
+                                                        <th><span class="las la-sort"></span> Outlet Name</th>
+                                                        <th><span class="las la-sort"></span> Location</th>
+                                                        <th><span class="las la-sort"></span> Rating</th>
+                                                        <th><span class="las la-sort"></span> Category</th>
+                                                        <th><span class="las la-sort"></span> Employees</th>
+                                                        <th><span class="las la-sort"></span> Status</th>
+                                                        <th><span class="las la-sort"></span> Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>
+                                                            <div class="logo">
+                                                               <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-QCKIyHiPkoouLv349z1C4-vuEvaY8pX95A&s" class="logo-img bg-img" style="background-image: url(img/3.jpeg)" />
+                                                            </div>
+                                                        </td>
+                                                        <td>Kelly Felder - Outlet 001</td>
+                                                        <td>Battaramulla</td>
+                                                        <td>
+                                                            <span class="rate">4.9</span>
+                                                        </td>
+                                                        <td>Fashion Accessories</td>
+                                                        <td>12</td>
+                                                        <td>
+                                                            <span class="active">Active</span>
+                                                        </td>
+                                                        <td>
+                                                            <span class="remove">Remove</span>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <label class="lbl-hr">Add Quantity</label>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="qunatity-section">
+                                        <button class="btn btn-qty" (click)="next()">-</button>
+                                        <input
+                                            class="form-control"
+                                            type="number"
+                                            formControlName="quantity"
+                                            [ngClass]="{'is-invalid' : Quantity?.touched && Quantity?.invalid}"
+                                            placeholder="1"/>
+                                        <button class="btn btn-qty" (click)="next()">+</button>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <label class="lbl-hr">Select Employee</label>
+                                </div>
+                                <div class="col-md-5">
+                                    <select>
+                                        <option value="">Chose your employee</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="hint-text">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M21.6602 10.44L20.6802 14.62C19.8402 18.23 18.1802 19.69 15.0602 19.39C14.5602 19.35 14.0202 19.26 13.4402 19.12L11.7602 18.72C7.59018 17.73 6.30018 15.67 7.28018 11.49L8.26018 7.30001C8.46018 6.45001 8.70018 5.71001 9.00018 5.10001C10.1702 2.68001 12.1602 2.03001 15.5002 2.82001L17.1702 3.21001C21.3602 4.19001 22.6402 6.26001 21.6602 10.44Z" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path opacity="0.4" d="M15.0603 19.3901C14.4403 19.8101 13.6603 20.1601 12.7103 20.4701L11.1303 20.9901C7.16034 22.2701 5.07034 21.2001 3.78034 17.2301L2.50034 13.2801C1.22034 9.3101 2.28034 7.2101 6.25034 5.9301L7.83034 5.4101C8.24034 5.2801 8.63034 5.1701 9.00034 5.1001C8.70034 5.7101 8.46034 6.4501 8.26034 7.3001L7.28034 11.4901C6.30034 15.6701 7.59034 17.7301 11.7603 18.7201L13.4403 19.1201C14.0203 19.2601 14.5603 19.3501 15.0603 19.3901Z" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path opacity="0.4" d="M12.6406 8.52979L17.4906 9.75979" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path opacity="0.4" d="M11.6602 12.3999L14.5602 13.1399" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                <span>Service Time Confirmation</span>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <label class="lbl-hr">Select Date</label>
+                                </div>
+                                <div class="col-md-2">
+                                    <input
+                                        class="form-control date"
+                                        type="date"
+                                        formControlName="date"
+                                        [ngClass]="{'is-invalid' : Date?.touched && Date?.invalid}"/>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="service-time-duration">
+                                        <div class="timeline">
+                                            <div class="time-section">
+                                                <span>8.30AM</span><br>
+                                                <span>10.30AM</span>
+                                            </div>
+                                            <div class="time-section">
+                                                <span>11.30AM</span><br>
+                                                <span>12.30PM</span>
+                                            </div>
+                                            <div class="time-section">
+                                                <span>4.30PM</span><br>
+                                                <span>5.30PM</span>
+                                            </div>
+                                        </div>
+                                        <span class="start-time">8.30AM</span>
+                                        <span class="end-time">9.30PM</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <label class="lbl-hr">Select Date</label>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="time-selection">
+                                        <i class="fa-solid fa-caret-left left-btn"></i>
+                                        <span class="time">8.30 AM</span>
+                                        <i class="fa-solid fa-caret-right right-btn"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="hint-text">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M21.6602 10.44L20.6802 14.62C19.8402 18.23 18.1802 19.69 15.0602 19.39C14.5602 19.35 14.0202 19.26 13.4402 19.12L11.7602 18.72C7.59018 17.73 6.30018 15.67 7.28018 11.49L8.26018 7.30001C8.46018 6.45001 8.70018 5.71001 9.00018 5.10001C10.1702 2.68001 12.1602 2.03001 15.5002 2.82001L17.1702 3.21001C21.3602 4.19001 22.6402 6.26001 21.6602 10.44Z" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path opacity="0.4" d="M15.0603 19.3901C14.4403 19.8101 13.6603 20.1601 12.7103 20.4701L11.1303 20.9901C7.16034 22.2701 5.07034 21.2001 3.78034 17.2301L2.50034 13.2801C1.22034 9.3101 2.28034 7.2101 6.25034 5.9301L7.83034 5.4101C8.24034 5.2801 8.63034 5.1701 9.00034 5.1001C8.70034 5.7101 8.46034 6.4501 8.26034 7.3001L7.28034 11.4901C6.30034 15.6701 7.59034 17.7301 11.7603 18.7201L13.4403 19.1201C14.0203 19.2601 14.5603 19.3501 15.0603 19.3901Z" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path opacity="0.4" d="M12.6406 8.52979L17.4906 9.75979" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path opacity="0.4" d="M11.6602 12.3999L14.5602 13.1399" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                <span>Delivery Details</span>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>Customer Address</label><br>
+                                    <textarea
+                                        class="form-control"
+                                        formControlName="customerAddress"
+                                        [ngClass]="{'is-invalid' : CustAddress?.touched && CustAddress?.invalid}"
+                                        placeholder="Enter Customer Address"
+                                        rows="4">
+                                    </textarea>
+                                </div>
+                                <div class="col-md-6">
+                                    <label>Delivery Method</label>
+                                    <select>
+                                        <option>Select Delivery Method</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="hint-text">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M21.6602 10.44L20.6802 14.62C19.8402 18.23 18.1802 19.69 15.0602 19.39C14.5602 19.35 14.0202 19.26 13.4402 19.12L11.7602 18.72C7.59018 17.73 6.30018 15.67 7.28018 11.49L8.26018 7.30001C8.46018 6.45001 8.70018 5.71001 9.00018 5.10001C10.1702 2.68001 12.1602 2.03001 15.5002 2.82001L17.1702 3.21001C21.3602 4.19001 22.6402 6.26001 21.6602 10.44Z" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path opacity="0.4" d="M15.0603 19.3901C14.4403 19.8101 13.6603 20.1601 12.7103 20.4701L11.1303 20.9901C7.16034 22.2701 5.07034 21.2001 3.78034 17.2301L2.50034 13.2801C1.22034 9.3101 2.28034 7.2101 6.25034 5.9301L7.83034 5.4101C8.24034 5.2801 8.63034 5.1701 9.00034 5.1001C8.70034 5.7101 8.46034 6.4501 8.26034 7.3001L7.28034 11.4901C6.30034 15.6701 7.59034 17.7301 11.7603 18.7201L13.4403 19.1201C14.0203 19.2601 14.5603 19.3501 15.0603 19.3901Z" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path opacity="0.4" d="M12.6406 8.52979L17.4906 9.75979" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path opacity="0.4" d="M11.6602 12.3999L14.5602 13.1399" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                <span>Payment and Coupons Details</span>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>Coupons Codes</label>
+                                    <input
+                                        class="form-control"
+                                        type="text"
+                                        formControlName="couponCode"
+                                        [ngClass]="{'is-invalid' : CouponCode?.touched && CouponCode?.invalid}"
+                                        placeholder="Enter Coupon Code"/>
+                                </div>
+                                <div class="col-md-6">
+                                    <label>Payment Method</label>
+                                    <select>
+                                        <option>Select Payment Method</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="footer-btn">
+                                    <div></div>
+                                    <div class="btn-section">
+                                        <button class="btn btn-back" (click)="previous()">
+                                            <i class="fa-solid fa-arrow-left"></i>Back
+                                        </button>
+                                        <button class="btn btn-next" (click)="onClickSave()">Save
+                                            <i class="fa-solid fa-arrow-right"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                </form>
+                <div class="order-summary" *ngIf="step == 3">
+                    <div class="hint-text">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M21.6602 10.44L20.6802 14.62C19.8402 18.23 18.1802 19.69 15.0602 19.39C14.5602 19.35 14.0202 19.26 13.4402 19.12L11.7602 18.72C7.59018 17.73 6.30018 15.67 7.28018 11.49L8.26018 7.30001C8.46018 6.45001 8.70018 5.71001 9.00018 5.10001C10.1702 2.68001 12.1602 2.03001 15.5002 2.82001L17.1702 3.21001C21.3602 4.19001 22.6402 6.26001 21.6602 10.44Z" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path opacity="0.4" d="M15.0603 19.3901C14.4403 19.8101 13.6603 20.1601 12.7103 20.4701L11.1303 20.9901C7.16034 22.2701 5.07034 21.2001 3.78034 17.2301L2.50034 13.2801C1.22034 9.3101 2.28034 7.2101 6.25034 5.9301L7.83034 5.4101C8.24034 5.2801 8.63034 5.1701 9.00034 5.1001C8.70034 5.7101 8.46034 6.4501 8.26034 7.3001L7.28034 11.4901C6.30034 15.6701 7.59034 17.7301 11.7603 18.7201L13.4403 19.1201C14.0203 19.2601 14.5603 19.3501 15.0603 19.3901Z" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path opacity="0.4" d="M12.6406 8.52979L17.4906 9.75979" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path opacity="0.4" d="M11.6602 12.3999L14.5602 13.1399" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span>Customer Information</span>
+                    </div>
+                    <div class="customer-info">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Customer Name</label><br>
+                                <span class="summary-info">Kalpana Sudharaka Hettiarachchi</span>
+                            </div>
+                            <div class="col-md-6">
+                                <label>Mobile Number</label><br>
+                                <span class="summary-info">+94701122345</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Customer Address</label><br>
+                                <span class="summary-info">No, Line one, Line two, City, Country</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="hint-text">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M21.6602 10.44L20.6802 14.62C19.8402 18.23 18.1802 19.69 15.0602 19.39C14.5602 19.35 14.0202 19.26 13.4402 19.12L11.7602 18.72C7.59018 17.73 6.30018 15.67 7.28018 11.49L8.26018 7.30001C8.46018 6.45001 8.70018 5.71001 9.00018 5.10001C10.1702 2.68001 12.1602 2.03001 15.5002 2.82001L17.1702 3.21001C21.3602 4.19001 22.6402 6.26001 21.6602 10.44Z" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path opacity="0.4" d="M15.0603 19.3901C14.4403 19.8101 13.6603 20.1601 12.7103 20.4701L11.1303 20.9901C7.16034 22.2701 5.07034 21.2001 3.78034 17.2301L2.50034 13.2801C1.22034 9.3101 2.28034 7.2101 6.25034 5.9301L7.83034 5.4101C8.24034 5.2801 8.63034 5.1701 9.00034 5.1001C8.70034 5.7101 8.46034 6.4501 8.26034 7.3001L7.28034 11.4901C6.30034 15.6701 7.59034 17.7301 11.7603 18.7201L13.4403 19.1201C14.0203 19.2601 14.5603 19.3501 15.0603 19.3901Z" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path opacity="0.4" d="M12.6406 8.52979L17.4906 9.75979" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path opacity="0.4" d="M11.6602 12.3999L14.5602 13.1399" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span>Order Product/Services </span>
+                    </div>
+                    <div class="assigned-services">
+                        <div class="row">
+                            <div class="col-md-12 table-responsive">
+                                <div class="assign-services-table">
+                                    <table width="100%">
+                                        <tbody>
+                                            <tr>
+                                                <td style="width: 100px;">
+                                                    <div class="logo">
+                                                       <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-QCKIyHiPkoouLv349z1C4-vuEvaY8pX95A&s" class="logo-img bg-img" style="background-image: url(img/3.jpeg)" />
+                                                    </div>
+                                                </td>
+                                                <td style="width: 280px;">Kelly Felder - Outlet 001</td>
+                                                <td style="width: 80px;">
+                                                    <span class="rate positive">4.9</span>
+                                                </td>
+                                                <td style="width: 150px;">Women Hand Bag</td>
+                                                <td style="width: 100px;">10-06-2024</td>
+                                                <td style="width: 90px;">1250</td>
+                                                <td style="width: 80px;">30 mins</td>
+                                                <td style="width: 80px;">
+                                                    <span class="active">Active</span>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="product-details">
+                                <div class="product-info">
+                                    <h3>Quantity</h3>
+                                    <span class="price-detail">10,000</span>
+                                </div>
+                                <div class="product-info">
+                                    <h3>Employee</h3>
+                                    <span class="price-detail">Your Employee</span>
+                                </div>
+                                <div class="product-info">
+                                    <h3>Selected Date</h3>
+                                    <span class="price-detail">2024 June 09</span>
+                                </div>
+                                <div class="product-info">
+                                    <h3>Time</h3>
+                                    <span class="price-detail">09.30 AM</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="hint-text">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M21.6602 10.44L20.6802 14.62C19.8402 18.23 18.1802 19.69 15.0602 19.39C14.5602 19.35 14.0202 19.26 13.4402 19.12L11.7602 18.72C7.59018 17.73 6.30018 15.67 7.28018 11.49L8.26018 7.30001C8.46018 6.45001 8.70018 5.71001 9.00018 5.10001C10.1702 2.68001 12.1602 2.03001 15.5002 2.82001L17.1702 3.21001C21.3602 4.19001 22.6402 6.26001 21.6602 10.44Z" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path opacity="0.4" d="M15.0603 19.3901C14.4403 19.8101 13.6603 20.1601 12.7103 20.4701L11.1303 20.9901C7.16034 22.2701 5.07034 21.2001 3.78034 17.2301L2.50034 13.2801C1.22034 9.3101 2.28034 7.2101 6.25034 5.9301L7.83034 5.4101C8.24034 5.2801 8.63034 5.1701 9.00034 5.1001C8.70034 5.7101 8.46034 6.4501 8.26034 7.3001L7.28034 11.4901C6.30034 15.6701 7.59034 17.7301 11.7603 18.7201L13.4403 19.1201C14.0203 19.2601 14.5603 19.3501 15.0603 19.3901Z" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path opacity="0.4" d="M12.6406 8.52979L17.4906 9.75979" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path opacity="0.4" d="M11.6602 12.3999L14.5602 13.1399" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span>Delivery Details</span>
+                    </div>
+                    <div class="delivery-details">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Delivery Address</label><br>
+                                <span class="summary-info">No, Line one, Line two, City, Country</span>
+                            </div>
+                            <div class="col-md-6">
+                                <label>Delivery Method</label><br>
+                                <span class="summary-info">Kumbiyo Delivery Service</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="hint-text">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M21.6602 10.44L20.6802 14.62C19.8402 18.23 18.1802 19.69 15.0602 19.39C14.5602 19.35 14.0202 19.26 13.4402 19.12L11.7602 18.72C7.59018 17.73 6.30018 15.67 7.28018 11.49L8.26018 7.30001C8.46018 6.45001 8.70018 5.71001 9.00018 5.10001C10.1702 2.68001 12.1602 2.03001 15.5002 2.82001L17.1702 3.21001C21.3602 4.19001 22.6402 6.26001 21.6602 10.44Z" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path opacity="0.4" d="M15.0603 19.3901C14.4403 19.8101 13.6603 20.1601 12.7103 20.4701L11.1303 20.9901C7.16034 22.2701 5.07034 21.2001 3.78034 17.2301L2.50034 13.2801C1.22034 9.3101 2.28034 7.2101 6.25034 5.9301L7.83034 5.4101C8.24034 5.2801 8.63034 5.1701 9.00034 5.1001C8.70034 5.7101 8.46034 6.4501 8.26034 7.3001L7.28034 11.4901C6.30034 15.6701 7.59034 17.7301 11.7603 18.7201L13.4403 19.1201C14.0203 19.2601 14.5603 19.3501 15.0603 19.3901Z" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path opacity="0.4" d="M12.6406 8.52979L17.4906 9.75979" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path opacity="0.4" d="M11.6602 12.3999L14.5602 13.1399" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span>Coupons Details Payment Method</span>
+                    </div>
+                    <div class="coupons-details">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Coupons Codes</label><br>
+                                <span class="summary-info">BOCOUP54YNM</span>
+                            </div>
+                            <div class="col-md-6">
+                                <label>Payment Method</label><br>
+                                <span class="summary-info">Visa Credit Card (**** 8582)</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="product-details">
+                            <div class="product-info">
+                                <h3>Total Price</h3>
+                                <span class="price-detail">LKR 2700.00</span>
+                            </div>
+                            <div class="product-info">
+                                <h3>Discount Rate</h3>
+                                <span class="price-detail">10%</span>
+                            </div>
+                            <div class="product-info">
+                                <h3>Net Price</h3>
+                                <span class="price-detail">LKR 2475.00</span>
+                            </div>
+                            <div class="product-info">
+                                <h3>Item Count</h3>
+                                <span class="price-detail">6</span>
+                            </div>
+                            <div class="product-info">
+                                <h3>Total Duration</h3>
+                                <span class="price-detail">1 hours 30 minutes</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="footer-btn">
+                            <div></div>
+                            <div class="btn-section">
+                                <button class="btn btn-back" (click)="previous()">
+                                    <i class="fa-solid fa-arrow-left"></i>Back
+                                </button>
+                                <button class="btn btn-complete">Complete</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

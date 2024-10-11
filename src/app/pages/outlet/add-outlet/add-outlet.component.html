@@ -1,0 +1,357 @@
+<div class="container">
+    <div class="add-company">
+        <div class="row">
+            <div class="col-md-12">
+                <form [formGroup]="generalInformation">
+                    <!-- progressbar -->
+                    <ul id="titlebar">
+                        <li [ngClass]="step==1 ? 'active' : 'inactive'">General Information</li>
+                        <li [ngClass]="step==2 ? 'active' : 'inactive'">Product Image and Videos</li>
+                        <li [ngClass]="step==3 ? 'active' : 'inactive'">Assigning</li>
+                    </ul>
+                    
+                    <div class="general-info" *ngIf="step == 1">
+                        <div class="hint-text">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M21.6602 10.44L20.6802 14.62C19.8402 18.23 18.1802 19.69 15.0602 19.39C14.5602 19.35 14.0202 19.26 13.4402 19.12L11.7602 18.72C7.59018 17.73 6.30018 15.67 7.28018 11.49L8.26018 7.30001C8.46018 6.45001 8.70018 5.71001 9.00018 5.10001C10.1702 2.68001 12.1602 2.03001 15.5002 2.82001L17.1702 3.21001C21.3602 4.19001 22.6402 6.26001 21.6602 10.44Z" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path opacity="0.4" d="M15.0603 19.3901C14.4403 19.8101 13.6603 20.1601 12.7103 20.4701L11.1303 20.9901C7.16034 22.2701 5.07034 21.2001 3.78034 17.2301L2.50034 13.2801C1.22034 9.3101 2.28034 7.2101 6.25034 5.9301L7.83034 5.4101C8.24034 5.2801 8.63034 5.1701 9.00034 5.1001C8.70034 5.7101 8.46034 6.4501 8.26034 7.3001L7.28034 11.4901C6.30034 15.6701 7.59034 17.7301 11.7603 18.7201L13.4403 19.1201C14.0203 19.2601 14.5603 19.3501 15.0603 19.3901Z" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path opacity="0.4" d="M12.6406 8.52979L17.4906 9.75979" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path opacity="0.4" d="M11.6602 12.3999L14.5602 13.1399" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span>Fill all information below</span>
+                        </div>
+
+                        <fieldset *ngIf="step == 1">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label>Shop Name</label><br>
+                                    <input 
+                                        type="text"
+                                        class="form-control"
+                                        formControlName="shopName"
+                                        [ngClass]="{'is-invalid' : ShopName?.touched && ShopName?.invalid}"
+                                        placeholder="Shop Name"/>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label>Shop Description</label><br>
+                                    <textarea
+                                        class="form-control"
+                                        formControlName="shopDescription"
+                                        [ngClass]="{'is-invalid' : ShopDescription?.touched && ShopDescription?.invalid}"
+                                        rows="4" 
+                                        placeholder="Enter Shop Description">
+                                    </textarea>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label>Shop Address</label><br>
+                                    <input 
+                                        class="form-control"
+                                        type="text"
+                                        formControlName="address"
+                                        [ngClass]="{'is-invalid' : Address?.touched && Address?.invalid}"
+                                        placeholder="Enter Your Shop Address"/>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>City</label><br>
+                                    <select>
+                                        <option value="">Your City</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label>Province</label><br>
+                                    <select>
+                                        <option value="">Your Province</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label>District</label><br>
+                                    <select>
+                                        <option value="">Your District</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>Latitude</label><br>
+                                    <input 
+                                        class="form-control"
+                                        type="text"
+                                        formControlName="latitude"
+                                        [ngClass]="{'is-invalid' : Latitude?.touched && Latitude?.invalid}"
+                                        placeholder="Latitude"/>
+                                </div>
+                                <div class="col-md-6">
+                                    <label>Longitude</label><br>
+                                    <input 
+                                        class="form-control"
+                                        type="text"
+                                        formControlName="longitude"
+                                        [ngClass]="{'is-invalid' : Longitude?.touched && Longitude?.invalid}"
+                                        placeholder="Longitude"/>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>Mobile Number</label><br>
+                                    <input 
+                                        class="form-control"
+                                        type="text"
+                                        formControlName="mobile"
+                                        [ngClass]="{'is-invalid' : Mobile?.touched && Mobile?.invalid}"
+                                        placeholder="Your Mobile Number"/>
+                                </div>
+                                <div class="col-md-6">
+                                    <label>Email</label><br>
+                                    <input 
+                                        class="form-control"
+                                        type="email"
+                                        formControlName="email"
+                                        [ngClass]="{'is-invalid' : Email?.touched && Email?.invalid}"
+                                        placeholder="Email address"/>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>Order Gap Duration</label><br>
+                                    <input 
+                                        class="form-control"
+                                        type="text"
+                                        formControlName="orderGapDuration"
+                                        [ngClass]="{'is-invalid' : OrderGapDuration?.touched && OrderGapDuration?.invalid}"
+                                        placeholder="Your Order gap duration"/>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>Is Employee Selection Enabled</label><br>
+                                    <input 
+                                        class="form-control"
+                                        type="text"
+                                        formControlName="employeeSelectionEnabled"
+                                        [ngClass]="{'is-invalid' : EmployeeSelectionEnabled?.touched && EmployeeSelectionEnabled?.invalid}"
+                                        placeholder="is employee selection enabled"/>
+                                </div>
+                                <div class="col-md-6">
+                                    <label>Is Multiple Employee Selection Enabled Based on Fetcher</label><br>
+                                    <input 
+                                        class="form-control"
+                                        type="text"
+                                        formControlName="multipleEmployeeSelectionEnabled"
+                                        [ngClass]="{'is-invalid' : MultipleEmployeeSelectionEnabled?.touched && MultipleEmployeeSelectionEnabled?.invalid}"
+                                        placeholder="is multiple employee selection enabled based on fetcher"/>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="footer-btn">
+                                    <div></div>
+                                    <div class="btn-section">
+                                        <button class="btn btn-next" (click)="next()">Next
+                                            <i class="fa-solid fa-arrow-right"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                </form>
+
+                <form>
+                    <div class="images-and-videos" *ngIf="step == 2">
+                        <div class="hint-text">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M21.6602 10.44L20.6802 14.62C19.8402 18.23 18.1802 19.69 15.0602 19.39C14.5602 19.35 14.0202 19.26 13.4402 19.12L11.7602 18.72C7.59018 17.73 6.30018 15.67 7.28018 11.49L8.26018 7.30001C8.46018 6.45001 8.70018 5.71001 9.00018 5.10001C10.1702 2.68001 12.1602 2.03001 15.5002 2.82001L17.1702 3.21001C21.3602 4.19001 22.6402 6.26001 21.6602 10.44Z" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path opacity="0.4" d="M15.0603 19.3901C14.4403 19.8101 13.6603 20.1601 12.7103 20.4701L11.1303 20.9901C7.16034 22.2701 5.07034 21.2001 3.78034 17.2301L2.50034 13.2801C1.22034 9.3101 2.28034 7.2101 6.25034 5.9301L7.83034 5.4101C8.24034 5.2801 8.63034 5.1701 9.00034 5.1001C8.70034 5.7101 8.46034 6.4501 8.26034 7.3001L7.28034 11.4901C6.30034 15.6701 7.59034 17.7301 11.7603 18.7201L13.4403 19.1201C14.0203 19.2601 14.5603 19.3501 15.0603 19.3901Z" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path opacity="0.4" d="M12.6406 8.52979L17.4906 9.75979" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path opacity="0.4" d="M11.6602 12.3999L14.5602 13.1399" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span>Upload company images and videos</span>
+                        </div>
+
+                        <div class="uploaded-image">
+                            <div class="image-container" *ngFor="let image of imageDataList; let i = index">
+                                <img [src]="imageUrls[i]"><br>
+                                <span>{{image.filePath}}</span>
+                                <div class="img-remove">
+                                    <i class="fa-solid fa-circle-xmark" (click)="removeImage(i)"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="file-container" *ngIf="imageDataList.length <= 3">
+                            <input type="file" class="file" (change)="getFile($event)" multiple="true">
+                            <label>
+                                <svg width="54" height="54" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <g opacity="0.4">
+                                    <path d="M9 17V11L7 13" stroke="var(--sub-ele-text-color)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M9 11L11 13" stroke="var(--sub-ele-text-color)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </g>
+                                    <path d="M22 10V15C22 20 20 22 15 22H9C4 22 2 20 2 15V9C2 4 4 2 9 2H14" stroke="var(--sub-ele-text-color)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M22 10H18C15 10 14 9 14 6V2L22 10Z" stroke="var(--sub-ele-text-color)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                <h4 (click)="$event.stopPropagation()">Drop files here or click to upload.</h4>
+                            </label>
+                        </div>
+    
+                        <div class="row">
+                            <div class="footer-btn">
+                                <div></div>
+                                <div class="btn-section">
+                                    <button class="btn btn-back" (click)="previous()">
+                                        <i class="fa-solid fa-arrow-left"></i>Back
+                                    </button>
+                                    <button class="btn btn-next" (click)="next()">Next
+                                        <i class="fa-solid fa-arrow-right"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="assign-outlet" *ngIf="step == 3">
+                    <div class="hint-text">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M21.6602 10.44L20.6802 14.62C19.8402 18.23 18.1802 19.69 15.0602 19.39C14.5602 19.35 14.0202 19.26 13.4402 19.12L11.7602 18.72C7.59018 17.73 6.30018 15.67 7.28018 11.49L8.26018 7.30001C8.46018 6.45001 8.70018 5.71001 9.00018 5.10001C10.1702 2.68001 12.1602 2.03001 15.5002 2.82001L17.1702 3.21001C21.3602 4.19001 22.6402 6.26001 21.6602 10.44Z" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path opacity="0.4" d="M15.0603 19.3901C14.4403 19.8101 13.6603 20.1601 12.7103 20.4701L11.1303 20.9901C7.16034 22.2701 5.07034 21.2001 3.78034 17.2301L2.50034 13.2801C1.22034 9.3101 2.28034 7.2101 6.25034 5.9301L7.83034 5.4101C8.24034 5.2801 8.63034 5.1701 9.00034 5.1001C8.70034 5.7101 8.46034 6.4501 8.26034 7.3001L7.28034 11.4901C6.30034 15.6701 7.59034 17.7301 11.7603 18.7201L13.4403 19.1201C14.0203 19.2601 14.5603 19.3501 15.0603 19.3901Z" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path opacity="0.4" d="M12.6406 8.52979L17.4906 9.75979" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path opacity="0.4" d="M11.6602 12.3999L14.5602 13.1399" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span>Assign employee</span>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label>Service Categories</label><br>
+                            <select>
+                                <option value="">Choose Category</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <br>
+                            <button class="btn btn-add-new-cat" (click)="next()">
+                                Add New
+                            </button>
+                        </div>
+                        <div class="col-md-4">
+                            <label>Assign employee to outlet</label><br>
+                            <select>
+                                <option value="">Choose Employee</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <br>
+                            <button class="btn btn-add-new-cat" (click)="next()">
+                                Assign
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <div class="assigned-employee-table">
+                            <table width="100%">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 280px;"><span class="las la-sort"></span> Employee</th>
+                                        <th style="width: 120px;"><span class="las la-sort"></span> Date</th>
+                                        <th style="width: 60px;"><span class="las la-sort"></span> Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Sahan Kularathne</td>
+                                        <td>2024-08-23</td>
+                                        <td class="action-icon">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Sahan Kularathne</td>
+                                        <td>2024-08-23</td>
+                                        <td class="action-icon">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Sahan Kularathne</td>
+                                        <td>2024-08-23</td>
+                                        <td class="action-icon">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Sahan Kularathne</td>
+                                        <td>2024-08-23</td>
+                                        <td class="action-icon">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Sahan Kularathne</td>
+                                        <td>2024-08-23</td>
+                                        <td class="action-icon">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Sahan Kularathne</td>
+                                        <td>2024-08-23</td>
+                                        <td class="action-icon">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="footer-btn">
+                            <div class="company-status">
+                                <label>Product Status</label>
+                                <div class="form-check">
+                                    <div class="radio-btn">
+                                        <input type="radio" class="form-check-input" id="online" name="status" value="online">
+                                        <label class="form-check-label" for="online">
+                                            Online
+                                        </label>
+                                    </div>
+                                    <div class="radio-btn">
+                                        <input type="radio" class="form-check-input" id="offline" name="status" value="offline">
+                                        <label class="form-check-label" for="offline">
+                                            Offline
+                                        </label>
+                                    </div>
+                                    <div class="radio-btn">
+                                        <input type="radio" class="form-check-input" id="draft" name="status" value="draft">
+                                        <label class="form-check-label" for="draft">
+                                            Draft
+                                        </label>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                            <div class="btn-section">
+                                <button class="btn btn-back" (click)="previous()">
+                                    <i class="fa-solid fa-arrow-left"></i>Back
+                                </button>
+                                <button class="btn btn-next" (click)="saveOutlet()">Save
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M5 2C4.44772 2 4 2.44772 4 3V21.382C4 22.1253 4.78231 22.6088 5.44721 22.2764L11.5528 19.2236C11.8343 19.0828 12.1657 19.0828 12.4472 19.2236L18.5528 22.2764C19.2177 22.6088 20 22.1253 20 21.382V3C20 2.44772 19.5523 2 19 2H5ZM18 4H6V20L12 17L18 20V4Z" fill="var(--inner-btn-color)"/>
+                                        <path d="M14.8284 7.87865C14.4379 7.48812 13.8047 7.48812 13.4142 7.87865L11.2929 9.99994L10.5858 9.2928C10.1952 8.90228 9.56208 8.90228 9.17156 9.2928C8.78103 9.68333 8.78103 10.3165 9.17156 10.707L10.5797 12.1151C10.5817 12.1172 10.5837 12.1192 10.5858 12.1213C10.9763 12.5118 11.6095 12.5118 12 12.1213L14.8284 9.29286C15.2189 8.90234 15.2189 8.26917 14.8284 7.87865Z" fill="var(--inner-btn-color)"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

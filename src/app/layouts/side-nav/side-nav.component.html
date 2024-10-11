@@ -1,0 +1,110 @@
+<div class="side-bar">
+    <div class="side-content">
+      <div *ngIf="!isShowProfileNav" class="page-side-nav">
+        <div class="profile">
+          <img class="profile-img bg-img" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSppkoKsaYMuIoNLDH7O8ePOacLPG1mKXtEng&s" alt="">
+          <h4>David Green</h4>
+          <small>Owner</small>
+        </div>
+
+        <div class="menu-list">
+          <ul>
+            <li>
+              <span class="folder root dashboard" (click)="openMenu($event, 'dashboard')">Dashboard</span>
+              <!-- <ul class="nested">
+                <li class="file-html">index.html</li>
+                <li class="file-html">services.html</li>
+                <li>
+                  <span class="folder" (click)="openMenu($event)">images</span>
+                  <ul class="nested">
+                    <li class="img">user.jpg</li>
+                    <li class="img">profile.png</li>
+                    <li class="img">profile.png</li>
+                    <li class="img">profile.png</li>
+                    <li class="img">profile.png</li>
+                    <li>
+                      <span class="folder" (click)="openMenu($event)">images</span>
+                      <ul class="nested">
+                        <li class="img">user.jpg</li>
+                        <li class="img">profile.png</li>
+                      </ul>
+                    </li>
+                  </ul>
+                </li>
+              </ul> -->
+            </li>
+            <!-- Start Companies -->
+            <li>
+              <span class="folder root company" (click)="openMenu($event, 'company')">Companies</span>
+              <ul class="nested">
+                <li class="file-css">Kelly Felder (Pvt) Ltd.</li>
+                <li>
+                  <span class="folder" (click)="openMenu($event, 'outlet')">Shops</span>
+                  <ul class="nested">
+                    <li>
+                      <span class="folder" (click)="openMenu($event)">Shop Name 01</span>
+                      <ul class="nested">
+                        <li>
+                          <span class="folder" (click)="openMenu($event)">Orders</span>
+                          <ul class="nested">
+                            <li class="img" [routerLink]="['/serviceRequest']">Service Requests</li>
+                            <li class="img" [routerLink]="['/order']">Order List</li>
+                          </ul>
+                        </li>
+                        <li class="img" [routerLink]="['/product']">Items</li>
+                        <li class="img" [routerLink]="['/service']">Services</li>
+                        <li class="img" [routerLink]="['/package']">Packages</li>
+                        <li class="img" [routerLink]="['/package']">Employees</li>
+                      </ul>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+            <!-- End Companies -->
+            <li>
+              <span class="folder root employee" (click)="openMenu($event, 'employee')">Employees</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div *ngIf="isShowProfileNav" class="profile-side-nav">
+        <div class="profile-item-list">
+          <div class="row">
+            <div class="col-md-12">
+              <label>Account Information</label>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <label>Change Password</label>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <label>Authentication</label>
+            </div>
+          </div>
+        </div>
+        <div class="delete-acc">
+          <button class="btn btn-delete-acc">Delete Account</button>
+        </div>
+      </div>
+    </div>
+
+    
+
+      
+</div>
+
+<script>
+  const folders = document.querySelectorAll('.folder');
+  for (const folder of folders) {
+    folder.onclick = () => {
+      console.log(folder.nextElementSibling);
+    }
+  } 
+</script>
+
+
