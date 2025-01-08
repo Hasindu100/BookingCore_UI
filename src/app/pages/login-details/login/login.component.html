@@ -14,24 +14,34 @@
                 <p class="info">Enter your email address and password to
                     access admin panel.</p>
             </div>
-            <form>
+            <form [formGroup]="loginForm">
                 <div class="inputBx">
                     <span>Email address</span>
-                    <input type="email" name="">
+                    <input 
+                        type="email"
+                        class="form-control" 
+                        name="email"
+                        formControlName="email"
+                        [ngClass]="{'is-invalid': Email.touched && Email.invalid}">
                 </div>
                 <div class="inputBx">
                     <span>Password</span>
                     <span class="forgot-pwd">
                         <a href="#">forgot Password?</a>
                     </span>
-                    <input type="password" name="">
+                    <input 
+                        type="password" 
+                        class="form-control"
+                        name="pwd"
+                        formControlName="password"
+                        [ngClass]="{'is-invalid': Password.touched && Password.invalid}">
                 </div>
                 <div class="remember">
                     <input type="checkbox" name=""> 
                     <span>Keep me signed in</span>
                 </div>
                 <div class="inputBx">
-                    <input type="submit" value="Log in" name="">
+                    <input type="submit" class="btn btn-primary" value="Log in" name="" [disabled]="loginForm.invalid" (click)="login()">
                 </div>
             </form>
             <h3>Login with</h3>

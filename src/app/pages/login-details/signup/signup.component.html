@@ -9,56 +9,224 @@
     </div>
     <div class="contentBx">
         <div class="formBx">
-            <div class="header">
-                <h2>Sign Up</h2>
-                <p class="info">Don't have an account? Create your own account, it takes less than a minute</p>
-            </div>
-            <form>
-                <div class="inputBx">
-                    <span>User Name</span>
-                    <input type="text" name="">
+            <div *ngIf="step == 1">
+                <div class="header">
+                    <h2>Sign Up</h2>
+                    <p class="info">Don't have an account? Create your own account, it takes less than a minute</p>
                 </div>
-                <div class="inputBx">
-                    <span>First Name</span>
-                    <input type="text" name="">
-                </div>
-                <div class="inputBx">
-                    <span>Last Name</span>
-                    <input type="text" name="">
-                </div>
-                <div class="inputBx">
-                    <span>Email address</span>
-                    <input type="email" name="">
-                </div>
-                <div class="inputBx">
-                    <span>Mobile Number</span>
-                    <input type="number" name="">
-                </div>
-                <div class="inputBx">
-                    <div class="pwd-section">
-                        <div class="pwdBx">
-                            <span>Password</span>
-                            <input type="password" name="">
-                        </div>
-                        <div class="pwdBx">
-                            <span>Confirm Password</span>
-                            <input type="password" name="">
+                <form [formGroup]="signUpForm" (submit)="onClickSignUp()">
+                    <div class="inputBx group">
+                        <span>Email address</span>
+                        <input 
+                            type="email"
+                            class="form-control"
+                            [ngClass]="{'is-invalid' : signUpFC.email.touched && signUpFC.email.invalid}"
+                            name="email"
+                            formControlName="email"
+                            placeholder="Enter your email">
+                        <div *ngIf="signUpFC.email.touched && signUpFC.email.invalid" class="invalid-tooltip">
+                            <div *ngIf="signUpFC.email.errors?.required">Password is required.</div>
+                            <div *ngIf="signUpFC.email.errors?.email">Please enter a valid email.</div>
                         </div>
                     </div>
+                    <div class="inputBx">
+                        <div class="pwd-section">
+                            <div class="pwdBx group">
+                                <span>Password</span>
+                                <input 
+                                    type="password"
+                                    class="form-control"
+                                    [ngClass]="{'is-invalid' : signUpFC.pwd.touched && signUpFC.pwd.invalid}"
+                                    name="pwd"
+                                    formControlName="pwd">
+                                <div *ngIf="signUpFC.pwd.touched && signUpFC.pwd.invalid" class="invalid-tooltip">
+                                    <div *ngIf="signUpFC.pwd.errors?.required">Password is required.</div>
+                                </div>
+                            </div>
+                            <div class="pwdBx group">
+                                <span>Confirm Password</span>
+                                <input 
+                                    type="password"
+                                    class="form-control"
+                                    [ngClass]="{'is-invalid' : signUpFC.comPwd.touched && signUpFC.comPwd.invalid}"
+                                    name="comPwd"
+                                    formControlName="comPwd">
+                                <div *ngIf="signUpFC.comPwd.touched && signUpFC.comPwd.invalid" class="invalid-tooltip">
+                                    <div *ngIf="signUpFC.comPwd.errors?.required">Confirm Password is required.</div>
+                                    <div *ngIf="signUpFC.comPwd.errors?.passwordMismatch">Password is not matched.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="inputBx group">
+                        <span>User Type</span>
+                        <select
+                            class="form-control"
+                            [ngClass]="{'is-invalid' : signUpFC.userType.touched && signUpFC.userType.invalid}"
+                            name="userType"
+                            formControlName="userType">
+                            <option [value]="0">Select Company Type</option>
+                            <option *ngFor="let user of userTypeList" [value]="user.id">{{user.name}}</option>
+                        </select>
+                        <div *ngIf="signUpFC.userType.touched && signUpFC.userType.invalid" class="invalid-tooltip">
+                            <div *ngIf="signUpFC.userType.errors?.min">User Type is required.</div>
+                        </div>
+                    </div>
+                    <div class="terms">
+                        <input 
+                            type="checkbox"
+                            name="terms"
+                            formControlName="terms"> 
+                        <span>I accept Terms and Conditions</span>
+                    </div>
+                    <div class="inputBx">
+                        <input type="submit" class="btn btn-primary" value="Sign Up" name="" [disabled]="signUpForm.invalid">
+                    </div>
+                </form>
+                <div class="acc-link">
+                    <p>Already have an account? <a [routerLink]="['/login']">Login</a></p>
                 </div>
-                <div class="terms">
-                    <input type="checkbox" name=""> 
-                    <span>I accept Terms and Conditions</span>
+                <div class="help">
+                    <p>Need help? <a href="#">Contact support</a></p>
                 </div>
-                <div class="inputBx">
-                    <input type="submit" value="Sign Up" name="">
-                </div>
-            </form>
-            <div class="acc-link">
-                <p>Already have an account? <a [routerLink]="['/login']">Login</a></p>
             </div>
-            <div class="help">
-                <p>Need help? <a href="#">Contact support</a></p>
+            <div *ngIf="step == 2">
+                <div class="header">
+                    <h2>Fill your details</h2>
+                </div>
+                <form [formGroup]="userRegForm" (submit)="onSaveUser()">
+                    <div class="inputBx group">
+                        <span>First Name</span>
+                        <input 
+                            type="text" 
+                            class="form-control"
+                            [ngClass]="{'is-invalid' : userRegFC.firstName.touched && userRegFC.firstName.invalid}"
+                            name="fName"
+                            formControlName="firstName"
+                            placeholder="Enter first name">
+                        <div *ngIf="userRegFC.firstName.touched && userRegFC.firstName.invalid" class="invalid-tooltip">
+                            <div *ngIf="userRegFC.firstName.errors?.required">First name is required.</div>
+                        </div>
+                    </div>
+                    <div class="inputBx group">
+                        <span>Last Name</span>
+                        <input 
+                            type="text"
+                            class="form-control"
+                            [ngClass]="{'is-invalid' : userRegFC.lastName.touched && userRegFC.lastName.invalid}"
+                            name="lName"
+                            formControlName="lastName"
+                            placeholder="Enter last name">
+                        <div *ngIf="userRegFC.lastName.touched && userRegFC.lastName.invalid" class="invalid-tooltip">
+                            <div *ngIf="userRegFC.lastName.errors?.required">Last name is required.</div>
+                        </div>
+                    </div>
+                    <div class="inputBx group">
+                        <span>Public Name</span>
+                        <input 
+                            type="text"
+                            class="form-control"
+                            [ngClass]="{'is-invalid' : userRegFC.publicName.touched && userRegFC.publicName.invalid}"
+                            name="pName"
+                            formControlName="publicName"
+                            placeholder="Enter public name">
+                        <div *ngIf="userRegFC.publicName.touched && userRegFC.publicName.invalid" class="invalid-tooltip">
+                            <div *ngIf="userRegFC.publicName.errors?.required">Public name is required.</div>
+                        </div>
+                    </div>
+                    <div class="inputBx group">
+                        <span>Address</span>
+                        <input 
+                            type="text"
+                            class="form-control"
+                            [ngClass]="{'is-invalid' : userRegFC.address.touched && userRegFC.address.invalid}"
+                            name="address"
+                            formControlName="address"
+                            placeholder="Enter address">
+                        <div *ngIf="userRegFC.address.touched && userRegFC.address.invalid" class="invalid-tooltip">
+                            <div *ngIf="userRegFC.address.errors?.required">Address is required.</div>
+                        </div>
+                    </div>
+                    <div class="inputBx group">
+                        <span>Mobile Number</span>
+                        <input 
+                            type="number" 
+                            class="form-control"
+                            [ngClass]="{'is-invalid' : userRegFC.mobile.touched && userRegFC.mobile.invalid}"
+                            name="mobile"
+                            formControlName="mobile">
+                        <div *ngIf="userRegFC.mobile.touched && userRegFC.mobile.invalid" class="invalid-tooltip">
+                            <div *ngIf="userRegFC.mobile.errors?.required">Mobile number is required.</div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="inputBx group">
+                                <span>Province</span>
+                                <ng-select
+                                    [ngClass]="{'is-invalid' : userRegFC.province.touched && userRegFC.province.invalid}"
+                                    name="province"
+                                    formControlName="province"
+                                    (change)="onChangeProvince()"
+                                    (clear)="clearProvince()">
+                                    <ng-option [value]="0">Select province</ng-option>
+                                    <ng-option *ngFor="let province of provinceList" [value]="province.id">{{province.name}}</ng-option>
+                                </ng-select>
+                                <div *ngIf="userRegFC.province.touched && userRegFC.province.invalid" class="invalid-tooltip">
+                                    <div *ngIf="userRegFC.province.errors?.min">Please select province.</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="inputBx group">
+                                <span>District</span>
+                                <ng-select
+                                    [ngClass]="{'is-invalid' : userRegFC.district.touched && userRegFC.district.invalid}"
+                                    name="district"
+                                    formControlName="district"
+                                    (change)="onChangeDistrict()"
+                                    (clear)="clearDistrict()">
+                                    <ng-option [value]="0">Select district</ng-option>
+                                    <ng-option *ngFor="let distrct of districtList" [value]="distrct.id">{{distrct.name}}</ng-option>
+                                </ng-select>
+                                <div *ngIf="userRegFC.district.touched && userRegFC.district.invalid" class="invalid-tooltip">
+                                    <div *ngIf="userRegFC.district.errors?.min">Please select district.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="inputBx group">
+                        <span>City</span>
+                        <ng-select
+                            [ngClass]="{'is-invalid' : userRegFC.city.touched && userRegFC.city.invalid}"
+                            name="city"
+                            formControlName="city"
+                            (clear)="clearCity()">
+                            <ng-option [value]="0">Select city</ng-option>
+                            <ng-option *ngFor="let city of cityList" [value]="city.id">{{city.name}}</ng-option>
+                        </ng-select>
+                        <div *ngIf="userRegFC.city.touched && userRegFC.city.invalid" class="invalid-tooltip">
+                            <div *ngIf="userRegFC.city.errors?.min">Please select city.</div>
+                        </div>
+                    </div>
+                    <div class="inputBx group">
+                        <span>Profile Picture</span>
+                        <input type="file" 
+                            class="form-control"
+                            [ngClass]="{'is-invalid' : userRegFC.profileImg.touched && userRegFC.profileImg.invalid}" 
+                            name="profileImg"
+                            formControlName="profileImg"
+                            (change)="onSelectProfile($event)"
+                            accept=".jpg, .jpeg, .png, .gif"
+                            #profileInput>
+                        <div *ngIf="userRegFC.profileImg.touched && userRegFC.profileImg.invalid" class="invalid-tooltip">
+                            <div *ngIf="userRegFC.profileImg.errors?.required">Profile picture is required.</div>
+                        </div>
+                    </div>
+                    <div class="inputBx">
+                        <input type="submit" class="btn btn-primary" value="Save" name="" [disabled]="userRegForm.invalid || saveDisabled">
+                    </div>
+                </form>
             </div>
         </div>
     </div>
