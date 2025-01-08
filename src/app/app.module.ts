@@ -47,6 +47,8 @@ import { VerifyAccountComponent } from './pages/login-details/verify-account/ver
 import { BreadcrumbComponent } from './layouts/breadcrumb/breadcrumb.component';
 import { ProfileComponent } from './pages/profile/profile/profile.component';
 import { CdkMenuModule } from '@angular/cdk/menu'
+import { NgSelectModule } from '@ng-select/ng-select';
+import { provideToastr, ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -99,9 +101,11 @@ import { CdkMenuModule } from '@angular/cdk/menu'
     OverlayModule,
     HttpClientModule,
     CommonModule,
-    CdkMenuModule
+    CdkMenuModule,
+    NgSelectModule,
+    ToastrModule.forRoot()
   ],
-  providers: [],
+  providers: [provideToastr()],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
