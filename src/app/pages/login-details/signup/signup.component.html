@@ -25,7 +25,7 @@
                             formControlName="email"
                             placeholder="Enter your email">
                         <div *ngIf="signUpFC.email.touched && signUpFC.email.invalid" class="invalid-tooltip">
-                            <div *ngIf="signUpFC.email.errors?.required">Password is required.</div>
+                            <div *ngIf="signUpFC.email.errors?.required">Email is required.</div>
                             <div *ngIf="signUpFC.email.errors?.email">Please enter a valid email.</div>
                         </div>
                     </div>

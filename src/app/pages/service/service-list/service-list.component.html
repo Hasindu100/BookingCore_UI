@@ -20,7 +20,7 @@
                     </select>
                 </div>
                 <div class="btn-section">
-                    <button class="btn btn-add" [routerLink]="['/service/add']">
+                    <button class="btn btn-add" [routerLink]="['/service/add']" [queryParams]="{ outletId: outletId}">
                         <i class="fa-solid fa-plus"></i> Add Service
                     </button>
                     <button class="btn btn-export">Export</button>
@@ -42,17 +42,17 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
+                        <tr *ngFor="let service of servicesList | paginate: {itemsPerPage: pageSize, currentPage: pageNumber, totalItems: totalElements};">
                             <td>
                                 <div class="logo">
-                                   <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-QCKIyHiPkoouLv349z1C4-vuEvaY8pX95A&s" class="logo-img bg-img" style="background-image: url(img/3.jpeg)" />
+                                   <img [src]="getServiceImageUrl(service.fetcherMedia)" class="logo-img bg-img" style="background-image: url(img/3.jpeg)" />
                                 </div>
                             </td>
-                            <td>Kelly Felder - Outlet 001</td>
+                            <td>{{service.name}}</td>
                             <td>
                                 <span class="rate positive">4.9</span>
                             </td>
-                            <td>Women Hand Bag</td>
+                            <td>{{service.fetcherCategory?.name}}</td>
                             <td>10-06-2024</td>
                             <td>1250</td>
                             <td>30 mins</td>
@@ -60,11 +60,11 @@
                                 <span class="active">Active</span>
                             </td>
                             <td class="action-icon">
-                                <i class="fa-regular fa-pen-to-square" style="margin-right: 10px;"></i>
+                                <i class="fa-regular fa-pen-to-square" style="margin-right: 10px;" routerLink="/service/add" [queryParams]="{ outletId: outletId, id: service.id }"></i>
                                 <i class="fa-solid fa-trash"></i>
                             </td>
                         </tr>
-                        <tr>
+                        <!-- <tr>
                             <td>
                                 <div class="logo">
                                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-QCKIyHiPkoouLv349z1C4-vuEvaY8pX95A&s" class="logo-img bg-img" style="background-image: url(img/3.jpeg)" />
@@ -129,7 +129,7 @@
                                 <i class="fa-regular fa-pen-to-square" style="margin-right: 10px;"></i>
                                 <i class="fa-solid fa-trash"></i>
                             </td>
-                        </tr>
+                        </tr> -->
                     </tbody>
                 </table>
             </div>
@@ -137,16 +137,19 @@
         <div class="row">
             <div class="footer-section">
                 <div class="table-data-size">
-                    <label>Showing Products 1 to 5 of 12</label>
+                    <label>Showing Products 1 to {{pageSize}} of {{totalElements}}</label>
                     <label>Display</label>
-                    <select class="drp-table-size" name="" id="">
-                        <option value="">5</option>
-                        <option value="">10</option>
-                        <option value="">15</option>
+                    <select class="drp-table-size" (change)="onTableSizeChange($event)">
+                        <option *ngFor="let size of tableSizes">
+                            {{size + "/" + totalElements}}
+                        </option>
                     </select>
                 </div>
                 <div class="btn-section">
-                    
+                    <pagination-controls
+            previousLabel="Prev"
+            nextLabel="Next"
+            (pageChange)="onTableDataChange($event)"></pagination-controls>
                 </div>
             </div>
         </div>

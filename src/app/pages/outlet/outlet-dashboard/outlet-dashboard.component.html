@@ -16,159 +16,23 @@
                     </select>
                 </div>
                 <div class="btn-section">
-                    <button class="btn btn-add" [routerLink]="['/package/add']">
-                        <i class="fa-solid fa-plus"></i> Add Package
+                    <button class="btn btn-add" [routerLink]="['/outlet/add']">
+                        <i class="fa-solid fa-plus"></i> Add Outlet
                     </button>
                 </div>
             </div>
         </div>
 
         <div class="row">
-            <div class="col-md-4">
-                <div class="card company-summary-card">
+            <div class="col-md-4" *ngFor="let outlet of outletList">
+                <div class="card company-summary-card" routerLink="/outlet/add" [queryParams]="{id: outlet.id}">
                     <div class="card-body">
                         <div class="card-header">
-                            <img class="company-logo bg-img" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-QCKIyHiPkoouLv349z1C4-vuEvaY8pX95A&s" alt="">
+                            <img class="company-logo bg-img" [src]="mediaUrl + outlet.branchMedia[0].url" alt="">
                             <div class="title">
-                                <h1>Kelly Felder (Pvt) Ltd.</h1>
+                                <h1>{{outlet.name}}</h1>
                                 <span class="location">
-                                    <i class="fa-solid fa-location-dot"></i> Battaramulla, Colombo
-                                </span>
-                            </div>
-                        </div>
-                        <h3>Shop Information</h3>
-                        <div class="row">
-                            <div class="col-md-6 details">
-                                <label>Category</label><br>
-                                <span>Fashion Accessories</span>
-                            </div>
-                            <div class="col-md-6 details">
-                                <label>Rating</label><br>
-                                <span>4.9 (10k)</span>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 details">
-                                <label>Orders</label><br>
-                                <span>458</span>
-                            </div>
-                            <div class="col-md-6 details">
-                                <label>Employees</label><br>
-                                <span>8</span>
-                            </div>
-                        </div>
-
-                        <h3>Analysis</h3>
-                        <div class="row" style="margin-bottom: 20px;">
-                            <div class="col-md-6 details">
-                                <label>Active Products</label><br>
-                                <span>4860</span>
-                            </div>
-                            <div class="col-md-6 details">
-                                <label>Deactive Products</label><br>
-                                <span>56</span>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 details">
-                                <label>Active Services</label><br>
-                                <span>17</span>
-                            </div>
-                            <div class="col-md-6 details">
-                                <label>Deactive Services</label><br>
-                                <span>2</span>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 details">
-                                <label>Active Packages</label><br>
-                                <span>23</span>
-                            </div>
-                            <div class="col-md-6 details">
-                                <label>Deactive Packages</label><br>
-                                <span>23</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card company-summary-card">
-                    <div class="card-body">
-                        <div class="card-header">
-                            <img class="company-logo bg-img" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-QCKIyHiPkoouLv349z1C4-vuEvaY8pX95A&s" alt="">
-                            <div class="title">
-                                <h1>Kelly Felder (Pvt) Ltd.</h1>
-                                <span class="location">
-                                    <i class="fa-solid fa-location-dot"></i> Battaramulla, Colombo
-                                </span>
-                            </div>
-                        </div>
-                        <h3>Shop Information</h3>
-                        <div class="row">
-                            <div class="col-md-6 details">
-                                <label>Category</label><br>
-                                <span>Fashion Accessories</span>
-                            </div>
-                            <div class="col-md-6 details">
-                                <label>Rating</label><br>
-                                <span>4.9 (10k)</span>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 details">
-                                <label>Orders</label><br>
-                                <span>458</span>
-                            </div>
-                            <div class="col-md-6 details">
-                                <label>Employees</label><br>
-                                <span>8</span>
-                            </div>
-                        </div>
-
-                        <h3>Analysis</h3>
-                        <div class="row" style="margin-bottom: 20px;">
-                            <div class="col-md-6 details">
-                                <label>Active Products</label><br>
-                                <span>4860</span>
-                            </div>
-                            <div class="col-md-6 details">
-                                <label>Deactive Products</label><br>
-                                <span>56</span>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 details">
-                                <label>Active Services</label><br>
-                                <span>17</span>
-                            </div>
-                            <div class="col-md-6 details">
-                                <label>Deactive Services</label><br>
-                                <span>2</span>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 details">
-                                <label>Active Packages</label><br>
-                                <span>23</span>
-                            </div>
-                            <div class="col-md-6 details">
-                                <label>Deactive Packages</label><br>
-                                <span>23</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card company-summary-card">
-                    <div class="card-body">
-                        <div class="card-header">
-                            <img class="company-logo bg-img" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-QCKIyHiPkoouLv349z1C4-vuEvaY8pX95A&s" alt="">
-                            <div class="title">
-                                <h1>Kelly Felder (Pvt) Ltd.</h1>
-                                <span class="location">
-                                    <i class="fa-solid fa-location-dot"></i> Battaramulla, Colombo
+                                    <i class="fa-solid fa-location-dot"></i> {{outlet.address}}
                                 </span>
                             </div>
                         </div>

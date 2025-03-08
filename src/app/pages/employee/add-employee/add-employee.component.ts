@@ -1,22 +1,51 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ImageFile } from 'src/app/models/models';
+import { EmployeeService } from '../services/employee.service';
+import { CommonService } from 'src/app/shared/services/common.service';
+import { ToastrService } from 'ngx-toastr';
+import { ActivatedRoute, Router } from '@angular/router';
+import { LoginService } from '../../login-details/services/login.service';
+import { UserLogin } from 'src/app/models/models';
 
 @Component({
   selector: 'app-add-employee',
   templateUrl: './add-employee.component.html',
   styleUrls: ['./add-employee.component.scss']
 })
-export class AddEmployeeComponent {
+export class AddEmployeeComponent implements OnInit {
   step: number = 1;
   generalInformation: any;
   pricingDetails: any;
   fileData: any[] = [];
   imageUrls: any[] = [];
   imageDataList: ImageFile[] = [];
+  formData = new FormData();
+  profilePicture: string = '';
+  loginId: number = 3;
+  companyId: number = 2;
+  formMode: string = 'Add';
+  employeeId: any;
+  isAddNewFile: boolean = false;
 
-  constructor(private formBuilder: FormBuilder) {
+  constructor(private formBuilder: FormBuilder,
+    private employeeService: EmployeeService,
+    private commonService: CommonService,
+    private loginService: LoginService,
+    private toastr: ToastrService,
+    private router: Router,
+    private route: ActivatedRoute) {
     this.createFormControllers();
+    
+    this.route.queryParams.subscribe((res: any) => {
+      if (res.id) {
+        this.employeeId = res.id;
+        this.setEmployeeData(this.employeeId);
+      }
+    })
+  }
+
+  ngOnInit(): void {
   }
 
   //#region getters for generalInformation
@@ -63,10 +92,10 @@ export class AddEmployeeComponent {
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       publicName: ['', Validators.required],
-      nic: [''],
-      email: ['', Validators.required],
+      nic: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
       mobile: ['', Validators.required],
-      currentAddress: ['', [Validators.required, Validators.email]]
+      currentAddress: ['', [Validators.required]]
     });
 
     this.pricingDetails = this.formBuilder.group({
@@ -74,6 +103,37 @@ export class AddEmployeeComponent {
       assignedShop: ['', Validators.required],
       ratePerHour: ['', Validators.required],
       allowance: ['', Validators.required]
+    })
+  }
+
+  setEmployeeData(employeeId: any) {
+    this.employeeService.getEmployeeById(employeeId).subscribe((res: any) => {
+      if (res.code == 200) {
+        this.formMode = 'Edit';
+        var data = res.object;
+        if (data != undefined) {
+          this.generalInformation.controls['firstName'].setValue(data.firstName);
+          this.generalInformation.controls['lastName'].setValue(data.lastName);
+          this.generalInformation.controls['publicName'].setValue(data.publicName);
+          this.generalInformation.controls['nic'].setValue(data.nic);
+          this.generalInformation.controls['currentAddress'].setValue(data.address);
+          this.generalInformation.controls['mobile'].setValue(data.mobileNumber);
+          this.generalInformation.controls['email'].setValue(data.email);
+          this.companyId = data.company.id;
+          this.profilePicture = data.profileImage;
+          var image = {
+            id: 0,
+            file: '',
+            filePath: data.profileImage,
+            url: ''
+          }
+          this.imageDataList.push(image);
+          this.imageUrls.push(this.commonService.mediaUrl + data.profileImage);
+        }
+      }
+      else {
+        this.formMode = 'Add';
+      }
     })
   }
 
@@ -92,10 +152,12 @@ export class AddEmployeeComponent {
 
   getFile(event: any) {
     if (event.target.files) {
+      this.isAddNewFile = true;
       for(let i=0; i < event.target.files.length; i++) {
         var id = i;
         var file = event.target.files[i];
         this.fileData.push(file);
+        this.formData.append('file', file);
         var filePath = event.target.files[i].name;
 
         var reader = new FileReader();
@@ -120,8 +182,100 @@ export class AddEmployeeComponent {
     this.fileData.splice(index, 1);
   }
 
-  saveProduct() {
+  onSave() {
+    if (this.isAddNewFile) {
+      this.commonService.saveMedia(this.loginId, this.formData).subscribe((res: any) => {
+        if (res.code == 200) {
+          this.profilePicture = res.object;
+          this.formMode == 'Add' ? this.registerEmployee() : this.updateEmployee();
+        }
+      });
+    }
+    else {
+      this.formMode == 'Add' ? this.registerEmployee() : this.updateEmployee();
+    }
+    
+  }
 
+  saveEmployee() {
+    let employeeDetails = {
+      "firstName": this.FirstName.value,
+      "lastName": this.LastName.value,
+      "publicName": this.PublicName.value,
+      "profileImage": this.profilePicture,
+      "address": this.CurrentAddress.value,
+      "mobileNumber": this.Mobile.value,
+      "email": this.Email.value,
+      "nic": this.NIC.value,
+      "userLogin": {
+        "id": this.loginId
+      },
+      "company": {
+        "id": this.companyId
+      }
+    }
+
+    this.employeeService.saveEmployee(employeeDetails).subscribe((res: any) => {
+      if (res.code == 200) {
+        this.toastr.success("Employee added successfully!");
+        this.router.navigateByUrl('/employee');
+      } else {
+        this.toastr.error("Something went wrong");
+      }
+    })
+  }
+
+  updateEmployee() {
+    let employeeDetails = {
+      "id": this.employeeId,
+      "firstName": this.FirstName.value,
+      "lastName": this.LastName.value,
+      "publicName": this.PublicName.value,
+      "profileImage": this.profilePicture,
+      "address": this.CurrentAddress.value,
+      "mobileNumber": this.Mobile.value,
+      "email": this.Email.value,
+      "nic": this.NIC.value,
+      "company": {
+        "id": this.companyId
+      }
+    }
+
+    this.employeeService.updateEmployeeDetails(employeeDetails).subscribe((res: any) => {
+      if (res.code == 200) {
+        this.toastr.success("Employee updated successfully!");
+        this.router.navigateByUrl('/employee');
+      } else {
+        this.toastr.error("Something went wrong");
+      }
+    })
+  }
+
+  registerEmployee() {
+    let loginDetails: UserLogin = {
+      userName: this.Email.value,
+      password: this.generatePassword(10),
+      userTypes: {
+        id: 2
+      }
+    }
+
+    this.loginService.saveLogin(loginDetails).subscribe((res: any) => {
+      if (res.code == 200) {
+        this.loginId = res.object.id;
+        this.saveEmployee();
+      }
+    });
+  }
+
+  generatePassword(length: number): string {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+[]{}|;:,.<>?';
+    let password = '';
+    for (let i = 0; i < length; i++) {
+        const randomIndex = Math.floor(Math.random() * characters.length);
+        password += characters[randomIndex];
+    }
+    return password;
   }
 
 }

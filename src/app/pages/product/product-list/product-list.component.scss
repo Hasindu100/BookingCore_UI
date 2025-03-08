@@ -230,3 +230,24 @@ table tbody tr {
         color: var(--ele-text-color);
     }
 }
+
+::ng-deep .ngx-pagination {
+    display: flex;
+    gap: 10px !important;
+}
+::ng-deep .ngx-pagination .current {
+    border-radius: 20px;
+    background-color: var(--add-btn-color) !important;
+}
+
+::ng-deep .ngx-pagination li a:hover {
+    background: rgb(245, 200, 165) !important;
+    border-radius: 20px;
+}
+
+::ng-deep {
+    .ngx-pagination li.pagination-next a:hover, .ngx-pagination li.pagination-previous a:hover{
+        background: transparent !important;
+        color: var(--add-btn-color);
+    }
+}

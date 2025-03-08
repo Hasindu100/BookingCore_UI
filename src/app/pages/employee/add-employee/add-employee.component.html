@@ -23,7 +23,7 @@
 
                         <fieldset *ngIf="step == 1">
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-6 group">
                                     <label>Employee first name</label><br>
                                     <input 
                                         type="text"
@@ -31,8 +31,11 @@
                                         formControlName="firstName"
                                         [ngClass]="{'is-invalid' : FirstName?.touched && FirstName?.invalid}"
                                         placeholder="First Name"/>
+                                    <div *ngIf="FirstName.touched && FirstName.invalid" class="invalid-tooltip">
+                                        <div *ngIf="FirstName.errors?.required">First name is required.</div>
+                                    </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-6 group">
                                     <label>Employee last name</label><br>
                                     <input 
                                         type="text"
@@ -40,10 +43,13 @@
                                         formControlName="lastName"
                                         [ngClass]="{'is-invalid' : LastName?.touched && LastName?.invalid}"
                                         placeholder="Last Name"/>
+                                    <div *ngIf="LastName.touched && LastName.invalid" class="invalid-tooltip">
+                                        <div *ngIf="LastName.errors?.required">Last name is required.</div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-6 group">
                                     <label>Public name</label><br>
                                     <input 
                                         type="text"
@@ -51,8 +57,11 @@
                                         formControlName="publicName"
                                         [ngClass]="{'is-invalid' : PublicName?.touched && PublicName?.invalid}"
                                         placeholder="Public Name"/>
+                                    <div *ngIf="PublicName.touched && PublicName.invalid" class="invalid-tooltip">
+                                        <div *ngIf="PublicName.errors?.required">Public name is required.</div>
+                                    </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-6 group">
                                     <label>NIC Number</label><br>
                                     <input 
                                         type="text"
@@ -60,10 +69,13 @@
                                         formControlName="nic"
                                         [ngClass]="{'is-invalid' : NIC?.touched && NIC?.invalid}"
                                         placeholder="NIC number"/>
+                                    <div *ngIf="NIC.touched && NIC.invalid" class="invalid-tooltip">
+                                        <div *ngIf="NIC.errors?.required">NIC Number is required.</div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-6 group">
                                     <label>Email Address</label><br>
                                     <input 
                                         type="text"
@@ -71,8 +83,12 @@
                                         formControlName="email"
                                         [ngClass]="{'is-invalid' : Email?.touched && Email?.invalid}"
                                         placeholder="Email Address"/>
+                                    <div *ngIf="Email.touched && Email.invalid" class="invalid-tooltip">
+                                        <div *ngIf="Email.errors?.required">Email is required.</div>
+                                        <div *ngIf="Email.errors?.email">Please enter a valid email.</div>
+                                    </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-6 group">
                                     <label>Mobile Number</label><br>
                                     <input 
                                         type="number"
@@ -80,10 +96,13 @@
                                         formControlName="mobile"
                                         [ngClass]="{'is-invalid' : Mobile?.touched && Mobile?.invalid}"
                                         placeholder="Mobile Number"/>
+                                    <div *ngIf="Mobile.touched && Mobile.invalid" class="invalid-tooltip">
+                                        <div *ngIf="Mobile.errors?.required">Mobile Number is required.</div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-12">
+                                <div class="col-md-12 group">
                                     <label>Current Address</label><br>
                                     <input 
                                         type="text"
@@ -91,13 +110,16 @@
                                         formControlName="currentAddress"
                                         [ngClass]="{'is-invalid' : CurrentAddress?.touched && CurrentAddress?.invalid}"
                                         placeholder="Enter current address"/>
+                                    <div *ngIf="CurrentAddress.touched && CurrentAddress.invalid" class="invalid-tooltip">
+                                        <div *ngIf="CurrentAddress.errors?.required">Current Address is required.</div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="footer-btn">
                                     <div></div>
                                     <div class="btn-section">
-                                        <button class="btn btn-next" (click)="next()">Next
+                                        <button class="btn btn-next" [disabled]="generalInformation.invalid" (click)="next()">Next
                                             <i class="fa-solid fa-arrow-right"></i>
                                         </button>
                                     </div>
@@ -129,7 +151,7 @@
                             </div>
                         </div>
 
-                        <div class="file-container" *ngIf="imageDataList.length <= 3">
+                        <div class="file-container" *ngIf="imageDataList.length == 0">
                             <input type="file" class="file" (change)="getFile($event)" multiple="true">
                             <label>
                                 <svg width="54" height="54" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -260,7 +282,7 @@
                                     <button class="btn btn-back" (click)="previous()">
                                         <i class="fa-solid fa-arrow-left"></i>Back
                                     </button>
-                                    <button class="btn btn-next" (click)="saveProduct()">Save
+                                    <button class="btn btn-next" (click)="onSave()"> {{formMode == 'Add' ? 'Save' : 'Update'}}
                                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path fill-rule="evenodd" clip-rule="evenodd" d="M5 2C4.44772 2 4 2.44772 4 3V21.382C4 22.1253 4.78231 22.6088 5.44721 22.2764L11.5528 19.2236C11.8343 19.0828 12.1657 19.0828 12.4472 19.2236L18.5528 22.2764C19.2177 22.6088 20 22.1253 20 21.382V3C20 2.44772 19.5523 2 19 2H5ZM18 4H6V20L12 17L18 20V4Z" fill="var(--inner-btn-color)"/>
                                             <path d="M14.8284 7.87865C14.4379 7.48812 13.8047 7.48812 13.4142 7.87865L11.2929 9.99994L10.5858 9.2928C10.1952 8.90228 9.56208 8.90228 9.17156 9.2928C8.78103 9.68333 8.78103 10.3165 9.17156 10.707L10.5797 12.1151C10.5817 12.1172 10.5837 12.1192 10.5858 12.1213C10.9763 12.5118 11.6095 12.5118 12 12.1213L14.8284 9.29286C15.2189 8.90234 15.2189 8.26917 14.8284 7.87865Z" fill="var(--inner-btn-color)"/>

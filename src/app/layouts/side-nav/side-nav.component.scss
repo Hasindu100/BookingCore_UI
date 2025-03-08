@@ -305,3 +305,7 @@ span:not(.root).selected::before {
     bottom: 0;
     position: absolute;
 }
+
+.active-link {
+    color: var(--add-btn-color) !important;
+}

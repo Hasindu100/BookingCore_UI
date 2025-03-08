@@ -23,7 +23,7 @@
 
                         <fieldset *ngIf="step == 1">
                             <div class="row">
-                                <div class="col-md-12">
+                                <div class="col-md-12 group">
                                     <label>Shop Name</label><br>
                                     <input 
                                         type="text"
@@ -31,6 +31,9 @@
                                         formControlName="shopName"
                                         [ngClass]="{'is-invalid' : ShopName?.touched && ShopName?.invalid}"
                                         placeholder="Shop Name"/>
+                                    <div *ngIf="ShopName.touched && ShopName.invalid" class="invalid-tooltip">
+                                        <div *ngIf="ShopName.errors?.required">Shop name is required.</div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="row">
@@ -46,7 +49,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-12">
+                                <div class="col-md-12 group">
                                     <label>Shop Address</label><br>
                                     <input 
                                         class="form-control"
@@ -54,32 +57,60 @@
                                         formControlName="address"
                                         [ngClass]="{'is-invalid' : Address?.touched && Address?.invalid}"
                                         placeholder="Enter Your Shop Address"/>
+                                    <div *ngIf="Address.touched && Address.invalid" class="invalid-tooltip">
+                                        <div *ngIf="Address.errors?.required">Address is required.</div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-6">
-                                    <label>City</label><br>
-                                    <select>
-                                        <option value="">Your City</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-6">
+                                <div class="col-md-6 group">
                                     <label>Province</label><br>
-                                    <select>
-                                        <option value="">Your Province</option>
-                                    </select>
+                                    <ng-select
+                                        [ngClass]="{'is-invalid' : Province.touched && Province.invalid}"
+                                        name="province"
+                                        formControlName="province"
+                                        (change)="onChangeProvince()"
+                                        (clear)="clearProvince()">
+                                        <ng-option [value]="0">Select province</ng-option>
+                                        <ng-option *ngFor="let province of provinceList" [value]="province.id">{{province.name}}</ng-option>
+                                    </ng-select>
+                                    <div *ngIf="Province.touched && Province.invalid" class="invalid-tooltip">
+                                        <div *ngIf="Province.errors?.min">Please select province.</div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12">
+                                <div class="col-md-6 group">
                                     <label>District</label><br>
-                                    <select>
-                                        <option value="">Your District</option>
-                                    </select>
+                                    <ng-select
+                                        [ngClass]="{'is-invalid' : District.touched && District.invalid}"
+                                        name="district"
+                                        formControlName="district"
+                                        (change)="onChangeDistrict()"
+                                        (clear)="clearDistrict()">
+                                        <ng-option [value]="0">Select district</ng-option>
+                                        <ng-option *ngFor="let distrct of districtList" [value]="distrct.id">{{distrct.name}}</ng-option>
+                                    </ng-select>
+                                    <div *ngIf="District.touched && District.invalid" class="invalid-tooltip">
+                                        <div *ngIf="District.errors?.min">Please select district.</div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-6 group">
+                                    <ng-select
+                                        [ngClass]="{'is-invalid' : City.touched && City.invalid}"
+                                        name="city"
+                                        formControlName="city"
+                                        (clear)="clearCity()">
+                                        <ng-option [value]="0">Select city</ng-option>
+                                        <ng-option *ngFor="let city of cityList" [value]="city.id">{{city.name}}</ng-option>
+                                    </ng-select>
+                                    <div *ngIf="City.touched && City.invalid" class="invalid-tooltip">
+                                        <div *ngIf="City.errors?.min">Please select city.</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 group">
                                     <label>Latitude</label><br>
                                     <input 
                                         class="form-control"
@@ -87,8 +118,11 @@
                                         formControlName="latitude"
                                         [ngClass]="{'is-invalid' : Latitude?.touched && Latitude?.invalid}"
                                         placeholder="Latitude"/>
+                                    <div *ngIf="Latitude.touched && Latitude.invalid" class="invalid-tooltip">
+                                        <div *ngIf="Latitude.errors?.required">Latitude is required.</div>
+                                    </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-6 group">
                                     <label>Longitude</label><br>
                                     <input 
                                         class="form-control"
@@ -96,19 +130,50 @@
                                         formControlName="longitude"
                                         [ngClass]="{'is-invalid' : Longitude?.touched && Longitude?.invalid}"
                                         placeholder="Longitude"/>
+                                    <div *ngIf="Longitude.touched && Longitude.invalid" class="invalid-tooltip">
+                                        <div *ngIf="Longitude.errors?.required">Longitude is required.</div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-6 group">
+                                    <label>Open Time</label><br>
+                                    <input 
+                                        class="form-control"
+                                        type="time"
+                                        formControlName="openTime"
+                                        
+                                        [ngClass]="{'is-invalid' : OpenTime?.touched && OpenTime?.invalid}"/>
+                                    <div *ngIf="OpenTime.touched && OpenTime.invalid" class="invalid-tooltip">
+                                        <div *ngIf="OpenTime.errors?.required">Open Time is required.</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 group">
+                                    <label>Close Time</label><br>
+                                    <input 
+                                        class="form-control"
+                                        type="time"
+                                        formControlName="closeTime"
+                                        [ngClass]="{'is-invalid' : CloseTime?.touched && CloseTime?.invalid}"/>
+                                    <div *ngIf="CloseTime.touched && CloseTime.invalid" class="invalid-tooltip">
+                                        <div *ngIf="CloseTime.errors?.required">Close Time is required.</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 group">
                                     <label>Mobile Number</label><br>
                                     <input 
                                         class="form-control"
-                                        type="text"
+                                        type="number"
                                         formControlName="mobile"
                                         [ngClass]="{'is-invalid' : Mobile?.touched && Mobile?.invalid}"
                                         placeholder="Your Mobile Number"/>
+                                    <div *ngIf="Mobile.touched && Mobile.invalid" class="invalid-tooltip">
+                                        <div *ngIf="Mobile.errors?.required">Mobile is required.</div>
+                                    </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-6 group">
                                     <label>Email</label><br>
                                     <input 
                                         class="form-control"
@@ -116,10 +181,14 @@
                                         formControlName="email"
                                         [ngClass]="{'is-invalid' : Email?.touched && Email?.invalid}"
                                         placeholder="Email address"/>
+                                    <div *ngIf="Email.touched && Email.invalid" class="invalid-tooltip">
+                                        <div *ngIf="Email.errors?.required">Email is required.</div>
+                                        <div *ngIf="Email.errors?.email">Please enter a valid email.</div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-6 group">
                                     <label>Order Gap Duration</label><br>
                                     <input 
                                         class="form-control"
@@ -127,10 +196,13 @@
                                         formControlName="orderGapDuration"
                                         [ngClass]="{'is-invalid' : OrderGapDuration?.touched && OrderGapDuration?.invalid}"
                                         placeholder="Your Order gap duration"/>
+                                    <div *ngIf="OrderGapDuration.touched && OrderGapDuration.invalid" class="invalid-tooltip">
+                                        <div *ngIf="OrderGapDuration.errors?.required">Order Gap Duration is required.</div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-6 group">
                                     <label>Is Employee Selection Enabled</label><br>
                                     <input 
                                         class="form-control"
@@ -138,8 +210,11 @@
                                         formControlName="employeeSelectionEnabled"
                                         [ngClass]="{'is-invalid' : EmployeeSelectionEnabled?.touched && EmployeeSelectionEnabled?.invalid}"
                                         placeholder="is employee selection enabled"/>
+                                    <div *ngIf="EmployeeSelectionEnabled.touched && EmployeeSelectionEnabled.invalid" class="invalid-tooltip">
+                                        <div *ngIf="EmployeeSelectionEnabled.errors?.required">Is Employee Selection Enabled is required.</div>
+                                    </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-6 group">
                                     <label>Is Multiple Employee Selection Enabled Based on Fetcher</label><br>
                                     <input 
                                         class="form-control"
@@ -147,13 +222,16 @@
                                         formControlName="multipleEmployeeSelectionEnabled"
                                         [ngClass]="{'is-invalid' : MultipleEmployeeSelectionEnabled?.touched && MultipleEmployeeSelectionEnabled?.invalid}"
                                         placeholder="is multiple employee selection enabled based on fetcher"/>
+                                    <div *ngIf="MultipleEmployeeSelectionEnabled.touched && MultipleEmployeeSelectionEnabled.invalid" class="invalid-tooltip">
+                                        <div *ngIf="MultipleEmployeeSelectionEnabled.errors?.required">MultipleEmployeeSelectionEnabled is required.</div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="footer-btn">
                                     <div></div>
                                     <div class="btn-section">
-                                        <button class="btn btn-next" (click)="next()">Next
+                                        <button class="btn btn-next" [disabled]="generalInformation.invalid" (click)="next()">Next
                                             <i class="fa-solid fa-arrow-right"></i>
                                         </button>
                                     </div>
@@ -341,7 +419,7 @@
                                 <button class="btn btn-back" (click)="previous()">
                                     <i class="fa-solid fa-arrow-left"></i>Back
                                 </button>
-                                <button class="btn btn-next" (click)="saveOutlet()">Save
+                                <button class="btn btn-next" (click)="onSave()">{{formMode == 'Add' ? 'Save' : 'Update'}}
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path fill-rule="evenodd" clip-rule="evenodd" d="M5 2C4.44772 2 4 2.44772 4 3V21.382C4 22.1253 4.78231 22.6088 5.44721 22.2764L11.5528 19.2236C11.8343 19.0828 12.1657 19.0828 12.4472 19.2236L18.5528 22.2764C19.2177 22.6088 20 22.1253 20 21.382V3C20 2.44772 19.5523 2 19 2H5ZM18 4H6V20L12 17L18 20V4Z" fill="var(--inner-btn-color)"/>
                                         <path d="M14.8284 7.87865C14.4379 7.48812 13.8047 7.48812 13.4142 7.87865L11.2929 9.99994L10.5858 9.2928C10.1952 8.90228 9.56208 8.90228 9.17156 9.2928C8.78103 9.68333 8.78103 10.3165 9.17156 10.707L10.5797 12.1151C10.5817 12.1172 10.5837 12.1192 10.5858 12.1213C10.9763 12.5118 11.6095 12.5118 12 12.1213L14.8284 9.29286C15.2189 8.90234 15.2189 8.26917 14.8284 7.87865Z" fill="var(--inner-btn-color)"/>

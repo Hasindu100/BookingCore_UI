@@ -274,3 +274,38 @@ table tbody tr {
     background: var(--ele-text-color);
     cursor: pointer;
 }
+
+.uploaded-image {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 10px;
+    .image-container {
+        width: 20%;
+        overflow: hidden;
+        margin-right: 5%;
+        position: relative;
+        img {
+            height: 220px;
+            width: 100%;
+        }
+        span {
+            display: block;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            padding-top: 10px;
+            color: var(--sub-ele-text-color);
+        }
+        .img-remove {
+            position: absolute;
+            top: 6%;
+            left: 92%;
+            transform: translate(-50%, -50%);
+            -ms-transform: translate(-50%, -50%);
+            color: var(--add-btn-color);
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+        }
+    }
+}
