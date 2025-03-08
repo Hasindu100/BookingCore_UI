@@ -14,7 +14,7 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./add-product.component.scss']
 })
 export class AddProductComponent implements OnInit {
-  step: number = 3;
+  step: number = 1;
   generalInformation: any;
   pricingDetails: any;
   fileData: any[] = [];
