@@ -7,7 +7,7 @@
           <small>Owner</small>
         </div>
 
-        <div class="menu-list">
+        <div id="test" class="menu-list">
           <ul>
             <li>
               <span class="folder root dashboard" (click)="openMenu($event, 'dashboard')">Dashboard</span>
@@ -41,8 +41,8 @@
                 <li>
                   <span class="folder" (click)="openMenu($event, 'outlet')">Shops</span>
                   <ul class="nested">
-                    <li>
-                      <span class="folder" (click)="openMenu($event)">Shop Name 01</span>
+                    <li *ngFor="let outlet of outletList">
+                      <span class="folder" (click)="openMenu($event)">{{outlet.name}}</span>
                       <ul class="nested">
                         <li>
                           <span class="folder" (click)="openMenu($event)">Orders</span>
@@ -51,8 +51,8 @@
                             <li class="img" [routerLink]="['/order']">Order List</li>
                           </ul>
                         </li>
-                        <li class="img" [routerLink]="['/product']">Items</li>
-                        <li class="img" [routerLink]="['/service']">Services</li>
+                        <li class="img" [routerLink]="['/product']" [queryParams]="{ outletId: outlet.id}">Items</li>
+                        <li class="img" [routerLink]="['/service']" [queryParams]="{ outletId: outlet.id}">Services</li>
                         <li class="img" [routerLink]="['/package']">Packages</li>
                         <li class="img" [routerLink]="['/package']">Employees</li>
                       </ul>

@@ -20,7 +20,7 @@
                     </select>
                 </div>
                 <div class="btn-section">
-                    <button class="btn btn-add" [routerLink]="['/product/add']">
+                    <button class="btn btn-add" [routerLink]="['/employee/add']">
                         <i class="fa-solid fa-plus"></i> Add Employee
                     </button>
                     <button class="btn btn-export">Export</button>
@@ -42,7 +42,29 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
+                        <tr *ngFor="let employee of employeeList | paginate: {itemsPerPage: pageSize, currentPage: pageNumber, totalItems: totalElements}; let i = index">
+                            <td><input type="checkbox"></td>
+                            <td>
+                                <div class="logo">
+                                   <img [src]="mediaUrl + employee.profileImage" class="logo-img bg-img" />
+                                </div>
+                            </td>
+                            <td>{{employee.firstName + " " + employee.lastName}}</td>
+                            <td>
+                                <span class="rate positive">4.9</span>
+                            </td>
+                            <td>Women Hand Bag</td>
+                            <td>Kelly Fleder - Battaramulla</td>
+                            <td>1250</td>
+                            <td>
+                                <span class="active">Active</span>
+                            </td>
+                            <td class="action-icon">
+                                <i class="fa-regular fa-pen-to-square" style="margin-right: 10px;" routerLink="/employee/add" [queryParams]="{id: employee.id}"></i>
+                                <i class="fa-solid fa-trash"></i>
+                            </td>
+                        </tr>
+                        <!-- <tr>
                             <td><input type="checkbox"></td>
                             <td>
                                 <div class="logo">
@@ -129,7 +151,7 @@
                                 <i class="fa-regular fa-pen-to-square" style="margin-right: 10px;"></i>
                                 <i class="fa-solid fa-trash"></i>
                             </td>
-                        </tr>
+                        </tr> -->
                     </tbody>
                 </table>
             </div>
@@ -137,16 +159,19 @@
         <div class="row">
             <div class="footer-section">
                 <div class="table-data-size">
-                    <label>Showing Products 1 to 5 of 12</label>
+                    <label>Showing Products 1 to {{pageSize}} of {{totalElements}}</label>
                     <label>Display</label>
-                    <select class="drp-table-size" name="" id="">
-                        <option value="">5</option>
-                        <option value="">10</option>
-                        <option value="">15</option>
+                    <select class="drp-table-size" (change)="onTableSizeChange($event)">
+                        <option *ngFor="let size of tableSizes">
+                            {{size + "/" + totalElements}}
+                        </option>
                     </select>
                 </div>
                 <div class="btn-section">
-                    
+                    <pagination-controls
+            previousLabel="Prev"
+            nextLabel="Next"
+            (pageChange)="onTableDataChange($event)"></pagination-controls>
                 </div>
             </div>
         </div>

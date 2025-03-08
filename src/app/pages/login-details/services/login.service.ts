@@ -36,4 +36,9 @@ export class LoginService {
     let url = environment.apiUrl + "user/save";
     return this.http.post(url, userDetails);
   }
+
+  saveOwner(userDetails: any) {
+    let url = environment.apiUrl + "owner/save";
+    return this.http.post(url, userDetails);
+  }
 }

@@ -1,0 +1,52 @@
+<div class="container">
+    <div class="assign-category">
+        <div class="close-btn">
+            <i class="fa-solid fa-xmark" (click)="close()"></i>
+        </div>
+        <h2 class="title">Add Category</h2>
+        <div class="row">
+            <div class="col-md-12">
+                <form #categoryForm="ngForm">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>Name</label>
+                            <input 
+                                type="text"
+                                class="form-control"
+                                name="catName"
+                                #catName='ngModel'
+                                [(ngModel)]="categoryName"
+                                placeholder="Enter Name"
+                                required />
+                        </div>
+                        <div class="col-md-6">
+                            <label>Image</label>
+                            <div class="file-input-container">
+                                <div class="file-input" [ngClass]="{'is-invalid' : profileInput.touched && categoryForm.invalid}">
+                                    <button class="btn btn-outline-success my-2 my-sm-0" (click)="openMyComputer()">Select</button>
+                                    <span>{{categoryImagePath == '' ? "No file Chosen" : categoryImagePath}}</span>
+                                </div>
+                            </div>
+                            <input type="file" 
+                                style="display: none;"
+                                id="imgupload" 
+                                name="catImage"
+                                (change)="onSelectProfile($event)"
+                                accept=".jpg, .jpeg, .png, .gif"
+                                #profileInput='ngModel'
+                                [(ngModel)]="categoryImagePath"
+                                required >
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <button class="btn btn-add-new-cat" [disabled]="categoryForm.invalid" (click)="onSave()">
+                                Add
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

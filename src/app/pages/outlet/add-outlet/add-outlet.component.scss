@@ -311,3 +311,31 @@ table tbody{
     }
 }
 
+.invalid-tooltip {
+    display: block;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: fit-content;
+    padding: 0.25rem 0.5rem;
+    margin-top: 0.25rem;
+    font-size: 0.875rem;
+    color: #fff;
+    background-color: #dc3545;
+    border-radius: 0.25rem;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.group {
+    position: relative;
+}
+
+.group:hover .invalid-tooltip {
+    opacity: 10;
+}
+
+::ng-deep ng-select.ng-invalid.ng-touched .ng-select-container {
+    border-color: #dc3545;
+}
+

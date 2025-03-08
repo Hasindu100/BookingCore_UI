@@ -7,6 +7,7 @@ import { environment } from 'src/environment';
 })
 export class CommonService {
   baseUrl = environment.apiUrl;
+  mediaUrl = environment.apiUrl + "media/";
 
   constructor(private http: HttpClient) { }
 

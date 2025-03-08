@@ -190,7 +190,9 @@ export class SignupComponent implements OnInit {
       }
     }
 
-    this.loginService.saveUser(userDetails).subscribe((res: any) => {
+    var userType = this.signUpFC.userType.value;
+
+    (userType == 4 ? this.loginService.saveOwner(userDetails) : this.loginService.saveUser(userDetails)).subscribe((res: any) => {
       if (res.code == 200) {
         this.toastr.success("Successfully registered!");
         this.router.navigateByUrl('/login');

@@ -49,6 +49,9 @@ import { ProfileComponent } from './pages/profile/profile/profile.component';
 import { CdkMenuModule } from '@angular/cdk/menu'
 import { NgSelectModule } from '@ng-select/ng-select';
 import { provideToastr, ToastrModule } from 'ngx-toastr';
+import { NgxPaginationModule } from 'ngx-pagination';
+import { AddProductCategoryPopupComponent } from './pages/product/add-product-category-popup/add-product-category-popup.component';
+import { AddServiceCategoryPopupComponent } from './pages/service/add-service-category-popup/add-service-category-popup.component';
 
 @NgModule({
   declarations: [
@@ -89,7 +92,9 @@ import { provideToastr, ToastrModule } from 'ngx-toastr';
     SignupComponent,
     VerifyAccountComponent,
     BreadcrumbComponent,
-    ProfileComponent
+    ProfileComponent,
+    AddProductCategoryPopupComponent,
+    AddServiceCategoryPopupComponent
   ],
   imports: [
     BrowserModule,
@@ -103,6 +108,7 @@ import { provideToastr, ToastrModule } from 'ngx-toastr';
     CommonModule,
     CdkMenuModule,
     NgSelectModule,
+    NgxPaginationModule,
     ToastrModule.forRoot()
   ],
   providers: [provideToastr()],
