@@ -57,9 +57,13 @@
                                 </div>
                                 <div class="col-md-6">
                                     <label>Company Category</label><br>
-                                    <select>
-                                        <option value="">Choose type</option>
-                                    </select>
+                                    <ng-select
+                                        [ngClass]="{'is-invalid' : CompanyCategory?.touched && CompanyCategory?.invalid}"
+                                        name="category"
+                                        formControlName="companyCategory">
+                                        <ng-option [value]="0">Choose type</ng-option>
+                                        <ng-option *ngFor="let category of companyTypes" [value]="category.id">{{category.name}}</ng-option>
+                                    </ng-select>
                                 </div>
                             </div>
                             <div class="row">

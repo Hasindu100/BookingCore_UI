@@ -25,10 +25,12 @@ export class AddServiceComponent implements OnInit {
   categoryList: any[] = [];
   sub: any;
   isAddNewFile: boolean = false;
-  loginId: number = 3;
+  loginId: number = this.commonService.user.loginId;
   formMode: string = 'Add';
   outletId: number = 0;
   serviceId: number = 0;
+  itemPriceId: number = 0;
+  isAddedDiscount: boolean = false;
 
   constructor(private formBuilder: FormBuilder,
     private router: Router,
@@ -85,12 +87,80 @@ export class AddServiceComponent implements OnInit {
     return this.pricingDetails.get('minute');
   }
 
+  get PriceName() {
+    return this.pricingDetails.get('priceName')
+  }
+
+  get PriceDescription() {
+    return this.pricingDetails.get('priceDescription')
+  }
+
   get ServicePrice() {
     return this.pricingDetails.get('servicePrice');
   }
 
   get LineDiscount() {
     return this.pricingDetails.get('lineDiscount');
+  }
+
+  get DiscountDescription() {
+    return this.pricingDetails.get('discountDescription');
+  }
+
+  get DiscountValue() {
+    return this.pricingDetails.get('discountValue');
+  }
+
+  get DiscountPercentage() {
+    return this.pricingDetails.get('discountPercentage');
+  }
+
+  get MinimumQuantity() {
+    return this.pricingDetails.get('minimumQuantity');
+  }
+
+  get MinimumOrderValue() {
+    return this.pricingDetails.get('minimumOrderValue');
+  }
+
+  get MaximumDiscountValue() {
+    return this.pricingDetails.get('maximumDiscountValue');
+  }
+
+  get DiscountStartTime() {
+    return this.pricingDetails.get('discountStartTime');
+  }
+
+  get DiscountCloseTime() {
+    return this.pricingDetails.get('discountCloseTime');
+  }
+
+  get BonusDescription() {
+    return this.pricingDetails.get('bonusDescription');
+  }
+
+  get BonusQuantity() {
+    return this.pricingDetails.get('bonusQuantity');
+  }
+
+  get MinimumBonusQuantity() {
+    return this.pricingDetails.get('minimumBonusQuantity');
+  }
+
+  get MinimumBonusOrderValue() {
+    return this.pricingDetails.get('minimumBonusOrderValue');
+  }
+
+  get MaximumBonusQuantity() {
+    return this.pricingDetails.get('maximumBonusQuantity');
+  }
+
+  get BonusStartTime() {
+    return this.pricingDetails.get('bonusStartTime');
+  }
+
+  get BonusCloseTime() {
+    return this.pricingDetails.get('bonusCloseTime');
   }
 
   //#endregion
@@ -108,8 +178,25 @@ export class AddServiceComponent implements OnInit {
       day: ['', Validators.required],
       hour: ['', Validators.required],
       minute: ['', Validators.required],
+      priceName: ['', Validators.required],
+      priceDescription: ['', Validators.required],
       servicePrice: ['', Validators.required],
-      lineDiscount: ['', Validators.required]
+      lineDiscount: ['', Validators.required],
+      discountDescription: ['', Validators.required],
+      discountValue: ['', Validators.required],
+      discountPercentage: ['', Validators.required],
+      minimumQuantity: ['', Validators.required],
+      minimumOrderValue: ['', Validators.required],
+      maximumDiscountValue: ['', Validators.required],
+      discountStartTime: ['', Validators.required],
+      discountCloseTime: ['', Validators.required],
+      bonusDescription: ['', Validators.required],
+      bonusQuantity: ['', Validators.required],
+      minimumBonusQuantity: ['', Validators.required],
+      minimumBonusOrderValue: ['', Validators.required],
+      maximumBonusQuantity: ['', Validators.required],
+      bonusStartTime: ['', Validators.required],
+      bonusCloseTime: ['', Validators.required],
     })
   }
 
@@ -136,7 +223,7 @@ export class AddServiceComponent implements OnInit {
     this.shopService.getServicesByCompanyId(2,2,0).subscribe((res: any) => {
       if (res.code == 200) {
         this.formMode = 'Edit';
-        var data = res.object.content[1];
+        var data = res.object.content[0];
         if (data != undefined) {
           // set general info
           this.ServiceName.setValue(data.name);
@@ -164,6 +251,19 @@ export class AddServiceComponent implements OnInit {
             }
             this.savedMediaList.push(media);
           });
+
+          // set pricing data
+          if (data.fetcherPrices.length > 0) {
+            var pricingData = data.fetcherPrices[0];
+            this.itemPriceId = pricingData.id;
+            this.PriceName.setValue(pricingData.name);
+            this.PriceDescription.setValue(pricingData.description);
+            this.ServicePrice.setValue(pricingData.price);
+
+            if (pricingData.discounts.length > 0) {
+              this.isAddedDiscount = true;
+            }
+          }
         }
       }
     })
@@ -279,10 +379,88 @@ export class AddServiceComponent implements OnInit {
         }
         else {
           this.toastr.success("Product updated successfully!");
+          this.savePriceAndDiscountDetails(res.object.id);
         }
-        this.router.navigateByUrl('/product/details');
+        //this.router.navigateByUrl('/product/details');
       } else {
         this.toastr.error("Something went wrong");
+      }
+    })
+  }
+
+  savePriceAndDiscountDetails(serviceId: number) {
+    let priceDetails = {
+      "id": this.itemPriceId,
+      "duration": 1,
+      "name": this.PriceName.value,
+      "description": this.PriceDescription.value,
+      "price": this.ServicePrice.value,
+      "isDefault": true,
+      "isActive": true
+    }
+
+    let discountDetails = {
+      "priceId": [],
+      "fetcherPriceDiscount": {
+        "id": 0,
+        "description": "string",
+        "discountValue": 10,
+        "discountPCT": 10,
+        "minimumQTY": 10,
+        "minimumOrderValue": 10,
+        "maximumDiscountValue": 10,
+        "startTime": "2025-03-19T14:57:06.015Z",
+        "endTime": "2025-03-19T14:57:06.015Z",
+        "isActive": true,
+        "isDeleted": true,
+        "bonusMedia": {
+          "id": 0,
+          "name": "string",
+          "url": "string",
+          "isActive": true,
+          "mediaType": {
+            "id": 0,
+            "name": "string",
+            "image": "string",
+            "isActive": true
+          }
+        }
+      },
+      "fetcherPriceBonus": {
+        "id": 0,
+        "bonusFetcherId": this.serviceId,
+        "description": "string",
+        "bonusQTY": 10,
+        "minimumQTY": 10,
+        "minimumOrderValue": 10,
+        "maximumBonusQTY": 10,
+        "startTime": "2025-03-19T14:57:06.015Z",
+        "endTime": "2025-03-19T14:57:06.015Z",
+        "isActive": true,
+        "isDeleted": true,
+        "discountMedia": {
+          "id": 0,
+          "name": "string",
+          "url": "string",
+          "isActive": true,
+          "mediaType": {
+            "id": 0,
+            "name": "string",
+            "image": "string",
+            "isActive": true
+          }
+        }
+      }
+    };
+
+    (this.formMode == 'Add' ? this.shopService.savePriceDetails(priceDetails, serviceId) : this.shopService.updatePriceDetails(priceDetails, serviceId)).subscribe((res: any) => {
+      if (res.code == 200) {
+        var priceItemId: any = [];
+        priceItemId.push(res.object.itemPrices[res.object.itemPrices.length - 1].id);
+        discountDetails.priceId = priceItemId;
+        (this.isAddedDiscount ? this.shopService.saveDiscountDetails(discountDetails) : this.shopService.updateDiscountDetails(discountDetails)).subscribe((res: any) => {
+
+        });
       }
     })
   }

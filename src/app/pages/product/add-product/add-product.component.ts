@@ -26,7 +26,7 @@ export class AddProductComponent implements OnInit {
   formData = new FormData();
   outletId: number = 0;
   formMode: string = 'Add';
-  loginId: number = 3;
+  loginId: number = this.commonService.user.loginId;
   savedMediaList: any[] = [];
   productId:number = 0;
   itemPriceId: number = 0;
@@ -224,19 +224,10 @@ export class AddProductComponent implements OnInit {
   }
 
   setProductData(productId: number) {
-    // this.productService.getProductById(productId).subscribe((res: any) => {
-    //   if (res.code == 200) {
-    //     this.formMode = "Edit";
-    //     var data = res.object;
-    //     if (data != undefined) {
-    //       this.ProductName.setValue(res.name);
-    //     }
-    //   }
-    // })
-    this.productService.getProductsByCompanyId(2, 2, 0).subscribe((res: any) => {
+    this.productService.getProductById(productId).subscribe((res: any) => {
       if (res.code == 200) {
         this.formMode = "Edit";
-        var data = res.object.content[0];
+        var data = res.object;
         if (data != undefined) {
           // set general info
           this.ProductName.setValue(data.name);

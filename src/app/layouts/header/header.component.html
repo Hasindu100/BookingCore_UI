@@ -18,10 +18,10 @@
                 </div>
                 
                 <div class="user">
-                    <img class="bg-img" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSppkoKsaYMuIoNLDH7O8ePOacLPG1mKXtEng&s" alt="">
+                    <img class="bg-img" [src]="profileImage" alt="">
                     <div class="user-info" [cdkMenuTriggerFor]="searchOverlay">
                         <div class="user-name">
-                            <span>Evony Jeniffer</span>
+                            <span>{{user?.firstName}}</span>
                         </div>
                         <span class="fa-solid fa-chevron-down"></span>
                     </div>

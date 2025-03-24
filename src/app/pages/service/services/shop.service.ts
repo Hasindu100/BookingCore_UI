@@ -36,4 +36,24 @@ export class ShopService {
     let url = this.baseUrl + "ByCompanyId/" + pageSize + "/" + pageNumber + "?companyId=" + companyId;
     return this.http.get(url);
   }
+
+  savePriceDetails(priceDetails: any, id: number) {
+    let url = environment.apiUrl + "price/service?serviceId=" + id;
+    return this.http.post(url, priceDetails);
+  }
+
+  updatePriceDetails(priceDetails: any, id: number) {
+    let url = environment.apiUrl + "price/service?serviceId=" + id;
+    return this.http.put(url, priceDetails);
+  }
+
+  saveDiscountDetails(discountDetails: any) {
+    let url = environment.apiUrl + "dis_bonus/service";
+    return this.http.post(url, discountDetails);
+  }
+
+  updateDiscountDetails(discountDetails: any) {
+    let url = environment.apiUrl + "dis_bonus/service";
+    return this.http.put(url, discountDetails);
+  }
 }

@@ -60,8 +60,9 @@
                                 <span class="active">Active</span>
                             </td>
                             <td class="action-icon">
-                                <i class="fa-regular fa-pen-to-square" style="margin-right: 10px;" routerLink="/product/add" [queryParams]="{ outletId: outletId, id: product.id }"></i>
-                                <i class="fa-solid fa-trash"></i>
+                                <i class="fa-regular fa-pen-to-square" style="margin-right: 10px;" title="Edit" routerLink="/product/add" [queryParams]="{ outletId: outletId, id: product.id }"></i>
+                                <i class="fa-solid fa-trash"  style="margin-right: 10px;" title="Remove"></i>
+                                <i class="fa-solid fa-eye" title="View" routerLink="/product/details" [queryParams]="{ outletId: outletId, id: product.id }"></i>
                             </td>
                         </tr>
                         <!-- <tr>

@@ -58,4 +58,9 @@ export class ProductService {
     return this.http.post(url, discountDetails);
   }
 
+  updateDiscountDetails(discountDetails: any) {
+    let url = environment.apiUrl + "dis_bonus/item";
+    return this.http.put(url, discountDetails);
+  }
+
 }

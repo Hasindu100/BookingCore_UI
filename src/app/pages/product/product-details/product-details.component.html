@@ -1,6 +1,6 @@
 <div class="container">
   <div class="card-wrapper">
-      <div class = "card">
+      <div class = "card" *ngIf="product != null">
         <!-- card left -->
         <div class = "product-imgs">
           <div class = "img-display">
@@ -8,7 +8,12 @@
               <img src="{{selectedImage}}" alt = "shoe image">
             </div>
           </div>
-          <div class = "img-select">
+          <div class="img-select">
+            <div class = "img-item" *ngFor="let image of product.itemMedia">
+              <img [src]="getProductImageUrl(image.url)" alt="shoe image" (click)="changeImage(image.url)">
+            </div>
+          </div>
+          <!-- <div class = "img-select">
             <div class = "img-item">
               <img src="../../../../assets/images/bag1.jpg" alt="shoe image" (click)="changeImage('../../../../assets/images/bag1.jpg')">
             </div>
@@ -21,11 +26,11 @@
             <div class = "img-item">
               <img src="../../../../assets/images/bag4.jpg" alt ="shoe image" (click)="changeImage('../../../../assets/images/bag4.jpg')">
             </div>
-          </div>
+          </div> -->
         </div>
         <!-- card right -->
         <div class = "product-content">
-          <h2 class = "product-title">Product Name</h2>
+          <h2 class = "product-title">{{product.name}}</h2>
           <div class = "product-rating">
             <i class = "fas fa-star"></i>
             <i class = "fas fa-star"></i>
@@ -48,11 +53,11 @@
                   <div class="row">
                       <div class="col-md-6">
                           <li>Place Of Origin : <span>Sri Lanka</span></li>
-                          <li>Manufacturer: <span>Company 1</span></li>
+                          <li>Manufacturer: <span>{{product.manufacturer}}</span></li>
                           <li>Features: <div class="features"><span>feature1</span><span>feature2</span></div></li>
                       </div>
                       <div class="col-md-6">
-                          <li>Brand: <span>Brand 1</span></li>
+                          <li>Brand: <span>{{product.brand}}</span></li>
                           <li>Materials: <div class="materials"><span>material1</span><span>material2</span></div>
                           </li>
                       </div>
@@ -70,28 +75,28 @@
     </div>
 
   <div class="btn-add-section">
-    <button class="btn btn-add">
+    <button class="btn btn-add" [routerLink]="['/product/price']" [queryParams]="{ outletId: outletId }">
       <i class="fa-solid fa-plus"></i> Add
     </button>
   </div>
 
   <div class="pricing-details table-responsive">
-    <div class="pricing-data-section">
+    <div class="pricing-data-section" *ngFor="let itemPrice of product.itemPrices">
       <div class="pricing-item">
         <label>Unit Price</label>
-        <span>LKR 3000</span>
+        <span>LKR {{itemPrice.price}}</span>
       </div>
       <div class="pricing-item">
         <label>Batch Name</label>
-        <span>Pink 24</span>
+        <span>{{itemPrice.batchName}}</span>
       </div>
       <div class="pricing-item">
         <label>Batch Number</label>
-        <span>250-H-34656-V124</span>
+        <span>{{itemPrice.batchNumber}}</span>
       </div>
       <div class="pricing-item">
         <label>Quantity</label>
-        <span>250</span>
+        <span>{{itemPrice.stock}}</span>
       </div>
       <div class="pricing-item">
         <label>Line Discount</label>
@@ -102,7 +107,7 @@
         <span>0%</span>
       </div>
       <div class="btn-section">
-          <button class="btn btn-edit" [routerLink]="['/product/price/edit']">
+          <button class="btn btn-edit" (click)="editPriceDetails(itemPrice.id)" [routerLink]="['/product/price']" [queryParams]="{ outletId: outletId, id: productId }">
             <i class="fa-solid fa-arrow-left"></i> Edit
           </button>
       </div>

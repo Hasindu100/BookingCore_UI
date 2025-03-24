@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { EmployeeService } from '../services/employee.service';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { Router } from '@angular/router';
+declare const window: any;
 
 @Component({
   selector: 'app-employee-list',
@@ -16,7 +17,7 @@ export class EmployeeListComponent implements OnInit {
   totalElements: number = 0;
   tableSize: number = 10;
   tableSizes: any = [2, 5, 10, 20];
-  companyId: number = 2;
+  companyId: number = 0;
 
   constructor(private employeeService: EmployeeService,
     private commonService: CommonService,
@@ -27,7 +28,11 @@ export class EmployeeListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getEmployeeByCompanyId(this.companyId, this.pageSize, this.pageNumber - 1);
+    this.commonService.isLoading = true;
+    setTimeout(() => {
+      this.companyId = this.commonService.companyId;
+      this.getEmployeeByCompanyId(this.companyId, this.pageSize, this.pageNumber - 1);
+    }, 1000);
   }
 
   getEmployeeByCompanyId(companyId: number, pageSize: number, pageNumber: number) {
@@ -35,6 +40,7 @@ export class EmployeeListComponent implements OnInit {
       if (res.code == 200) {
         this.employeeList = res.object.content;
         this.totalElements = res.object.totalElements;
+        this.commonService.isLoading = false;
       }
       else {
         

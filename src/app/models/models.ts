@@ -28,3 +28,12 @@ export interface UserLogin {
         id: number
     }
 }
+
+export interface UserDetails {
+    firstName: string,
+    email: string,
+    profileImage: string,
+    loginId: number,
+    userId: number
+    userTypeId: number
+}
