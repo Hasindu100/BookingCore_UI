@@ -7,9 +7,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   styleUrls: ['./add-company.component.scss']
 })
 export class AddCompanyComponent implements OnInit {
-  personalDetails!: FormGroup;
-  addressDetails!: FormGroup;
-  educationalDetails!: FormGroup;
+  personalDetails: any;
+  addressDetails: any;
+  educationalDetails: any;
   personal_step = false;
   address_step = false;
   education_step = false;
