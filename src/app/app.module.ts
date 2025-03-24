@@ -52,6 +52,7 @@ import { provideToastr, ToastrModule } from 'ngx-toastr';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { AddProductCategoryPopupComponent } from './pages/product/add-product-category-popup/add-product-category-popup.component';
 import { AddServiceCategoryPopupComponent } from './pages/service/add-service-category-popup/add-service-category-popup.component';
+import { LoaderComponent } from './shared/loader/loader.component';
 
 @NgModule({
   declarations: [
@@ -94,7 +95,8 @@ import { AddServiceCategoryPopupComponent } from './pages/service/add-service-ca
     BreadcrumbComponent,
     ProfileComponent,
     AddProductCategoryPopupComponent,
-    AddServiceCategoryPopupComponent
+    AddServiceCategoryPopupComponent,
+    LoaderComponent
   ],
   imports: [
     BrowserModule,

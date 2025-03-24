@@ -41,7 +41,7 @@ const routes: Routes = [
       { path: 'product', component: ProductListComponent },
       { path: 'product/add', component: AddProductComponent },
       { path: 'product/details', component: ProductDetailsComponent },
-      { path: 'product/price/edit', component: EditProductPricingDetailsComponent },
+      { path: 'product/price', component: EditProductPricingDetailsComponent },
       { path: 'service', component: ServiceListComponent },
       { path: 'service/add', component: AddServiceComponent },
       { path: 'service/discountDetails', component: ServiceDiscountDetailsComponent },

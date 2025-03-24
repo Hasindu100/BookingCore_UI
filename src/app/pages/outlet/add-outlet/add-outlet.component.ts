@@ -22,8 +22,7 @@ export class AddOutletComponent implements OnInit {
   provinceList: any = [];
   districtList: any = [];
   cityList: any = [];
-  companyId: number = 2;
-  loginId: number = 1;
+  loginId: number = this.commonService.user.loginId;;
   outletId: number = 0;
   formMode: string = 'Add';
   isAddNewFile: boolean = false;
@@ -47,6 +46,10 @@ export class AddOutletComponent implements OnInit {
 
   get mediaUrl() {
     return this.commonService.mediaUrl;
+  }
+
+  get companyId() {
+    return this.commonService.companyId;
   }
 
   ngOnInit(): void {

@@ -22,11 +22,11 @@ export class AddEmployeeComponent implements OnInit {
   imageDataList: ImageFile[] = [];
   formData = new FormData();
   profilePicture: string = '';
-  loginId: number = 3;
-  companyId: number = 2;
+  loginId: number = this.commonService.user.loginId;
   formMode: string = 'Add';
   employeeId: any;
   isAddNewFile: boolean = false;
+  employeeLoginId: number = 0;
 
   constructor(private formBuilder: FormBuilder,
     private employeeService: EmployeeService,
@@ -43,6 +43,10 @@ export class AddEmployeeComponent implements OnInit {
         this.setEmployeeData(this.employeeId);
       }
     })
+  }
+
+  get companyId() {
+    return this.commonService.companyId;
   }
 
   ngOnInit(): void {
@@ -119,7 +123,6 @@ export class AddEmployeeComponent implements OnInit {
           this.generalInformation.controls['currentAddress'].setValue(data.address);
           this.generalInformation.controls['mobile'].setValue(data.mobileNumber);
           this.generalInformation.controls['email'].setValue(data.email);
-          this.companyId = data.company.id;
           this.profilePicture = data.profileImage;
           var image = {
             id: 0,
@@ -183,18 +186,22 @@ export class AddEmployeeComponent implements OnInit {
   }
 
   onSave() {
-    if (this.isAddNewFile) {
-      this.commonService.saveMedia(this.loginId, this.formData).subscribe((res: any) => {
-        if (res.code == 200) {
-          this.profilePicture = res.object;
-          this.formMode == 'Add' ? this.registerEmployee() : this.updateEmployee();
-        }
-      });
+    if (this.formMode == 'Add') {
+      this.registerEmployee();
     }
     else {
-      this.formMode == 'Add' ? this.registerEmployee() : this.updateEmployee();
+      if (this.isAddNewFile) {
+        this.commonService.saveMedia(this.loginId, this.formData).subscribe((res: any) => {
+          if (res.code == 200) {
+            this.profilePicture = res.object;
+            this.updateEmployee();
+          }
+        });
+      }
+      else {
+        this.updateEmployee();
+      }
     }
-    
   }
 
   saveEmployee() {
@@ -208,7 +215,7 @@ export class AddEmployeeComponent implements OnInit {
       "email": this.Email.value,
       "nic": this.NIC.value,
       "userLogin": {
-        "id": this.loginId
+        "id": this.employeeLoginId
       },
       "company": {
         "id": this.companyId
@@ -262,8 +269,21 @@ export class AddEmployeeComponent implements OnInit {
 
     this.loginService.saveLogin(loginDetails).subscribe((res: any) => {
       if (res.code == 200) {
-        this.loginId = res.object.id;
-        this.saveEmployee();
+        this.employeeLoginId = res.object.id;;
+        if (this.isAddNewFile) {
+          this.commonService.saveMedia(this.loginId, this.formData).subscribe((res2: any) => {
+            if (res2.code == 200) {
+              this.profilePicture = res2.object;
+              this.saveEmployee();
+            }
+          });
+        }
+        else {
+          this.saveEmployee();
+        }
+      }
+      else {
+        this.toastr.error(res.message);
       }
     });
   }

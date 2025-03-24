@@ -2,8 +2,8 @@
     <div class="side-content">
       <div *ngIf="!isShowProfileNav" class="page-side-nav">
         <div class="profile">
-          <img class="profile-img bg-img" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSppkoKsaYMuIoNLDH7O8ePOacLPG1mKXtEng&s" alt="">
-          <h4>David Green</h4>
+          <img class="profile-img bg-img" [src]="profileImage" alt="">
+          <h4>{{user.firstName}}</h4>
           <small>Owner</small>
         </div>
 

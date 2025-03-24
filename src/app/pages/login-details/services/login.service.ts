@@ -1,6 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { UserDetails } from 'src/app/models/models';
 import { environment } from 'src/environment';
+declare const window: any;
 
 @Injectable({
   providedIn: 'root'
@@ -40,5 +42,18 @@ export class LoginService {
   saveOwner(userDetails: any) {
     let url = environment.apiUrl + "owner/save";
     return this.http.post(url, userDetails);
+  }
+
+  getUser(): UserDetails {
+    let user: UserDetails = {
+      firstName: 'Damith',
+      email: '',
+      profileImage: '9/91742629418913360_F_224869519_aRaeLneqALfPNBzg0xxMZXghtvBXkfIA.jpg',
+      loginId: 14,
+      userId: 5,
+      userTypeId: 4
+    }
+    window['user'] = user;
+    return user;
   }
 }

@@ -1,3 +1,3 @@
 export const environment = {
-    apiUrl: 'http://109.199.119.170:8081/api/'
+    apiUrl: 'https://booking.weinbyte.com/api/'
 }

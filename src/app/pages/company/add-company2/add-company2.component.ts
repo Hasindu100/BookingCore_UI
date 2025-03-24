@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ImageFile } from 'src/app/models/models';
 import { CompanyService } from '../services/company.service';
@@ -11,16 +11,16 @@ import { Router } from '@angular/router';
   templateUrl: './add-company2.component.html',
   styleUrls: ['./add-company2.component.scss']
 })
-export class AddCompany2Component {
+export class AddCompany2Component implements OnInit {
   step: number = 1;
-  generalInformation!: FormGroup;
+  generalInformation: any;
   imageDataList: ImageFile[] = [];
   formData = new FormData();
   fileData: any[] = [];
   imageUrls: any[] = [];
   companyTypes: any[] = [];
-  loginId: number = 8;
-  ownerId: number = 2;
+  loginId: number = this.commonService.user.loginId;
+  ownerId: number = this.commonService.user.userId;
   companyLogo: string = '';
 
   constructor(private formBuilder: FormBuilder, 
@@ -75,7 +75,7 @@ export class AddCompany2Component {
       companyName: ['', Validators.required],
       companyDescription: ['', Validators.required],
       ownerName: ['', Validators.required],
-      companyCategory: [''],
+      companyCategory: [0, Validators.min(1)],
       taxID: ['', Validators.required],
       phone: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
@@ -83,9 +83,15 @@ export class AddCompany2Component {
     })
   }
 
+  ngOnInit(): void {
+    this.getCompanyTypes();
+  }
+
   getCompanyTypes() {
     this.companyService.getCompanyTypes().subscribe((res: any) => {
-
+      if (res.code == 200) {
+        this.companyTypes = res.object;
+      }
     })
   }
 
@@ -103,7 +109,7 @@ export class AddCompany2Component {
       'name': this.CompanyName?.value,
       'logo': this.companyLogo,
       'companyType': {
-        'id': 1
+        'id': this.CompanyCategory.value
       },
       'ownerDetails': {
         'id': this.ownerId
@@ -115,6 +121,7 @@ export class AddCompany2Component {
 
     this.companyService.saveCompany(companyDetails).subscribe((res: any) => {
       if (res.code == 200) {
+        this.commonService.companyId = res.object.id;
         this.toastr.success("Company added Successfully!");
         this.router.navigateByUrl('/dashboard');
       } else {

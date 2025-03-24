@@ -8,6 +8,9 @@ import { environment } from 'src/environment';
 export class CommonService {
   baseUrl = environment.apiUrl;
   mediaUrl = environment.apiUrl + "media/";
+  isLoading: boolean = false;
+  companyId: number = 0;
+  user: any;
 
   constructor(private http: HttpClient) { }
 

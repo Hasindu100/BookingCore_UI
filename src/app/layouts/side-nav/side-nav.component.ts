@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { OutletService } from 'src/app/pages/outlet/services/outlet.service';
 import { CommonService } from 'src/app/shared/services/common.service';
+declare const window: any;
 
 @Component({
   selector: 'app-side-nav',
@@ -12,22 +13,37 @@ export class SideNavComponent implements OnInit {
   label: any;
   isShowProfileNav: boolean = false;
   outletList: any[] = [];
-  companyId: number = 2;
+  user: any;
+  profileImage: string = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSppkoKsaYMuIoNLDH7O8ePOacLPG1mKXtEng&s';
   
   constructor(private router: Router,
     private outletService: OutletService,
     private commonService: CommonService) {
   }
 
+  get mediaUrl() {
+    return this.commonService.mediaUrl;
+  }
+
+  get companyId() {
+    return this.commonService.companyId;
+  }
+
   ngOnInit(): void {
     this.showHideProfileNav();
-    this.getOutletByCompanyId(this.companyId, 10, 0);
+    this.commonService.isLoading = true;
+    setTimeout(() => {
+      this.getOutletByCompanyId(this.companyId, 10, 0);
+    }, 1000);
+    this.user = window?.user;
+    this.profileImage = this.mediaUrl + this.user?.profileImage;
   }
 
   getOutletByCompanyId(companyId: number, pageSize: number, pageNumber: number) {
     this.outletService.getOutletByCompanyId(companyId, pageSize, pageNumber).subscribe((res: any) => {
       if (res.code == 200) {
         this.outletList = res.object.content;
+        this.commonService.isLoading = false;
       }
       else {
         

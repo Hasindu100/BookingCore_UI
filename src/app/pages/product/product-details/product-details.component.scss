@@ -35,9 +35,15 @@ img{
 }
 .img-select{
     display: flex;
+    gap: 10px;
+    margin-top: 10px;
 }
 .img-item{
     margin: 0.3rem;
+    cursor: pointer;
+    img {
+        max-height: 130px;
+    }
 }
 .img-item:nth-child(1),
 .img-item:nth-child(2),
@@ -198,12 +204,16 @@ img{
     border-radius: 3px;
     overflow-x: auto;
     padding: 15px 10px 15px 15px;
+    max-height: 80px;
 }
 
 .pricing-data-section {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 10px;
+    margin-bottom: 10px;
 
     .pricing-item {
         display: grid;

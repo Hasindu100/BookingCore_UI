@@ -13,7 +13,7 @@ export class OutletDashboardComponent implements OnInit {
   totalElements: number = 0;
   tableSize: number = 10;
   tableSizes: any = [2, 5, 10, 20];
-  companyId: number = 2;
+  companyId: number = 0;
   outletList: any[] = [];
 
   constructor(private outletService: OutletService,
@@ -24,7 +24,11 @@ export class OutletDashboardComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getOutletByCompanyId(this.companyId, this.pageSize, this.pageNumber);
+    this.commonService.isLoading = true;
+    setTimeout(() => {
+      this.companyId = this.commonService.companyId;
+      this.getOutletByCompanyId(this.companyId, this.pageSize, this.pageNumber);
+    }, 1000);
   }
 
   getOutletByCompanyId(companyId: number, pageSize: number, pageNumber: number) {
@@ -32,6 +36,7 @@ export class OutletDashboardComponent implements OnInit {
       if (res.code == 200) {
         this.outletList = res.object.content;
         this.totalElements = res.object.totalElements;
+        this.commonService.isLoading = false;
       }
       else {
         

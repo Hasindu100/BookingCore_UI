@@ -16,7 +16,6 @@ export class ServiceListComponent implements OnInit {
   totalElements: number = 0;
   tableSize: number = 10;
   tableSizes: any = [2, 5, 10, 20];
-  companyId: number = 2;
 
   constructor(private route: ActivatedRoute,
     private shopService: ShopService,
@@ -32,18 +31,26 @@ export class ServiceListComponent implements OnInit {
     return this.commonService.mediaUrl;
   }
 
+  get companyId() {
+    return this.commonService.companyId;
+  }
+
   ngOnInit(): void {
     this.init();
   }
 
   init() {
-    this.getServicesByCompanyId(this.companyId, this.pageSize, this.pageNumber - 1);
+    this.commonService.isLoading = true;
+    setTimeout(() => {
+      this.getServicesByCompanyId(this.companyId, this.pageSize, this.pageNumber - 1);
+    }, 500);
   }
 
   getServicesByCompanyId(companyId: number, pageSize: number, pageNumber: number) {
     this.shopService.getServicesByCompanyId(companyId, pageSize, pageNumber).subscribe((res: any) => {
         this.servicesList = res.object.content;
         this.totalElements = res.object.totalElements;
+        this.commonService.isLoading = false;
     })
   }
 
