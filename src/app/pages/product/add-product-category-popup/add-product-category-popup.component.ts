@@ -46,6 +46,7 @@ export class AddProductCategoryPopupComponent {
   }
 
   onSave() {
+    this.commonService.isLoading = true;
     if (this.isAddNewFile) {
       this.commonService.saveMedia(this.loginId, this.formData).subscribe((res: any) => {
         if (res.code == 200) {
@@ -69,6 +70,7 @@ export class AddProductCategoryPopupComponent {
 
     this.productService.saveProductCategory(categoryDetails).subscribe((res: any) => {
       if (res.code == 200) {
+        this.commonService.isLoading = false;
         this.productService.refreshProductCategories.next(null);
         this.toastr.success("Category added successfully!");
         this.close();

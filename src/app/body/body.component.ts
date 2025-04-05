@@ -35,8 +35,8 @@ export class BodyComponent implements OnInit {
   getCompanyDetailsByOwnerId(ownerId: number) {
     this.companyService.getCompanyDetialsByOwnerId(ownerId).subscribe((res: any) => {
       if (res.code == 200) {
-        this.commonService.companyId = res.object[0].id;
-        window['companyId'] = res.object[0].id;
+        this.commonService.companyId = 2;
+        window['companyId'] = 2;
       }
     })
 

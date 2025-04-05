@@ -1,19 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ProductService } from '../services/product.service';
 import { ToastrService } from 'ngx-toastr';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { forkJoin } from 'rxjs';
+import { ShopService } from '../services/shop.service';
 
 @Component({
-  selector: 'app-edit-product-pricing-details',
-  templateUrl: './edit-product-pricing-details.component.html',
-  styleUrls: ['./edit-product-pricing-details.component.scss']
+  selector: 'app-service-pricing-details',
+  templateUrl: './service-pricing-details.component.html',
+  styleUrls: ['./service-pricing-details.component.scss']
 })
-export class EditProductPricingDetailsComponent implements OnInit {
+export class ServicePricingDetailsComponent {
   outletId: number = 0;
-  productId: number = 0;
+  serviceId: number = 0;
   pricingDetails: any;
   discountDetails: any;
   formMode: string = 'Add';
@@ -27,7 +27,7 @@ export class EditProductPricingDetailsComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder,
     private route: ActivatedRoute,
-    private productService: ProductService,
+    private shopService: ShopService,
     private toastr: ToastrService,
     private commonService: CommonService,
     private router: Router) {
@@ -35,8 +35,8 @@ export class EditProductPricingDetailsComponent implements OnInit {
         if (res.outletId) {
           this.outletId = res.outletId;
         }
-        if (res.productId) {
-          this.productId = res.productId;
+        if (res.serviceId) {
+          this.serviceId = res.serviceId;
         }
         if (res.id) {
           this.itemPriceId = +res.id!;
@@ -49,17 +49,14 @@ export class EditProductPricingDetailsComponent implements OnInit {
   get Description() {
     return this.pricingDetails.get('description');
   }
-  get UnitPrice() {
-    return this.pricingDetails.get('unitPrice');
+  get ServicePrice() {
+    return this.pricingDetails.get('servicePrice');
   }
-  get BatchName() {
-    return this.pricingDetails.get('batchName');
+  get PriceName() {
+    return this.pricingDetails.get('priceName');
   }
-  get BatchNumber() {
-    return this.pricingDetails.get('batchNumber');
-  }
-  get Quantity() {
-    return this.pricingDetails.get('quantity');
+  get Duration() {
+    return this.pricingDetails.get('duration');
   }
   get PriceId() {
     return this.discountDetails.get('priceId');
@@ -114,10 +111,9 @@ export class EditProductPricingDetailsComponent implements OnInit {
   createFormControllers() {
     this.pricingDetails = this.formBuilder.group({
       description: ['', Validators.required],
-      unitPrice: ['', Validators.required],
-      batchName: ['', Validators.required],
-      batchNumber: ['', Validators.required],
-      quantity: [''],
+      servicePrice: ['', Validators.required],
+      priceName: ['', Validators.required],
+      duration: [''],
     });
 
     this.discountDetails = this.formBuilder.group({
@@ -145,14 +141,14 @@ export class EditProductPricingDetailsComponent implements OnInit {
   }
 
   init() {
-    this.getProductDetailsById();
+    this.getServiceDetailsById();
   }
 
-  getProductDetailsById() {
-    this.productService.getProductById(this.productId).subscribe((res: any) => {
+  getServiceDetailsById() {
+    this.shopService.getServiceById(this.serviceId).subscribe((res: any) => {
       if (res.code == 200) {
-        this.priceList = res.object?.itemPrices;
-        var priceData = res.object?.itemPrices.find((x: any) => x.id == this.itemPriceId);
+        this.priceList = res.object?.fetcherPrices;
+        var priceData = res.object?.fetcherPrices.find((x: any) => x.id == this.itemPriceId);
         if (priceData != null && priceData != undefined) {
           this.setFormData(priceData);
         }
@@ -164,10 +160,9 @@ export class EditProductPricingDetailsComponent implements OnInit {
     this.formMode = 'Edit';
     // set price data
     this.Description.setValue(data.description);
-    this.UnitPrice.setValue(data.price);
-    this.Quantity.setValue(data.stock);
-    this.BatchNumber.setValue(data.batchNumber);
-    this.BatchName.setValue(data.batchName);
+    this.ServicePrice.setValue(data.price);
+    this.Duration.setValue(data.duration);
+    this.PriceName.setValue(data.name);
 
     // set discount data
     if (data.discounts.length > 0) {
@@ -206,23 +201,22 @@ export class EditProductPricingDetailsComponent implements OnInit {
   onSavePriceDetails() {
     let priceDetails = {
       "id": this.itemPriceId,
-      "batchName": this.BatchName.value,
-      "batchNumber": this.BatchNumber.value,
+      "duration": this.Duration.value,
+      "name": this.PriceName.value,
       "description": this.Description.value,
-      "stock": this.Quantity.value,
-      "price": this.UnitPrice.value,
+      "price": this.ServicePrice.value,
       "isDefault": false,
       "isActive": true
     };
 
     this.commonService.isLoading = true;
-    (this.formMode == 'Add' ? this.productService.savePriceDetails(priceDetails, this.productId) : this.productService.updatePriceDetails(priceDetails, this.productId)).subscribe((res: any) => {
+    (this.formMode == 'Add' ? this.shopService.savePriceDetails(priceDetails, this.serviceId) : this.shopService.updatePriceDetails(priceDetails, this.serviceId)).subscribe((res: any) => {
       if (res.code == 200) {
         this.commonService.isLoading = false;
         if (this.formMode == 'Add') {
           this.toastr.success("Price details added successfully");
-          this.itemPriceId = res.object.itemPrices[res.object.itemPrices.length - 1].id
-          this.router.navigate(['/product/price'], { queryParams: { outletId: this.outletId, productId: this.productId, id: this.itemPriceId }});
+          this.itemPriceId = res.object.fetcherPrices[res.object.fetcherPrices.length - 1].id
+          this.router.navigate(['/service/price'], { queryParams: { outletId: this.outletId, serviceId: this.serviceId, id: this.itemPriceId }});
         } else {
           this.toastr.success("Price details updated successfully");
         }
@@ -239,7 +233,7 @@ export class EditProductPricingDetailsComponent implements OnInit {
       "minimumQTY": this.MinimumQuantity.value,
       "minimumOrderValue": this.MinimumOrderValue.value,
       "maximumDiscountValue": this.MaximumDiscountValue.value,
-      "startTime": this.DiscountStartTime.value,
+      "startTime":  this.DiscountStartTime.value,
       "endTime": this.DiscountCloseTime.value,
       "isActive": true,
       "isDeleted": false,
@@ -255,12 +249,12 @@ export class EditProductPricingDetailsComponent implements OnInit {
 
     let bonusDetails = {
       "id": this.bonusId,
-      "bonusItemId": 4,
+      "bonusFetcherId": 4,
       "description": this.BonusDescription.value,
-      "bonusQTY": this.BonusQuantity.value == "" ? 5 : this.BonusQuantity.value,
-      "minimumQTY": this.MinimumBonusQuantity.value == "" ? 0 : this.MinimumBonusQuantity.value,
-      "minimumOrderValue": this.MinimumBonusOrderValue.value == "" ? 0 : this.MinimumBonusOrderValue.value,
-      "maximumBonusQTY": this.MaximumBonusQuantity.value == "" ? 0 : this.MaximumBonusQuantity.value,
+      "bonusQTY": this.BonusQuantity.value,
+      "minimumQTY": this.MinimumBonusQuantity.value,
+      "minimumOrderValue": this.MinimumBonusOrderValue.value,
+      "maximumBonusQTY": this.MaximumBonusQuantity.value,
       "startTime": this.BonusStartTime.value,
       "endTime": this.BonusCloseTime.value,
       "isActive": true,
@@ -277,13 +271,13 @@ export class EditProductPricingDetailsComponent implements OnInit {
 
     let saveDiscountModel = {
       "priceId": this.PriceId.value,
-      "itemPriceDiscount": discountDetails,
-      "itemPriceBonus": bonusDetails
+      "fetcherPriceDiscount": discountDetails,
+      "fetcherPriceBonus": bonusDetails
     };
 
    this.commonService.isLoading = true;
    if (!(this.isDiscountExist && this.isBonusExist)) {
-      this.productService.saveDiscountDetails(saveDiscountModel).subscribe((res: any) => {
+      this.shopService.saveDiscountDetails(saveDiscountModel).subscribe((res: any) => {
         if (res.code == 200) {
           this.commonService.isLoading = false;
           this.toastr.success("Discount details added successfully");
@@ -291,8 +285,8 @@ export class EditProductPricingDetailsComponent implements OnInit {
       });
     }
     else {
-      const updateDisountDetails$ = this.productService.updateDiscountDetails(discountDetails);
-      const updateBonusDetails$ = this.productService.updateBonusDetails(bonusDetails);
+      const updateDisountDetails$ = this.shopService.updateDiscountDetails(discountDetails);
+      const updateBonusDetails$ = this.shopService.updateBonusDetails(bonusDetails);
 
       let forkJoinArray = [updateDisountDetails$, updateBonusDetails$];
       forkJoin(forkJoinArray).subscribe((res: any) => {

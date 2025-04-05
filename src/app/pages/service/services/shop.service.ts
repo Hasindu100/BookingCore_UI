@@ -37,6 +37,11 @@ export class ShopService {
     return this.http.get(url);
   }
 
+  getServicesByBranchId(branchId: number, pageSize: number, pageNumber: number) {
+    let url = this.baseUrl + "ByBranchId/" + pageSize + "/" + pageNumber + "?shopId=" + branchId;
+    return this.http.get(url);
+  }
+
   savePriceDetails(priceDetails: any, id: number) {
     let url = environment.apiUrl + "price/service?serviceId=" + id;
     return this.http.post(url, priceDetails);
@@ -53,7 +58,22 @@ export class ShopService {
   }
 
   updateDiscountDetails(discountDetails: any) {
-    let url = environment.apiUrl + "dis_bonus/service";
+    let url = environment.apiUrl + "dis_bonus/service/discount";
     return this.http.put(url, discountDetails);
+  }
+
+  updateBonusDetails(bonusDetails: any) {
+    let url = environment.apiUrl + "dis_bonus/service/bonus"
+    return this.http.put(url, bonusDetails);
+  }
+
+  getServiceById(serviceId: number) {
+    let url = this.baseUrl + serviceId;
+    return this.http.get(url);
+  }
+
+  removeService(serviceId: number) {
+    let url = this.baseUrl + "disable?shopFetcherId=" + serviceId;
+    return this.http.put(url, null);
   }
 }

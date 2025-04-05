@@ -7,6 +7,7 @@ import { DialogService } from 'src/app/shared/dialog/dialog.service';
 import { ShopService } from '../services/shop.service';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { ToastrService } from 'ngx-toastr';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-add-service',
@@ -30,7 +31,11 @@ export class AddServiceComponent implements OnInit {
   outletId: number = 0;
   serviceId: number = 0;
   itemPriceId: number = 0;
+  discountId: number = 0;
+  bonusId: number = 0;
   isAddedDiscount: boolean = false;
+  isDiscountExist: boolean = false;
+  isBonusExist: boolean = false;
 
   constructor(private formBuilder: FormBuilder,
     private router: Router,
@@ -85,6 +90,10 @@ export class AddServiceComponent implements OnInit {
 
   get Minute() {
     return this.pricingDetails.get('minute');
+  }
+
+  get Duration() {
+    return this.pricingDetails.get('duration');
   }
 
   get PriceName() {
@@ -178,6 +187,7 @@ export class AddServiceComponent implements OnInit {
       day: ['', Validators.required],
       hour: ['', Validators.required],
       minute: ['', Validators.required],
+      duration: ['', Validators.required],
       priceName: ['', Validators.required],
       priceDescription: ['', Validators.required],
       servicePrice: ['', Validators.required],
@@ -220,10 +230,10 @@ export class AddServiceComponent implements OnInit {
   }
 
   setServiceData() {
-    this.shopService.getServicesByCompanyId(2,2,0).subscribe((res: any) => {
+    this.shopService.getServiceById(this.serviceId).subscribe((res: any) => {
       if (res.code == 200) {
         this.formMode = 'Edit';
-        var data = res.object.content[0];
+        var data = res.object;
         if (data != undefined) {
           // set general info
           this.ServiceName.setValue(data.name);
@@ -254,14 +264,41 @@ export class AddServiceComponent implements OnInit {
 
           // set pricing data
           if (data.fetcherPrices.length > 0) {
-            var pricingData = data.fetcherPrices[0];
+            var pricingData = data.fetcherPrices.find((x: any) => x.isDefault == true);;
             this.itemPriceId = pricingData.id;
             this.PriceName.setValue(pricingData.name);
             this.PriceDescription.setValue(pricingData.description);
             this.ServicePrice.setValue(pricingData.price);
+            this.Duration.setValue(pricingData.duration);
 
+            //set discount data
             if (pricingData.discounts.length > 0) {
               this.isAddedDiscount = true;
+              this.isDiscountExist = true;
+              var discountData = pricingData.discounts[0];
+              this.discountId = discountData.id;
+              this.DiscountDescription.setValue(discountData.description);
+              this.DiscountValue.setValue(discountData.discountValue);
+              this.DiscountPercentage.setValue(discountData.discountPCT);
+              this.MinimumQuantity.setValue(discountData.minimumQTY);
+              this.MinimumOrderValue.setValue(discountData.minimumOrderValue);
+              this.MaximumDiscountValue.setValue(discountData.maximumDiscountValue);
+              this.DiscountStartTime.setValue(discountData.startTime != null ? this.formatDateTime(discountData.startTime) : discountData.startTime);
+              this.DiscountCloseTime.setValue(discountData.endTime != null ? this.formatDateTime(discountData.endTime) : discountData.endTime);
+            }
+
+            // set bonus data
+            if (pricingData.bonuses.length > 0) {
+              this.isBonusExist = true;
+              var bonusData = pricingData.bonuses[0];
+              this.bonusId = bonusData.id;
+              this.BonusDescription.setValue(bonusData.description);
+              this.BonusQuantity.setValue(bonusData.bonusQTY);
+              this.MinimumBonusQuantity.setValue(bonusData.minimumQTY);
+              this.MinimumBonusOrderValue.setValue(bonusData.minimumOrderValue);
+              this.MaximumBonusQuantity.setValue(bonusData.maximumBonusQTY);
+              this.BonusStartTime.setValue(bonusData.startTime != null ? this.formatDateTime(bonusData.startTime) : bonusData.startTime);
+              this.BonusCloseTime.setValue(bonusData.endTime != null ? this.formatDateTime(bonusData.endTime) : bonusData.endTime);
             }
           }
         }
@@ -324,6 +361,7 @@ export class AddServiceComponent implements OnInit {
   }
 
   onSave() {
+    this.commonService.isLoading = true;
     if (this.isAddNewFile) {
       let count = 0;
       this.fileData.forEach((file: any) => {
@@ -376,10 +414,11 @@ export class AddServiceComponent implements OnInit {
       if (res.code == 200) {
         if (this.formMode == 'Add') {
           this.toastr.success("Product added successfully!");
+          this.savePriceAndDiscountDetails(res.object.id);
         }
         else {
           this.toastr.success("Product updated successfully!");
-          this.savePriceAndDiscountDetails(res.object.id);
+          this.updatePriceAndDiscountDetails(res.object.id);
         }
         //this.router.navigateByUrl('/product/details');
       } else {
@@ -391,7 +430,7 @@ export class AddServiceComponent implements OnInit {
   savePriceAndDiscountDetails(serviceId: number) {
     let priceDetails = {
       "id": this.itemPriceId,
-      "duration": 1,
+      "duration": this.Duration.value,
       "name": this.PriceName.value,
       "description": this.PriceDescription.value,
       "price": this.ServicePrice.value,
@@ -403,65 +442,149 @@ export class AddServiceComponent implements OnInit {
       "priceId": [],
       "fetcherPriceDiscount": {
         "id": 0,
-        "description": "string",
-        "discountValue": 10,
-        "discountPCT": 10,
-        "minimumQTY": 10,
-        "minimumOrderValue": 10,
-        "maximumDiscountValue": 10,
-        "startTime": "2025-03-19T14:57:06.015Z",
-        "endTime": "2025-03-19T14:57:06.015Z",
+        "description": this.DiscountDescription.value,
+        "discountValue": this.DiscountValue.value,
+        "discountPCT": this.DiscountPercentage.value,
+        "minimumQTY": this.MinimumQuantity.value,
+        "minimumOrderValue": this.MinimumOrderValue.value,
+        "maximumDiscountValue": this.MaximumDiscountValue.value,
+        "startTime":  this.DiscountStartTime.value,
+        "endTime": this.DiscountCloseTime.value,
         "isActive": true,
-        "isDeleted": true,
+        "isDeleted": false,
         "bonusMedia": {
-          "id": 0,
           "name": "string",
           "url": "string",
           "isActive": true,
           "mediaType": {
-            "id": 0,
-            "name": "string",
-            "image": "string",
-            "isActive": true
+            "id": 1
           }
         }
       },
       "fetcherPriceBonus": {
         "id": 0,
-        "bonusFetcherId": this.serviceId,
-        "description": "string",
-        "bonusQTY": 10,
-        "minimumQTY": 10,
-        "minimumOrderValue": 10,
-        "maximumBonusQTY": 10,
-        "startTime": "2025-03-19T14:57:06.015Z",
-        "endTime": "2025-03-19T14:57:06.015Z",
+        "bonusFetcherId": 4,
+        "description": this.BonusDescription.value,
+        "bonusQTY": this.BonusQuantity.value,
+        "minimumQTY": this.MinimumBonusQuantity.value,
+        "minimumOrderValue": this.MinimumBonusOrderValue.value,
+        "maximumBonusQTY": this.MaximumBonusQuantity.value,
+        "startTime": this.BonusStartTime.value,
+        "endTime": this.BonusCloseTime.value,
         "isActive": true,
-        "isDeleted": true,
+        "isDeleted": false,
         "discountMedia": {
-          "id": 0,
           "name": "string",
           "url": "string",
           "isActive": true,
           "mediaType": {
-            "id": 0,
-            "name": "string",
-            "image": "string",
-            "isActive": true
+            "id": 1
           }
         }
       }
     };
 
-    (this.formMode == 'Add' ? this.shopService.savePriceDetails(priceDetails, serviceId) : this.shopService.updatePriceDetails(priceDetails, serviceId)).subscribe((res: any) => {
+    this.shopService.savePriceDetails(priceDetails, serviceId).subscribe((res: any) => {
       if (res.code == 200) {
         var priceItemId: any = [];
-        priceItemId.push(res.object.itemPrices[res.object.itemPrices.length - 1].id);
+        priceItemId.push(res.object.fetcherPrices[res.object.fetcherPrices.length - 1].id);
         discountDetails.priceId = priceItemId;
-        (this.isAddedDiscount ? this.shopService.saveDiscountDetails(discountDetails) : this.shopService.updateDiscountDetails(discountDetails)).subscribe((res: any) => {
-
-        });
+        this.shopService.saveDiscountDetails(discountDetails).subscribe((res: any) => {});
+        this.commonService.isLoading = false;
+        this.router.navigate(['/service/summary'], { queryParams: { outletId: this.outletId, id: serviceId }});
       }
-    })
+    });
+  }
+
+  updatePriceAndDiscountDetails(serviceId: number) {
+    let priceDetails = {
+      "id": this.itemPriceId,
+      "duration": this.Duration.value,
+      "name": this.PriceName.value,
+      "description": this.PriceDescription.value,
+      "price": this.ServicePrice.value,
+      "isDefault": true,
+      "isActive": true
+    }
+
+    let discountDetails = {
+      "id": this.discountId,
+      "description": this.DiscountDescription.value,
+      "discountValue": this.DiscountValue.value,
+      "discountPCT": this.DiscountPercentage.value,
+      "minimumQTY": this.MinimumQuantity.value,
+      "minimumOrderValue": this.MinimumOrderValue.value,
+      "maximumDiscountValue": this.MaximumDiscountValue.value,
+      "startTime":  this.DiscountStartTime.value,
+      "endTime": this.DiscountCloseTime.value,
+      "isActive": true,
+      "isDeleted": false,
+      "bonusMedia": {
+        "name": "string",
+        "url": "string",
+        "isActive": true,
+        "mediaType": {
+          "id": 1
+        }
+      }
+    }
+
+    let bonusDetails = {
+      "id": this.bonusId,
+      "bonusFetcherId": 4,
+      "description": this.BonusDescription.value,
+      "bonusQTY": this.BonusQuantity.value,
+      "minimumQTY": this.MinimumBonusQuantity.value,
+      "minimumOrderValue": this.MinimumBonusOrderValue.value,
+      "maximumBonusQTY": this.MaximumBonusQuantity.value,
+      "startTime": this.BonusStartTime.value,
+      "endTime": this.BonusCloseTime.value,
+      "isActive": true,
+      "isDeleted": false,
+      "discountMedia": {
+        "name": "string",
+        "url": "string",
+        "isActive": true,
+        "mediaType": {
+          "id": 1
+        }
+      }
+    };
+
+    let saveDiscountModel = {
+      "priceId": [],
+      "fetcherPriceDiscount": discountDetails,
+      "fetcherPriceBonus": bonusDetails
+    }
+
+    this.shopService.updatePriceDetails(priceDetails, serviceId).subscribe((res: any) => {
+      if (res.code == 200) {
+        this.commonService.isLoading = false;
+        this.router.navigate(['/service/summary'], { queryParams: { outletId: this.outletId, id: serviceId }});
+        var priceItemId: any = [];
+        priceItemId.push(res.object?.id);
+        saveDiscountModel.priceId = priceItemId;
+        if (!(this.isDiscountExist && this.isBonusExist)) {
+          this.shopService.saveDiscountDetails(saveDiscountModel).subscribe((res: any) => {});
+        }
+        else {
+          const updateDisountDetails$ = this.shopService.updateDiscountDetails(discountDetails);
+          const updateBonusDetails$ = this.shopService.updateBonusDetails(bonusDetails);
+
+          let forkJoinArray = [updateDisountDetails$, updateBonusDetails$];
+          forkJoin(forkJoinArray).subscribe();
+        }
+      }
+    });
+  }
+
+  formatDateTime(dateStr: string): string {
+    const date = new Date(dateStr);
+    const year = date.getFullYear();
+    const month = ('0' + (date.getMonth() + 1)).slice(-2);
+    const day = ('0' + date.getDate()).slice(-2);
+    const hours = ('0' + date.getHours()).slice(-2);
+    const minutes = ('0' + date.getMinutes()).slice(-2);
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
   }
 }

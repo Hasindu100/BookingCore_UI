@@ -29,6 +29,7 @@ import { LoginComponent } from './pages/login-details/login/login.component';
 import { SignupComponent } from './pages/login-details/signup/signup.component';
 import { VerifyAccountComponent } from './pages/login-details/verify-account/verify-account.component';
 import { ProfileComponent } from './pages/profile/profile/profile.component';
+import { ServicePricingDetailsComponent } from './pages/service/service-pricing-details/service-pricing-details.component';
 
 const routes: Routes = [
   { path: '', 
@@ -46,6 +47,7 @@ const routes: Routes = [
       { path: 'service/add', component: AddServiceComponent },
       { path: 'service/discountDetails', component: ServiceDiscountDetailsComponent },
       { path: 'service/summary', component: ServiceSummaryComponent },
+      { path: 'service/price', component: ServicePricingDetailsComponent },
       { path: 'package', component: PackageListComponent },
       { path: 'package/add', component: AddPackageComponent },
       { path: 'package/summary', component: PackageSummaryComponent },

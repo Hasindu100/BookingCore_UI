@@ -13,6 +13,11 @@ export class ProductDetailsComponent implements OnInit{
   productId: number = 0;
   selectedImage = '';
   product: any;
+  productGrossAmt: number = 0;
+  productNetAmt: number = 0;
+  discountValue: number = 0;
+  discountPCT: number = 0;
+  isDiscountExist: boolean = false;
 
   constructor(private route: ActivatedRoute,
     private productService: ProductService,
@@ -46,6 +51,17 @@ export class ProductDetailsComponent implements OnInit{
         var data = res.object;
         this.product = data;
         this.selectedImage = data.itemMedia.length > 0 ? (this.mediaUrl + data.itemMedia[0].url) : '../../../../assets/images/bag1.jpg';
+        if (data.itemPrices.length > 0) {
+          var priceData = data.itemPrices.find((x: any) => x.isDefault == true);
+          this.productGrossAmt = this.productNetAmt = priceData?.price;
+          if (priceData.discounts.length > 0) {
+            var discountData = priceData.discounts[0];
+            this.isDiscountExist = true;
+            this.discountValue = discountData.discountValue;
+            this.discountPCT = discountData.discountPCT;
+            this.productNetAmt = this.productGrossAmt - this.discountValue;
+          }
+        }
       }
     })
   }
@@ -55,7 +71,7 @@ export class ProductDetailsComponent implements OnInit{
   }
 
   editPriceDetails(itemPriceId: any) {
-    this.router.navigate(['/product/price/edit'], { queryParams: { outletId: this.outletId, productId: this.productId, id: itemPriceId }});
+    this.router.navigate(['/product/price'], { queryParams: { outletId: this.outletId, productId: this.productId, id: itemPriceId }});
   }
 
   getProductImageUrl(url: any) {

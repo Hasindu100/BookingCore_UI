@@ -53,6 +53,8 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { AddProductCategoryPopupComponent } from './pages/product/add-product-category-popup/add-product-category-popup.component';
 import { AddServiceCategoryPopupComponent } from './pages/service/add-service-category-popup/add-service-category-popup.component';
 import { LoaderComponent } from './shared/loader/loader.component';
+import { ServicePricingDetailsComponent } from './pages/service/service-pricing-details/service-pricing-details.component';
+import { WarningPopupComponent } from './shared/warning-popup/warning-popup.component';
 
 @NgModule({
   declarations: [
@@ -96,7 +98,9 @@ import { LoaderComponent } from './shared/loader/loader.component';
     ProfileComponent,
     AddProductCategoryPopupComponent,
     AddServiceCategoryPopupComponent,
-    LoaderComponent
+    LoaderComponent,
+    ServicePricingDetailsComponent,
+    WarningPopupComponent
   ],
   imports: [
     BrowserModule,

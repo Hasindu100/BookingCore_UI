@@ -25,49 +25,40 @@
                                 placeholder="Description"/>
                         </div>
                         <div class="col-md-4">
-                            <label>Unit Price (LKR)</label><br>
+                            <label>Name</label><br>
                             <input 
-                                type="number"
+                                type="text"
                                 class="form-control"
-                                formControlName="unitPrice"
-                                format="{n2}"
-                                [ngClass]="{'is-invalid' : UnitPrice?.touched && UnitPrice?.invalid}"
-                                placeholder="Unit Price"/>
-                        </div>
-                        <div class="col-md-4">
-                            <label>Quantity</label><br>
-                            <input 
-                                type="number"
-                                class="form-control"
-                                formControlName="quantity"
-                                [ngClass]="{'is-invalid' : Quantity?.touched && Quantity?.invalid}"
-                                placeholder="Quantity"/>
+                                formControlName="priceName"
+                                [ngClass]="{'is-invalid' : PriceName?.touched && PriceName?.invalid}"
+                                placeholder="Name"/>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-4">
-                            <label>Batch Number</label><br>
+                            <label>Service Price (LKR)</label><br>
                             <input 
-                                type="text"
+                                type="number"
                                 class="form-control"
-                                formControlName="batchNumber"
-                                [ngClass]="{'is-invalid' : BatchNumber?.touched && BatchNumber?.invalid}"
-                                placeholder="Batch Number"/>
+                                formControlName="servicePrice"
+                                format="{n2}"
+                                [ngClass]="{'is-invalid' : ServicePrice?.touched && ServicePrice?.invalid}"
+                                placeholder="Service Price"/>
                         </div>
                         <div class="col-md-4">
-                            <label>Batch Name</label><br>
+                            <label>Duration</label><br>
                             <input 
-                                type="text"
+                                type="number"
                                 class="form-control"
-                                formControlName="batchName"
-                                [ngClass]="{'is-invalid' : BatchName?.touched && BatchName?.invalid}"
-                                placeholder="Batch Name"/>
+                                formControlName="duration"
+                                [ngClass]="{'is-invalid' : Duration?.touched && Duration?.invalid}"
+                                placeholder="Duration"/>
                         </div>
                     </div>
                     <div class="row">
                         <div class="footer-btn">
                             <div class="btn-section">
-                                <button class="btn btn-cancel" [routerLink]="['/product/details']" [queryParams]="{ outletId: outletId, id: productId }">
+                                <button class="btn btn-cancel" [routerLink]="['/service/summary']" [queryParams]="{ outletId: outletId, id: serviceId }">
                                     <i class="fa-solid fa-arrow-left"></i>Cancel
                                 </button>
                                 <button class="btn btn-update" (click)="onSavePriceDetails()">{{formMode == 'Add' ? 'Save' : 'Update'}}
@@ -268,7 +259,7 @@
                     <div class="row">
                         <div class="footer-btn">
                             <div class="btn-section">
-                                <button class="btn btn-cancel" [routerLink]="['/product/details']" [queryParams]="{ outletId: outletId, id: productId }">
+                                <button class="btn btn-cancel" [routerLink]="['/service/summary']" [queryParams]="{ outletId: outletId, id: serviceId }">
                                     <i class="fa-solid fa-arrow-left"></i>Cancel
                                 </button>
                                 <button class="btn btn-update" (click)="onSaveDiscountDetails()">{{!(isDiscountExist && isBonusExist) ? 'Save' : 'Update'}}
@@ -284,45 +275,4 @@
             </div>
         </div>
     </div>
-
-    <!-- <div class="add-price-discount-details">
-        <h2>Create Price and Discount Details</h2>
-        <div class="card">
-            <div class="card-body">
-                <form>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <input 
-                                type="text"
-                                class="form-control"
-                                style="margin-bottom: 10px;"
-                                placeholder="Enter Your Feature Title"/>
-                            <input 
-                                type="text"
-                                class="form-control"
-                                placeholder="Enter Value"/>
-                        </div>
-                        <div class="col-md-6">
-                            <button class="btn btn-add-new">Add new customize field</button>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="footer-btn">
-                            <div class="btn-section">
-                                <button class="btn btn-cancel">
-                                    <i class="fa-solid fa-arrow-left"></i>Cancel
-                                </button>
-                                <button class="btn btn-update">{{formMode == 'Add' ? 'Save' : 'Update'}}
-                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M5 2C4.44772 2 4 2.44772 4 3V21.382C4 22.1253 4.78231 22.6088 5.44721 22.2764L11.5528 19.2236C11.8343 19.0828 12.1657 19.0828 12.4472 19.2236L18.5528 22.2764C19.2177 22.6088 20 22.1253 20 21.382V3C20 2.44772 19.5523 2 19 2H5ZM18 4H6V20L12 17L18 20V4Z" fill="var(--inner-btn-color)"/>
-                                        <path d="M14.8284 7.87865C14.4379 7.48812 13.8047 7.48812 13.4142 7.87865L11.2929 9.99994L10.5858 9.2928C10.1952 8.90228 9.56208 8.90228 9.17156 9.2928C8.78103 9.68333 8.78103 10.3165 9.17156 10.707L10.5797 12.1151C10.5817 12.1172 10.5837 12.1192 10.5858 12.1213C10.9763 12.5118 11.6095 12.5118 12 12.1213L14.8284 9.29286C15.2189 8.90234 15.2189 8.26917 14.8284 7.87865Z" fill="var(--inner-btn-color)"/>
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div> -->
 </div>

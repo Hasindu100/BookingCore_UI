@@ -49,8 +49,8 @@ export class LoginService {
       firstName: 'Damith',
       email: '',
       profileImage: '9/91742629418913360_F_224869519_aRaeLneqALfPNBzg0xxMZXghtvBXkfIA.jpg',
-      loginId: 14,
-      userId: 5,
+      loginId: 8,
+      userId: 3,
       userTypeId: 4
     }
     window['user'] = user;

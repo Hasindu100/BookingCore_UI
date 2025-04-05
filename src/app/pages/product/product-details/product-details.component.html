@@ -40,13 +40,12 @@
           </div>
   
           <div class = "product-price">
-              <p class="discount">10% OFF (Discount)</p>
-              <p>Price: <span class="last-price">LKR 3000.00</span><span class="new-price">LKR 2700.00</span></p>
+              <p class="discount">{{discountPCT}}% OFF (Discount)</p>
+              <p>Price: <span *ngIf="isDiscountExist" class="last-price">LKR {{productGrossAmt | number: '1.2-2'}}</span><span class="new-price">LKR {{productNetAmt | number: '1.2-2'}}</span></p>
           </div>
   
           <div class = "product-detail">
-            <p>Establishment that offers professional hair styling services for men and women. Hair
-              salons offer hair services including professional hair styling.</p>
+            <p>{{product.description}}</p>
             <div class="specification">
               <h4>Specifications</h4>
               <ul>
@@ -75,7 +74,7 @@
     </div>
 
   <div class="btn-add-section">
-    <button class="btn btn-add" [routerLink]="['/product/price']" [queryParams]="{ outletId: outletId }">
+    <button class="btn btn-add" [routerLink]="['/product/price']" [queryParams]="{ outletId: outletId, productId: productId }">
       <i class="fa-solid fa-plus"></i> Add
     </button>
   </div>
@@ -107,7 +106,7 @@
         <span>0%</span>
       </div>
       <div class="btn-section">
-          <button class="btn btn-edit" (click)="editPriceDetails(itemPrice.id)" [routerLink]="['/product/price']" [queryParams]="{ outletId: outletId, id: productId }">
+          <button class="btn btn-edit" (click)="editPriceDetails(itemPrice.id)">
             <i class="fa-solid fa-arrow-left"></i> Edit
           </button>
       </div>

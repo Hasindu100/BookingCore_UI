@@ -38,6 +38,11 @@ export class ProductService {
     return this.http.get(url);
   }
 
+  getProductsByBranchId(branchId: number, pageSize: number, pageNumber: number) {
+    let url = this.baseUrl + "ByBranchId/" + pageSize + "/" + pageNumber + "?branchId=" + branchId;
+    return this.http.get(url);
+  }
+
   getProductById(id: any) {
     let url = this.baseUrl + id;
     return this.http.get(url);
@@ -59,8 +64,18 @@ export class ProductService {
   }
 
   updateDiscountDetails(discountDetails: any) {
-    let url = environment.apiUrl + "dis_bonus/item";
+    let url = environment.apiUrl + "dis_bonus/item/bonus";
     return this.http.put(url, discountDetails);
+  }
+
+  updateBonusDetails(discountDetails: any) {
+    let url = environment.apiUrl + "dis_bonus/item/discount";
+    return this.http.put(url, discountDetails);
+  }
+
+  removeProduct(productId: number) {
+    let url = this.baseUrl + "disable?shopItemId=" + productId;
+    return this.http.put(url, null);
   }
 
 }
