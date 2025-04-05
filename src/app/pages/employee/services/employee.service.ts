@@ -30,4 +30,14 @@ export class EmployeeService {
     let url = this.baseUrl + "update";
     return this.http.put(url, employeeDetails);
   }
+
+  removeEmployee(employeeId: number) {
+    let url = this.baseUrl + "disable?id=" + employeeId;
+    return this.http.put(url, null);
+  }
+
+  enableEmployee(employeeId: number) {
+    let url = this.baseUrl + "enable?id=" + employeeId;
+    return this.http.put(url, null);
+  }
 }

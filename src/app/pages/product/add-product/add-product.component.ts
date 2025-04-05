@@ -7,6 +7,7 @@ import { AddProductCategoryPopupComponent } from '../add-product-category-popup/
 import { ProductService } from '../services/product.service';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { ToastrService } from 'ngx-toastr';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-add-product',
@@ -30,6 +31,10 @@ export class AddProductComponent implements OnInit {
   savedMediaList: any[] = [];
   productId:number = 0;
   itemPriceId: number = 0;
+  discountId: number = 0;
+  bonusId: number = 0;
+  isDiscountExist: boolean = false;
+  isBonusExist: boolean = false;
 
   constructor(private formBuilder: FormBuilder,
     private router: Router,
@@ -94,6 +99,10 @@ export class AddProductComponent implements OnInit {
   //#endregion
 
   //#region getters for pricingDetails
+  get PriceDescription() {
+    return this.pricingDetails.get('priceDescription');
+  }
+
   get Quantity() {
     return this.pricingDetails.get('quantity');
   }
@@ -179,32 +188,33 @@ export class AddProductComponent implements OnInit {
       placeOfOrigin: [''],
       category: [0, Validators.min(1)],
       brand: ['', Validators.required],
-      features: ['', Validators.required],
+      features: [''],
       material: [''],
       manufacturer: ['', Validators.required],
       functionality: [''],
     });
 
     this.pricingDetails = this.formBuilder.group({
+      priceDescription: ['', Validators.required],
       quantity: ['', Validators.required],
       unitPrice: ['', Validators.required],
       batchName: ['', Validators.required],
       batchNumber: ['', Validators.required],
-      discountDescription: ['', Validators.required],
-      discountValue: ['', Validators.required],
-      discountPercentage: ['', Validators.required],
-      minimumQuantity: ['', Validators.required],
-      minimumOrderValue: ['', Validators.required],
-      maximumDiscountValue: ['', Validators.required],
-      discountStartTime: ['', Validators.required],
-      discountCloseTime: ['', Validators.required],
-      bonusDescription: ['', Validators.required],
-      bonusQuantity: ['', Validators.required],
-      minimumBonusQuantity: ['', Validators.required],
-      minimumBonusOrderValue: ['', Validators.required],
-      maximumBonusQuantity: ['', Validators.required],
-      bonusStartTime: ['', Validators.required],
-      bonusCloseTime: ['', Validators.required],
+      discountDescription: [''],
+      discountValue: [''],
+      discountPercentage: [''],
+      minimumQuantity: [''],
+      minimumOrderValue: [''],
+      maximumDiscountValue: [''],
+      discountStartTime: [''],
+      discountCloseTime: [''],
+      bonusDescription: [''],
+      bonusQuantity: [''],
+      minimumBonusQuantity: [''],
+      minimumBonusOrderValue: [''],
+      maximumBonusQuantity: [''],
+      bonusStartTime: [''],
+      bonusCloseTime: [''],
     })
   }
 
@@ -238,12 +248,42 @@ export class AddProductComponent implements OnInit {
 
           // set pricing data
           if (data.itemPrices.length > 0) {
-            var pricingData = data.itemPrices[0];
+            var pricingData = data.itemPrices.find((x: any) => x.isDefault == true);
             this.itemPriceId = pricingData.id;
+            this.PriceDescription.setValue(pricingData.description);
             this.Quantity.setValue(pricingData.stock);
             this.UnitPrice.setValue(pricingData.price);
             this.BatchName.setValue(pricingData.batchName);
             this.BatchNumber.setValue(pricingData.batchNumber);
+
+            //set discunt data
+            if (pricingData.discounts.length > 0) {
+              this.isDiscountExist = true;
+              var discountData = pricingData.discounts[0];
+              this.discountId = discountData.id;
+              this.DiscountDescription.setValue(discountData.description);
+              this.DiscountValue.setValue(discountData.discountValue);
+              this.DiscountPercentage.setValue(discountData.discountPCT);
+              this.MinimumQuantity.setValue(discountData.minimumQTY);
+              this.MinimumOrderValue.setValue(discountData.minimumOrderValue);
+              this.MaximumDiscountValue.setValue(discountData.maximumDiscountValue);
+              this.DiscountStartTime.setValue(discountData.startTime != null ? this.formatDateTime(discountData.startTime) : discountData.startTime);
+              this.DiscountCloseTime.setValue(discountData.endTime != null ? this.formatDateTime(discountData.endTime) : discountData.endTime);
+            }
+
+            // set bonus data
+            if (pricingData.bonuses.length > 0) {
+              this.isBonusExist = true;
+              var bonusData = pricingData.bonuses[0];
+              this.bonusId = bonusData.id;
+              this.BonusDescription.setValue(bonusData.description);
+              this.BonusQuantity.setValue(bonusData.bonusQTY);
+              this.MinimumBonusQuantity.setValue(bonusData.minimumQTY);
+              this.MinimumBonusOrderValue.setValue(bonusData.minimumOrderValue);
+              this.MaximumBonusQuantity.setValue(bonusData.maximumBonusQTY);
+              this.BonusStartTime.setValue(bonusData.startTime != null ? this.formatDateTime(bonusData.startTime) : bonusData.startTime);
+              this.BonusCloseTime.setValue(bonusData.endTime != null ? this.formatDateTime(bonusData.endTime) : bonusData.endTime);
+            }
           }
 
           // set image data
@@ -328,6 +368,7 @@ export class AddProductComponent implements OnInit {
   }
 
   onSave() {
+    this.commonService.isLoading = true;
     if (this.isAddNewFile) {
       let count = 0;
       this.fileData.forEach((file: any) => {
@@ -383,12 +424,13 @@ export class AddProductComponent implements OnInit {
       if (res.code == 200) {
         if (this.formMode == 'Add') {
           this.toastr.success("Product added successfully!");
+          this.productId = res.object?.id;
+          this.savePriceAndDiscountDetails(res.object.id);
         }
         else {
           this.toastr.success("Product updated successfully!");
-          this.savePriceAndDiscountDetails(res.object.id);
+          this.updatePriceAndDiscountDetails(res.object.id);
         }
-        this.router.navigateByUrl('/product/details');
       } else {
         this.toastr.error("Something went wrong");
       }
@@ -401,24 +443,69 @@ export class AddProductComponent implements OnInit {
       "id": this.itemPriceId,
       "batchName": this.BatchName.value,
       "batchNumber": this.BatchNumber.value,
-      "description": "string",
+      "description": this.PriceDescription.value,
       "stock": this.Quantity.value,
       "price": this.UnitPrice.value,
       "isDefault": true,
       "isActive": true
     }
 
+    // let discountDetails = {
+    //   "priceId": [],
+    //   "itemPriceDiscount": {
+    //     "description": "string",
+    //     "discountValue": 10,
+    //     "discountPCT": 10,
+    //     "minimumQTY": 10,
+    //     "minimumOrderValue": 10,
+    //     "maximumDiscountValue": 120,
+    //     "startTime": "2022-01-02T10:19",
+    //     "endTime": "2022-01-02T10:19",
+    //     "isActive": true,
+    //     "isDeleted": false,
+    //     "bonusMedia": {
+    //       "name": "string",
+    //       "url": "string",
+    //       "isActive": true,
+    //       "mediaType": {
+    //         "id": 1
+    //       }
+    //     }
+    //   },
+    //   "itemPriceBonus": {
+    //     "bonusItemId": 4,
+    //     "description": "string",
+    //     "bonusQTY": 2,
+    //     "minimumQTY": 10,
+    //     "minimumOrderValue": 10,
+    //     "maximumBonusQTY": 10,
+    //     "startTime": "2022-01-02T10:19",
+    //     "endTime": "2022-01-02T10:19",
+    //     "isActive": true,
+    //     "isDeleted": false,
+    //     "discountMedia": {
+    //       "name": "string",
+    //       "url": "string",
+    //       "isActive": true,
+    //       "mediaType": {
+    //         "id": 1
+    //       }
+    //     }
+    //   }
+    // };
+
     let discountDetails = {
       "priceId": [],
       "itemPriceDiscount": {
-        "description": "string",
-        "discountValue": 10,
-        "discountPCT": 10,
-        "minimumQTY": 10,
-        "minimumOrderValue": 10,
-        "maximumDiscountValue": 120,
-        "startTime": "2022-01-02T10:19",
-        "endTime": "2022-01-02T10:19",
+        "id": this.discountId,
+        "description": this.DiscountDescription.value,
+        "discountValue": this.DiscountValue.value,
+        "discountPCT": this.DiscountPercentage.value,
+        "minimumQTY": this.MinimumQuantity.value,
+        "minimumOrderValue": this.MinimumOrderValue.value,
+        "maximumDiscountValue": this.MaximumDiscountValue.value,
+        "startTime": this.DiscountStartTime.value,
+        "endTime": this.DiscountCloseTime.value,
         "isActive": true,
         "isDeleted": false,
         "bonusMedia": {
@@ -431,14 +518,15 @@ export class AddProductComponent implements OnInit {
         }
       },
       "itemPriceBonus": {
+        "id": this.bonusId,
         "bonusItemId": 4,
-        "description": "string",
-        "bonusQTY": 2,
-        "minimumQTY": 10,
-        "minimumOrderValue": 10,
-        "maximumBonusQTY": 10,
-        "startTime": "2022-01-02T10:19",
-        "endTime": "2022-01-02T10:19",
+        "description": this.BonusDescription.value,
+        "bonusQTY": this.BonusQuantity.value,
+        "minimumQTY": this.MinimumBonusQuantity.value,
+        "minimumOrderValue": this.MinimumBonusOrderValue.value,
+        "maximumBonusQTY": this.MaximumBonusQuantity.value,
+        "startTime": this.BonusStartTime.value,
+        "endTime": this.BonusCloseTime.value,
         "isActive": true,
         "isDeleted": false,
         "discountMedia": {
@@ -450,10 +538,12 @@ export class AddProductComponent implements OnInit {
           }
         }
       }
-    }
+    };
 
-    this.productService.updatePriceDetails(priceDetails, productId).subscribe((res: any) => {
+    this.productService.savePriceDetails(priceDetails, productId).subscribe((res: any) => {
       if (res.code == 200) {
+        this.commonService.isLoading = false;
+        this.router.navigate(['/product/details'], { queryParams: { outletId: this.outletId, id: productId }});
         var priceItemId: any = [];
         priceItemId.push(res.object.itemPrices[res.object.itemPrices.length - 1].id);
         discountDetails.priceId = priceItemId;
@@ -461,7 +551,99 @@ export class AddProductComponent implements OnInit {
 
         });
       }
-    })
+    });
   }
 
+  updatePriceAndDiscountDetails(productId: number) {
+    let priceDetails = {
+      "id": this.itemPriceId,
+      "batchName": this.BatchName.value,
+      "batchNumber": this.BatchNumber.value,
+      "description": this.PriceDescription.value,
+      "stock": this.Quantity.value,
+      "price": this.UnitPrice.value,
+      "isDefault": true,
+      "isActive": true
+    }
+
+    let discountDetails = {
+      "id": this.discountId,
+      "description": this.DiscountDescription.value,
+      "discountValue": this.DiscountValue.value,
+      "discountPCT": this.DiscountPercentage.value,
+      "minimumQTY": this.MinimumQuantity.value,
+      "minimumOrderValue": this.MinimumOrderValue.value,
+      "maximumDiscountValue": this.MaximumDiscountValue.value,
+      "startTime": this.DiscountStartTime.value,
+      "endTime": this.DiscountCloseTime.value,
+      "isActive": true,
+      "isDeleted": false,
+      "bonusMedia": {
+        "name": "string",
+        "url": "string",
+        "isActive": true,
+        "mediaType": {
+          "id": 1
+        }
+      }
+    }
+
+    let bonusDetails = {
+      "id": this.bonusId,
+      "bonusItemId": 4,
+      "description": this.BonusDescription.value,
+      "bonusQTY": this.BonusQuantity.value,
+      "minimumQTY": this.MinimumBonusQuantity.value,
+      "minimumOrderValue": this.MinimumBonusOrderValue.value,
+      "maximumBonusQTY": this.MaximumBonusQuantity.value,
+      "startTime": this.BonusStartTime.value,
+      "endTime": this.BonusCloseTime.value,
+      "isActive": true,
+      "isDeleted": false,
+      "discountMedia": {
+        "name": "string",
+        "url": "string",
+        "isActive": true,
+        "mediaType": {
+          "id": 1
+        }
+      }
+    };
+
+    let saveDiscountModel = {
+      "priceId": [],
+      "itemPriceDiscount": discountDetails,
+      "itemPriceBonus": bonusDetails
+    }
+
+    this.productService.updatePriceDetails(priceDetails, productId).subscribe((res: any) => {
+      if (res.code == 200) {
+        this.commonService.isLoading = false;
+        this.router.navigate(['/product/details'], { queryParams: { outletId: this.outletId, id: productId }});
+        var priceItemId: any = [];
+        priceItemId.push(res.object?.id);
+        saveDiscountModel.priceId = priceItemId;
+        if (!(this.isDiscountExist && this.isBonusExist)) {
+          this.productService.saveDiscountDetails(saveDiscountModel).subscribe((res: any) => {});
+        }
+        else {
+          const updateDisountDetails$ = this.productService.updateDiscountDetails(discountDetails);
+          const updateBonusDetails$ = this.productService.updateBonusDetails(bonusDetails);
+
+          let forkJoinArray = [updateDisountDetails$, updateBonusDetails$];
+          forkJoin(forkJoinArray).subscribe();
+        }
+      }
+    });
+  }
+
+  formatDateTime(dateStr: string): string {
+    const date = new Date(dateStr);
+    const year = date.getFullYear();
+    const month = ('0' + (date.getMonth() + 1)).slice(-2);
+    const day = ('0' + date.getDate()).slice(-2);
+    const hours = ('0' + date.getHours()).slice(-2);
+    const minutes = ('0' + date.getMinutes()).slice(-2);
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
+  }
 }

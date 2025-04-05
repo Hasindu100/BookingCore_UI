@@ -89,4 +89,14 @@ export class SideNavComponent implements OnInit {
   redirectToPages(pageName: string) {
     this.router.navigateByUrl(pageName);
   }
+
+  navigateToPages(pageName: string, outletId: number) {
+    switch(pageName) {
+      case 'Product' :
+        this.router.navigate([`/product/`], { queryParams: { outletId: outletId }});
+        break;
+      default:
+        break;
+    }
+  }
 }

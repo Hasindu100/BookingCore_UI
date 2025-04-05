@@ -51,7 +51,7 @@
                             <li class="img" [routerLink]="['/order']">Order List</li>
                           </ul>
                         </li>
-                        <li class="img" [routerLink]="['/product']" [queryParams]="{ outletId: outlet.id}">Items</li>
+                        <li class="img" (click)="navigateToPages('Product', outlet.id)">Items</li>
                         <li class="img" [routerLink]="['/service']" [queryParams]="{ outletId: outlet.id}">Services</li>
                         <li class="img" [routerLink]="['/package']">Packages</li>
                         <li class="img" [routerLink]="['/package']">Employees</li>

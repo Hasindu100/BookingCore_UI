@@ -57,11 +57,13 @@
                             <td>Kelly Fleder - Battaramulla</td>
                             <td>1250</td>
                             <td>
-                                <span class="active">Active</span>
+                                <span *ngIf="employee.isActive" class="active">Active</span>
+                                <span *ngIf="!employee.isActive" class="deactive">Deactive</span>
                             </td>
                             <td class="action-icon">
                                 <i class="fa-regular fa-pen-to-square" style="margin-right: 10px;" routerLink="/employee/add" [queryParams]="{id: employee.id}"></i>
-                                <i class="fa-solid fa-trash"></i>
+                                <i *ngIf="employee.isActive" class="fa-solid fa-trash" title="Remove" (click)="onClickRemove(employee.id)"></i>
+                                <i *ngIf="!employee.isActive" class="fa-regular fa-circle-check" title="Active" (click)="enableEmployee(employee.id)"></i>
                             </td>
                         </tr>
                         <!-- <tr>
@@ -177,4 +179,8 @@
         </div>
     </div>
 </div>
+
+<app-warning-popup *ngIf="isDisplayWarningPopup"
+    (onClickYes)="onClickYesWarningPopup()"
+    (onClickClose)="closeWarningPopup()"></app-warning-popup>
 

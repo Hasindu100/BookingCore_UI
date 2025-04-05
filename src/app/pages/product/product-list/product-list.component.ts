@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ProductService } from '../services/product.service';
 import { CommonService } from 'src/app/shared/services/common.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-product-list',
@@ -16,13 +17,17 @@ export class ProductListComponent implements OnInit {
   totalElements: number = 0;
   tableSize: number = 10;
   tableSizes: any = [2, 5, 10, 20];
+  isDisplayWarningPopup: boolean = false;
+  selectedProductId: number = 0;
 
   constructor(private route: ActivatedRoute,
     private productService: ProductService,
-    private commonService: CommonService) {
+    private commonService: CommonService,
+    private toastr: ToastrService) {
       this.route.queryParams.subscribe((res: any) => {
         if (res.outletId) {
           this.outletId = res.outletId;
+          this.init();
         }
       })
   }
@@ -42,13 +47,14 @@ export class ProductListComponent implements OnInit {
   init() {
     this.commonService.isLoading = true;
     setTimeout(() => {
-      this.getProductsByCompanyId(this.companyId, this.pageSize, this.pageNumber - 1);
+      this.getProductsByCompanyId(this.outletId, this.pageSize, this.pageNumber - 1);
     }, 1000);
   }
 
-  getProductsByCompanyId(companyId: number, pageSize: number, pageNumber: number) {
+  getProductsByCompanyId(outletId: number, pageSize: number, pageNumber: number) {
     this.commonService.isLoading = true;
-    this.productService.getProductsByCompanyId(companyId, pageSize, pageNumber).subscribe((res: any) => {
+    this.productService.getProductsByBranchId(outletId, pageSize, pageNumber).subscribe((res: any) => {
+        //this.productList = res.object.content.filter((x: any) => x.isActive);
         this.productList = res.object.content;
         this.totalElements = res.object.totalElements;
         this.commonService.isLoading = false;
@@ -65,13 +71,52 @@ export class ProductListComponent implements OnInit {
 
   onTableDataChange(event: any) {
     this.pageNumber = event;
-    this.getProductsByCompanyId(this.companyId, this.pageSize, this.pageNumber - 1);
+    this.getProductsByCompanyId(this.outletId, this.pageSize, this.pageNumber - 1);
   }
 
   onTableSizeChange(event: any): void {
     this.pageSize = event.target.value.split("/")[0];
     this.pageNumber = 1;
-    this.getProductsByCompanyId(this.companyId, this.pageSize, this.pageNumber - 1);
+    this.getProductsByCompanyId(this.outletId, this.pageSize, this.pageNumber - 1);
+  }
+
+  getProductPrice(priceList: any) {
+    var price = 0;
+    var priceData = priceList.find((x: any) => x.isDefault == true);
+    price = priceData.price;
+    return price;
+  }
+
+  getProductQuantity(priceList: any) {
+    var quantity = 0;
+    var priceData = priceList.find((x: any) => x.isDefault == true);
+    quantity = priceData.stock;
+    return quantity;
+  }
+
+  onClickRemove(productId: number) {
+    this.selectedProductId = productId;
+    this.isDisplayWarningPopup = true;
+  }
+
+  removeProduct(productId: number) {
+    this.commonService.isLoading = true;
+    this.productService.removeProduct(productId).subscribe((res: any) => {
+      if (res.code == 200) {
+        this.commonService.isLoading = false;
+        this.isDisplayWarningPopup = false;
+        this.toastr.success("Item removed successfully");
+        this.getProductsByCompanyId(this.outletId, this.pageSize, this.pageNumber - 1);
+      }
+    })
+  }
+
+  onClickYesWarningPopup() {
+    this.removeProduct(this.selectedProductId);
+  }
+
+  closeWarningPopup() {
+    this.isDisplayWarningPopup = false;
   }
 
 }
