@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Subject } from 'rxjs';
 import { environment } from 'src/environment';
 
 @Injectable({
@@ -8,6 +9,8 @@ import { environment } from 'src/environment';
 export class OutletService {
 
   baseUrl = environment.apiUrl + "shop/"
+  refreshOutletDetails = new Subject();
+  refreshOutletDetails$ = this.refreshOutletDetails.asObservable();
   
   constructor(private http: HttpClient) { }
 

@@ -29,11 +29,18 @@ export class SideNavComponent implements OnInit {
     return this.commonService.companyId;
   }
 
+  get companyName() {
+    return this.commonService.companyName;
+  }
+
   ngOnInit(): void {
     this.showHideProfileNav();
     this.commonService.isLoading = true;
     setTimeout(() => {
-      this.getOutletByCompanyId(this.companyId, 10, 0);
+      this.outletService.refreshOutletDetails$.subscribe(() => {
+        this.getOutletByCompanyId(this.companyId, 10, 0);
+      });
+      this.outletService.refreshOutletDetails.next(null);
     }, 1000);
     this.user = window?.user;
     this.profileImage = this.mediaUrl + this.user?.profileImage;

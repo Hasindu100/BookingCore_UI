@@ -5,6 +5,7 @@ import { CompanyService } from '../services/company.service';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
+import { OutletService } from '../../outlet/services/outlet.service';
 
 @Component({
   selector: 'app-add-company2',
@@ -27,7 +28,8 @@ export class AddCompany2Component implements OnInit {
     private companyService: CompanyService,
     private commonService: CommonService,
     private toastr: ToastrService,
-    private router: Router) {
+    private router: Router,
+    private outletService: OutletService) {
     this.createFormControllers();
   }
 
@@ -124,6 +126,9 @@ export class AddCompany2Component implements OnInit {
         this.commonService.companyId = res.object.id;
         this.toastr.success("Company added Successfully!");
         this.router.navigateByUrl('/dashboard');
+        this.commonService.companyId = res.object.id;
+        this.commonService.companyName = res.object.name;
+        this.outletService.refreshOutletDetails.next(null);
       } else {
         this.toastr.error("Something went wrong");
       }

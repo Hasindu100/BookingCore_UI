@@ -50,6 +50,10 @@ export class SignupComponent implements OnInit {
     });
   }
 
+  get isLoading() {
+    return this.commonService.isLoading;
+  }
+
   get signUpFC() {
     return this.signUpForm.controls;
   }
@@ -134,6 +138,7 @@ export class SignupComponent implements OnInit {
   }
 
   onClickSignUp() {
+    this.commonService.isLoading = true;
     this.loginService.checkUserName(this.signUpFC.email.value).subscribe((res: any) => {
       if(res.code == 200 && res.message == 'User Exist') {
         this.toastr.error("This email is already registered. Please try another email");
@@ -142,6 +147,7 @@ export class SignupComponent implements OnInit {
       } else {
         this.toastr.error("Something went wrong");
       }
+      this.commonService.isLoading = false;
     })
   }
 
@@ -160,6 +166,7 @@ export class SignupComponent implements OnInit {
       }
     }
 
+    this.commonService.isLoading = true;
     this.loginService.saveLogin(loginDetails).subscribe((res: any) => {
       if (res.code == 200) {
         this.loginId = res.object.id;
@@ -195,10 +202,12 @@ export class SignupComponent implements OnInit {
     (userType == 4 ? this.loginService.saveOwner(userDetails) : this.loginService.saveUser(userDetails)).subscribe((res: any) => {
       if (res.code == 200) {
         this.toastr.success("Successfully registered!");
-        this.router.navigateByUrl('/login');
+        localStorage.setItem("userEmail", this.signUpFC.email.value);
+        this.router.navigateByUrl('/verifyAccount');
       } else {
         this.toastr.error("Something went wrong");
       }
+      this.commonService.isLoading = false;
     })
   }
 }

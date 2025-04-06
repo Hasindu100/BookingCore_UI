@@ -45,7 +45,7 @@ section .contentBx .formBx input[type=number] {
     color: var(--inner-box-text-color);
     text-align: center;
 }
-section .contentBx .formBx .inputBx input[type=submit] {
+section .contentBx .formBx .inputBx .btn-verify {
     background: var(--add-btn-color);
     color: #fff;
     outline: none;
