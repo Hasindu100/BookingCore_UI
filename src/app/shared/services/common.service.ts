@@ -10,6 +10,7 @@ export class CommonService {
   mediaUrl = environment.apiUrl + "media/";
   isLoading: boolean = false;
   companyId: number = 0;
+  companyName: string = '';
   user: any;
 
   constructor(private http: HttpClient) { }

@@ -272,6 +272,7 @@ export class AddOutletComponent implements OnInit {
 
   onSave() {
     let count = 0;
+    this.commonService.isLoading = true;
     if (this.isAddNewFile) {
       this.fileData.forEach((file: any, index: number) => {
         this.formData = new FormData();
@@ -325,14 +326,18 @@ export class AddOutletComponent implements OnInit {
 
     (this.formMode == 'Add' ? this.outletService.saveShop(outletDetails) : this.outletService.updateShop(outletDetails)).subscribe((res: any) => {
       if (res.code == 200) {
-        if (this.formMode == 'Add')
+        if (this.formMode == 'Add') {
           this.toastr.success("Outlet added successfully!");
-        else
+          this.outletService.refreshOutletDetails.next(null);
+        }
+        else {
           this.toastr.success("Outlet updated successfully!");
+        }
         this.router.navigateByUrl('/outlet');
       } else {
         this.toastr.error("Something went wrong");
       }
+      this.commonService.isLoading = false;
     })
   }
 }

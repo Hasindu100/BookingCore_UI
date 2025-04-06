@@ -30,10 +30,12 @@ export interface UserLogin {
 }
 
 export interface UserDetails {
-    firstName: string,
+    userId: Number,
     email: string,
+    firstName: string,
+    lastName: string,
+    mobileNumber: string,
     profileImage: string,
-    loginId: number,
-    userId: number
-    userTypeId: number
+    userTypeId: Number,
+    loginId: Number
 }

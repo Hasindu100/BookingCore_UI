@@ -42,7 +42,7 @@
                         <a [routerLink]="'/profile'"><div class="menu-item">Profile</div></a>
                     </li>
                     <li class="profile-menu-list">
-                        <a [routerLink]="'/login'"><div class="menu-item logout">Log out</div></a>
+                        <a (click)="logout()"><div class="menu-item logout">Log out</div></a>
                     </li>
                 </ul>
             </div>

@@ -7,19 +7,22 @@
             <h2>{{title}}</h2>
             <p *ngIf="!isVerified">Enter the six digit code we sent to your email address to verify your new account</p>
             <p *ngIf="isVerified">You are now successfully sign up.</p>
-            <form *ngIf="!isVerified" #OTPForm="ngForm" (ngSubmit)="verify(OTPForm)">
+            <form *ngIf="!isVerified" [formGroup]="OTPForm" >
                 <div class="inputBx">
-                    <input type="number" name="">
-                    <input type="number" name="">
-                    <input type="number" name="">
-                    <input type="number" name="">
-                    <input type="number" name="">
-                    <input type="number" name="">
+                    <input type="number" id="otp1" name="" formControlName="otp1" [appCustomMaxLength]="1" (input)="moveFocus($event, 'otp2')">
+                    <input type="number" id="otp2" name="" formControlName="otp2" [appCustomMaxLength]="1" (input)="moveFocus($event, 'otp3')">
+                    <input type="number" id="otp3" name="" formControlName="otp3" [appCustomMaxLength]="1" (input)="moveFocus($event, 'otp4')">
+                    <input type="number" id="otp4" name="" formControlName="otp4" [appCustomMaxLength]="1" (input)="moveFocus($event, 'otp5')">
+                    <input type="number" id="otp5" name="" formControlName="otp5" [appCustomMaxLength]="1" (input)="moveFocus($event, 'otp6')">
+                    <input type="number" id="otp6" name="" formControlName="otp6" [appCustomMaxLength]="1" (input)="moveFocus($event, 'otp7')">
+                    <input type="number" id="otp7" name="" formControlName="otp7" [appCustomMaxLength]="1">
                 </div>
                 <div class="inputBx">
-                    <input type="submit" value="Verify & Continue" name="">
+                    <button type="submit" class="btn btn-verify" name="" [disabled]="OTPForm.invalid" (click)="verify()">Verify & Continue</button>
                 </div>
             </form>
         </div>
     </div>
 </section>
+
+<app-loader *ngIf="isLoading"></app-loader>

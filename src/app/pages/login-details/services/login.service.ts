@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { UserDetails } from 'src/app/models/models';
 import { environment } from 'src/environment';
 declare const window: any;
@@ -10,8 +11,13 @@ declare const window: any;
 export class LoginService {
 
   baseUrl = environment.apiUrl + "login/"
+  isLoggedGuard: boolean = false;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient,
+    private router: Router) {
+      if (localStorage.getItem("user") != null || localStorage.getItem("user") != undefined) {
+        this.isLoggedGuard = true;
+      }
   }
 
   getLoginDetailsById(id: number) {
@@ -44,16 +50,40 @@ export class LoginService {
     return this.http.post(url, userDetails);
   }
 
+  login(loginDetails: any) {
+    let url = this.baseUrl + "all";
+    return this.http.post(url, loginDetails);
+  }
+
+  emailVerify(username: string, code: string) {
+    let url = this.baseUrl + "emailverify/" + username + "/" + code;
+    return this.http.get(url);
+  }
+
+  setUser(userDetails: UserDetails) {
+    localStorage.setItem("user", JSON.stringify(userDetails));
+    this.isLoggedGuard = true;
+  }
+
   getUser(): UserDetails {
+    var userData = localStorage.getItem("user") != null ? JSON.parse(localStorage.getItem("user")!) : null;
     let user: UserDetails = {
-      firstName: 'Damith',
-      email: '',
-      profileImage: '9/91742629418913360_F_224869519_aRaeLneqALfPNBzg0xxMZXghtvBXkfIA.jpg',
-      loginId: 8,
-      userId: 3,
-      userTypeId: 4
+      userId: userData.userId,
+      email: userData.email,
+      firstName: userData.firstName,
+      lastName: userData.lastName,
+      mobileNumber: userData.mobileNumber,
+      profileImage: userData.profileImage,
+      userTypeId: userData.userTypeId,
+      loginId: userData.loginId
     }
     window['user'] = user;
     return user;
+  }
+
+  logOut() {
+    localStorage.removeItem('user');
+    this.isLoggedGuard = false;
+    this.router.navigateByUrl('login');
   }
 }

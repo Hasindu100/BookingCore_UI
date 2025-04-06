@@ -55,6 +55,7 @@ import { AddServiceCategoryPopupComponent } from './pages/service/add-service-ca
 import { LoaderComponent } from './shared/loader/loader.component';
 import { ServicePricingDetailsComponent } from './pages/service/service-pricing-details/service-pricing-details.component';
 import { WarningPopupComponent } from './shared/warning-popup/warning-popup.component';
+import { CustomMaxLengthDirective } from './shared/directive/custom-max-length.directive';
 
 @NgModule({
   declarations: [
@@ -100,7 +101,8 @@ import { WarningPopupComponent } from './shared/warning-popup/warning-popup.comp
     AddServiceCategoryPopupComponent,
     LoaderComponent,
     ServicePricingDetailsComponent,
-    WarningPopupComponent
+    WarningPopupComponent,
+    CustomMaxLengthDirective
   ],
   imports: [
     BrowserModule,
