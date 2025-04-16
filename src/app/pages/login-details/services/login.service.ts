@@ -15,8 +15,10 @@ export class LoginService {
 
   constructor(private http: HttpClient,
     private router: Router) {
-      if (localStorage.getItem("user") != null || localStorage.getItem("user") != undefined) {
+      if (localStorage.getItem("user") != null && localStorage.getItem("user") != undefined) {
         this.isLoggedGuard = true;
+      } else{
+        this.router.navigateByUrl('login');
       }
   }
 

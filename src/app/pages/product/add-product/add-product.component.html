@@ -61,7 +61,7 @@
                                         [ngClass]="{'is-invalid' : PlaceOfOrigin?.touched && PlaceOfOrigin?.invalid}"
                                         placeholder="Place Of Origin"/>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-4 group">
                                     <label>Category</label><br>
                                     <ng-select
                                         [ngClass]="{'is-invalid' : Category?.touched && Category?.invalid}"
@@ -70,6 +70,9 @@
                                         <ng-option [value]="0">Choose type</ng-option>
                                         <ng-option *ngFor="let category of categoryList" [value]="category.id">{{category.name}}</ng-option>
                                     </ng-select>
+                                    <div *ngIf="Category.touched && Category.invalid" class="invalid-tooltip">
+                                        <div *ngIf="Category.errors?.min">Category is required.</div>
+                                    </div>
                                 </div>
                                 <div class="col-md-2">
                                     <br>
@@ -79,7 +82,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-6 group">
                                     <label>Brand</label><br>
                                     <input 
                                         class="form-control"
@@ -111,7 +114,7 @@
                                         [ngClass]="{'is-invalid' : Material?.touched && Material?.invalid}"
                                         placeholder="Enter Materials"/>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-6 group">
                                     <label>Manufacturer</label><br>
                                     <input 
                                         class="form-control"
@@ -223,7 +226,7 @@
 
                         <fieldset *ngIf="step == 3">
                             <div class="row">
-                                <div class="col-md-4">
+                                <div class="col-md-4 group">
                                     <label>Description</label><br>
                                     <input 
                                         type="text"
@@ -231,8 +234,11 @@
                                         formControlName="priceDescription"
                                         [ngClass]="{'is-invalid' : PriceDescription?.touched && PriceDescription?.invalid}"
                                         placeholder="Add Description"/>
+                                    <div *ngIf="PriceDescription.touched && PriceDescription.invalid" class="invalid-tooltip">
+                                        <div *ngIf="PriceDescription.errors?.required">Price Description is required.</div>
+                                    </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-4 group">
                                     <label>Quantity</label><br>
                                     <input 
                                         type="number"
@@ -240,8 +246,11 @@
                                         formControlName="quantity"
                                         [ngClass]="{'is-invalid' : Quantity?.touched && Quantity?.invalid}"
                                         placeholder="Add Quantity"/>
+                                    <div *ngIf="Quantity.touched && Quantity.invalid" class="invalid-tooltip">
+                                        <div *ngIf="Quantity.errors?.required">Quantity is required.</div>
+                                    </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-4 group">
                                     <label>Unit Price</label><br>
                                     <input
                                         type="number"
@@ -249,6 +258,9 @@
                                         formControlName="unitPrice"
                                         [ngClass]="{'is-invalid' : UnitPrice?.touched && UnitPrice?.invalid}"
                                         placeholder="Unit Price"/>
+                                    <div *ngIf="UnitPrice.touched && UnitPrice.invalid" class="invalid-tooltip">
+                                        <div *ngIf="UnitPrice.errors?.required">Unit Price is required.</div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="hint-text">
@@ -261,7 +273,7 @@
                                 <span>Set Batch name and Number</span>
                             </div>
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-6 group">
                                     <label>Batch Name</label>
                                     <input 
                                         class="form-control"
@@ -269,8 +281,11 @@
                                         formControlName="batchName"
                                         [ngClass]="{'is-invalid' : BatchName?.touched && BatchName?.invalid}"
                                         placeholder="Batch Name"/>
+                                    <div *ngIf="BatchName.touched && BatchName.invalid" class="invalid-tooltip">
+                                        <div *ngIf="BatchName.errors?.required">BatchName is required.</div>
+                                    </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-6 group">
                                     <label>Batch Number</label>
                                     <input 
                                         class="form-control"
@@ -278,6 +293,9 @@
                                         formControlName="batchNumber"
                                         [ngClass]="{'is-invalid' : BatchNumber?.touched && BatchNumber?.invalid}"
                                         placeholder="Enter product batch number"/>
+                                    <div *ngIf="BatchNumber.touched && BatchNumber.invalid" class="invalid-tooltip">
+                                        <div *ngIf="BatchNumber.errors?.required">Batch Number is required.</div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="hint-text">

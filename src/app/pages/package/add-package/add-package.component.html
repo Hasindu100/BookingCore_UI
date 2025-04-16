@@ -2,184 +2,210 @@
     <div class="add-company">
         <div class="row">
             <div class="col-md-12">
-                <!-- progressbar -->
-                <ul id="titlebar">
-                    <li [ngClass]="step==1 ? 'active' : 'inactive'" title="Assign Services to Package">Assign Services to Package</li>
-                    <li [ngClass]="step==2 ? 'active' : 'inactive'" title="Assign Items to Package">Assign Items to Package</li>
-                    <li [ngClass]="step==3 ? 'active' : 'inactive'" title="Package Image and Videos">Package Image and Videos</li>
-                    <li [ngClass]="step==4 ? 'active' : 'inactive'" title="Package Details">Package Details</li>
-                </ul>
-                <div class="assign-services" *ngIf="step == 1">
-                    <div class="hint-text">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M21.6602 10.44L20.6802 14.62C19.8402 18.23 18.1802 19.69 15.0602 19.39C14.5602 19.35 14.0202 19.26 13.4402 19.12L11.7602 18.72C7.59018 17.73 6.30018 15.67 7.28018 11.49L8.26018 7.30001C8.46018 6.45001 8.70018 5.71001 9.00018 5.10001C10.1702 2.68001 12.1602 2.03001 15.5002 2.82001L17.1702 3.21001C21.3602 4.19001 22.6402 6.26001 21.6602 10.44Z" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path opacity="0.4" d="M15.0603 19.3901C14.4403 19.8101 13.6603 20.1601 12.7103 20.4701L11.1303 20.9901C7.16034 22.2701 5.07034 21.2001 3.78034 17.2301L2.50034 13.2801C1.22034 9.3101 2.28034 7.2101 6.25034 5.9301L7.83034 5.4101C8.24034 5.2801 8.63034 5.1701 9.00034 5.1001C8.70034 5.7101 8.46034 6.4501 8.26034 7.3001L7.28034 11.4901C6.30034 15.6701 7.59034 17.7301 11.7603 18.7201L13.4403 19.1201C14.0203 19.2601 14.5603 19.3501 15.0603 19.3901Z" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path opacity="0.4" d="M12.6406 8.52979L17.4906 9.75979" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path opacity="0.4" d="M11.6602 12.3999L14.5602 13.1399" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                        <span>Fill all information below</span>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-10">
-                            <label>Services</label><br>
-                            <select>
-                                <option value="">Choose Services to assign to Package</option>
-                            </select>
+                <form [formGroup]="packageDetails">
+                    <!-- progressbar -->
+                    <ul id="titlebar">
+                        <li [ngClass]="step==1 ? 'active' : 'inactive'" title="Assign Services to Package">Assign Services to Package</li>
+                        <li [ngClass]="step==2 ? 'active' : 'inactive'" title="Assign Items to Package">Assign Items to Package</li>
+                        <li [ngClass]="step==3 ? 'active' : 'inactive'" title="Package Image and Videos">Package Image and Videos</li>
+                        <li [ngClass]="step==4 ? 'active' : 'inactive'" title="Package Details">Package Details</li>
+                    </ul>
+                    <div class="assign-services" *ngIf="step == 1">
+                        <div class="hint-text">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M21.6602 10.44L20.6802 14.62C19.8402 18.23 18.1802 19.69 15.0602 19.39C14.5602 19.35 14.0202 19.26 13.4402 19.12L11.7602 18.72C7.59018 17.73 6.30018 15.67 7.28018 11.49L8.26018 7.30001C8.46018 6.45001 8.70018 5.71001 9.00018 5.10001C10.1702 2.68001 12.1602 2.03001 15.5002 2.82001L17.1702 3.21001C21.3602 4.19001 22.6402 6.26001 21.6602 10.44Z" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path opacity="0.4" d="M15.0603 19.3901C14.4403 19.8101 13.6603 20.1601 12.7103 20.4701L11.1303 20.9901C7.16034 22.2701 5.07034 21.2001 3.78034 17.2301L2.50034 13.2801C1.22034 9.3101 2.28034 7.2101 6.25034 5.9301L7.83034 5.4101C8.24034 5.2801 8.63034 5.1701 9.00034 5.1001C8.70034 5.7101 8.46034 6.4501 8.26034 7.3001L7.28034 11.4901C6.30034 15.6701 7.59034 17.7301 11.7603 18.7201L13.4403 19.1201C14.0203 19.2601 14.5603 19.3501 15.0603 19.3901Z" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path opacity="0.4" d="M12.6406 8.52979L17.4906 9.75979" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path opacity="0.4" d="M11.6602 12.3999L14.5602 13.1399" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span>Fill all information below</span>
                         </div>
-                        <div class="col-md-2">
-                            <br>
-                            <button class="btn btn-add-new-cat" (click)="openAddItemToBranch()">
-                                Assign
-                            </button>
+                        <div class="row">
+                            <div class="col-md-10">
+                                <label>Services</label><br>
+                                <ng-select
+                                    [multiple]="true"
+                                    [hideSelected]="true"
+                                    [closeOnSelect]="false"
+                                    [ngClass]="{'is-invalid' : ServiceIds?.touched && ServiceIds?.invalid}"
+                                    name="serviceIds"
+                                    formControlName="serviceIds"
+                                    placeholder="Choose Services to assign to Package"
+                                    (change)="onChangeService($event)"
+                                    (remove)="onRemoveService($event)"
+                                    (add)="onAddService($event)"
+                                    (clear)="onClearService()">
+                                    <ng-option *ngFor="let service of servicesList" [value]="service.id">{{service.name}}</ng-option>
+                                </ng-select>
+                            </div>
+                            <div class="col-md-2">
+                                <!-- <br>
+                                <button class="btn btn-add-new-cat" (click)="openAddItemToBranch()">
+                                    Assign
+                                </button> -->
+                            </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12 table-responsive">
-                            <label>Added Services</label><br>
-                            <div class="added-services-table">
-                                <table width="100%">
-                                    <thead>
-                                        <tr>
-                                            <th style="width: 100px;"><span class="las la-sort"></span> Image</th>
-                                            <th style="width: 200px;"><span class="las la-sort"></span> Service Name</th>
-                                            <th style="width: 80px;"><span class="las la-sort"></span> Rating</th>
-                                            <th style="width: 140px;"><span class="las la-sort"></span> Category</th>
-                                            <th style="width: 100px;"><span class="las la-sort"></span> Added Date</th>
-                                            <th style="width: 90px;"><span class="las la-sort"></span> Price(LKR)</th>
-                                            <th style="width: 80px;"><span class="las la-sort"></span> Duration</th>
-                                            <th style="width: 80px;"><span class="las la-sort"></span> Status</th>
-                                            <th style="width: 80px;"><span class="las la-sort"></span> Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>
-                                                <div class="logo">
-                                                   <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-QCKIyHiPkoouLv349z1C4-vuEvaY8pX95A&s" class="logo-img bg-img" style="background-image: url(img/3.jpeg)" />
-                                                </div>
-                                            </td>
-                                            <td>Kelly Felder - Outlet 001</td>
-                                            <td>
-                                                <span class="rate positive">4.9</span>
-                                            </td>
-                                            <td>Women Hand Bag</td>
-                                            <td>10-06-2024</td>
-                                            <td>1250</td>
-                                            <td>30 mins</td>
-                                            <td>
-                                                <span class="active">Active</span>
-                                            </td>
-                                            <td class="action-icon">
-                                                <i class="fa-regular fa-pen-to-square" style="margin-right: 10px;"></i>
-                                                <i class="fa-solid fa-trash"></i>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                        <div class="row">
+                            <div class="col-md-12 table-responsive">
+                                <label>Added Services</label><br>
+                                <div class="added-services-table">
+                                    <table width="100%">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 100px;"><span class="las la-sort"></span> Image</th>
+                                                <th style="width: 200px;"><span class="las la-sort"></span> Service Name</th>
+                                                <th style="width: 80px;"><span class="las la-sort"></span> Rating</th>
+                                                <th style="width: 140px;"><span class="las la-sort"></span> Category</th>
+                                                <th style="width: 90px;"><span class="las la-sort"></span> Price(LKR)</th>
+                                                <th style="width: 80px;"><span class="las la-sort"></span> Duration</th>
+                                                <th style="width: 100px;"><span class="las la-sort"></span> Added Date</th>
+                                                <th style="width: 80px;"><span class="las la-sort"></span> Count</th>
+                                                <th style="width: 80px;"><span class="las la-sort"></span> Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngIf="assignedServicesList.length == 0">
+                                                <td class="no-record" colspan="9">No assigned services</td>
+                                            </tr>
+                                            <tr *ngFor="let service of assignedServicesList">
+                                                <td>
+                                                    <div class="logo">
+                                                    <img [src]="getItemImageUrl(service.fetcherMedia)" class="logo-img bg-img" style="background-image: url(img/3.jpeg)" />
+                                                    </div>
+                                                </td>
+                                                <td>{{service.name}}</td>
+                                                <td>
+                                                    <span class="rate positive">4.9</span>
+                                                </td>
+                                                <td>{{service.fetcherCategory.name}}</td>
+                                                <td>{{getServicePrice(service.fetcherPrices) | number: '1.2-2'}}</td>
+                                                <td>{{getServiceDuration(service.fetcherPrices)}}</td>
+                                                <td>10-06-2024</td>
+                                                <td>
+                                                    <span class="item-count">
+                                                        <input type="number" [(ngModel)]="service.count" [ngModelOptions]="{standalone: true}">
+                                                    </span>
+                                                </td>
+                                                <td class="action-icon">
+                                                    <i class="fa-solid fa-circle-xmark" title="remove" (click)="onRemoveAssignedService(service.id)"></i>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="footer-btn">
+                                <div></div>
+                                <div class="btn-section">
+                                    <button class="btn btn-next" (click)="next()">Next
+                                        <i class="fa-solid fa-arrow-right"></i>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="footer-btn">
-                            <div></div>
-                            <div class="btn-section">
-                                <button class="btn btn-back" (click)="previous()">
-                                    <i class="fa-solid fa-arrow-left"></i>Back
-                                </button>
-                                <button class="btn btn-next" (click)="next()">Next
-                                    <i class="fa-solid fa-arrow-right"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
-                <div class="assign-items" *ngIf="step == 2">
-                    <div class="hint-text">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M21.6602 10.44L20.6802 14.62C19.8402 18.23 18.1802 19.69 15.0602 19.39C14.5602 19.35 14.0202 19.26 13.4402 19.12L11.7602 18.72C7.59018 17.73 6.30018 15.67 7.28018 11.49L8.26018 7.30001C8.46018 6.45001 8.70018 5.71001 9.00018 5.10001C10.1702 2.68001 12.1602 2.03001 15.5002 2.82001L17.1702 3.21001C21.3602 4.19001 22.6402 6.26001 21.6602 10.44Z" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path opacity="0.4" d="M15.0603 19.3901C14.4403 19.8101 13.6603 20.1601 12.7103 20.4701L11.1303 20.9901C7.16034 22.2701 5.07034 21.2001 3.78034 17.2301L2.50034 13.2801C1.22034 9.3101 2.28034 7.2101 6.25034 5.9301L7.83034 5.4101C8.24034 5.2801 8.63034 5.1701 9.00034 5.1001C8.70034 5.7101 8.46034 6.4501 8.26034 7.3001L7.28034 11.4901C6.30034 15.6701 7.59034 17.7301 11.7603 18.7201L13.4403 19.1201C14.0203 19.2601 14.5603 19.3501 15.0603 19.3901Z" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path opacity="0.4" d="M12.6406 8.52979L17.4906 9.75979" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path opacity="0.4" d="M11.6602 12.3999L14.5602 13.1399" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                        <span>Assign Items</span>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-10">
-                            <label>Items</label><br>
-                            <select>
-                                <option value="">Choose Items to assign to Package</option>
-                            </select>
+                    <div class="assign-items" *ngIf="step == 2">
+                        <div class="hint-text">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M21.6602 10.44L20.6802 14.62C19.8402 18.23 18.1802 19.69 15.0602 19.39C14.5602 19.35 14.0202 19.26 13.4402 19.12L11.7602 18.72C7.59018 17.73 6.30018 15.67 7.28018 11.49L8.26018 7.30001C8.46018 6.45001 8.70018 5.71001 9.00018 5.10001C10.1702 2.68001 12.1602 2.03001 15.5002 2.82001L17.1702 3.21001C21.3602 4.19001 22.6402 6.26001 21.6602 10.44Z" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path opacity="0.4" d="M15.0603 19.3901C14.4403 19.8101 13.6603 20.1601 12.7103 20.4701L11.1303 20.9901C7.16034 22.2701 5.07034 21.2001 3.78034 17.2301L2.50034 13.2801C1.22034 9.3101 2.28034 7.2101 6.25034 5.9301L7.83034 5.4101C8.24034 5.2801 8.63034 5.1701 9.00034 5.1001C8.70034 5.7101 8.46034 6.4501 8.26034 7.3001L7.28034 11.4901C6.30034 15.6701 7.59034 17.7301 11.7603 18.7201L13.4403 19.1201C14.0203 19.2601 14.5603 19.3501 15.0603 19.3901Z" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path opacity="0.4" d="M12.6406 8.52979L17.4906 9.75979" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path opacity="0.4" d="M11.6602 12.3999L14.5602 13.1399" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span>Assign Items</span>
                         </div>
-                        <div class="col-md-2">
-                            <br>
-                            <button class="btn btn-add-new-cat" (click)="openAddItemToBranch()">
-                                Assign
-                            </button>
+                        <div class="row">
+                            <div class="col-md-10">
+                                <label>Items</label><br>
+                                <ng-select
+                                    [multiple]="true"
+                                    [hideSelected]="true"
+                                    [closeOnSelect]="false"
+                                    [ngClass]="{'is-invalid' : ProductIds?.touched && ProductIds?.invalid}"
+                                    name="productIds"
+                                    formControlName="productIds"
+                                    placeholder="Choose Items to assign to Package"
+                                    (remove)="onRemoveProduct($event)"
+                                    (add)="onAddProduct($event)"
+                                    (clear)="onClearProduct()">
+                                    <ng-option *ngFor="let product of productsList" [value]="product.id">{{product.name}}</ng-option>
+                                </ng-select>
+                            </div>
+                            <div class="col-md-2">
+                                <!-- <br>
+                                <button class="btn btn-add-new-cat" (click)="openAddItemToBranch()">
+                                    Assign
+                                </button> -->
+                            </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12 table-responsive">
-                            <label>Added Items</label><br>
-                            <div class="added-services-table">
-                                <table width="100%">
-                                    <thead>
-                                        <tr>
-                                            <th style="width: 100px;"><span class="las la-sort"></span> Image</th>
-                                            <th style="width: 200px;"><span class="las la-sort"></span> Product Name</th>
-                                            <th style="width: 80px;"><span class="las la-sort"></span> Rating</th>
-                                            <th style="width: 140px;"><span class="las la-sort"></span> Category</th>
-                                            <th style="width: 100px;"><span class="las la-sort"></span> Added Date</th>
-                                            <th style="width: 90px;"><span class="las la-sort"></span> Price(LKR)</th>
-                                            <th style="width: 80px;"><span class="las la-sort"></span> Quantity</th>
-                                            <th style="width: 80px;"><span class="las la-sort"></span> Status</th>
-                                            <th style="width: 80px;"><span class="las la-sort"></span> Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>
-                                                <div class="logo">
-                                                   <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-QCKIyHiPkoouLv349z1C4-vuEvaY8pX95A&s" class="logo-img bg-img" style="background-image: url(img/3.jpeg)" />
-                                                </div>
-                                            </td>
-                                            <td>Kelly Felder - Outlet 001</td>
-                                            <td>
-                                                <span class="rate positive">4.9</span>
-                                            </td>
-                                            <td>Women Hand Bag</td>
-                                            <td>10-06-2024</td>
-                                            <td>1250</td>
-                                            <td>30 mins</td>
-                                            <td>
-                                                <span class="active">Active</span>
-                                            </td>
-                                            <td class="action-icon">
-                                                <i class="fa-regular fa-pen-to-square" style="margin-right: 10px;"></i>
-                                                <i class="fa-solid fa-trash"></i>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                        <div class="row">
+                            <div class="col-md-12 table-responsive">
+                                <label>Added Items</label><br>
+                                <div class="added-services-table">
+                                    <table width="100%">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 100px;"><span class="las la-sort"></span> Image</th>
+                                                <th style="width: 200px;"><span class="las la-sort"></span> Product Name</th>
+                                                <th style="width: 80px;"><span class="las la-sort"></span> Rating</th>
+                                                <th style="width: 140px;"><span class="las la-sort"></span> Category</th>
+                                                <th style="width: 90px;"><span class="las la-sort"></span> Price(LKR)</th>
+                                                <th style="width: 80px;"><span class="las la-sort"></span> Quantity</th>
+                                                <th style="width: 100px;"><span class="las la-sort"></span> Added Date</th>
+                                                <th style="width: 80px;"><span class="las la-sort"></span> Count</th>
+                                                <th style="width: 80px;"><span class="las la-sort"></span> Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngIf="assignedProductsList.length == 0">
+                                                <td class="no-record" colspan="9">No assigned products</td>
+                                            </tr>
+                                            <tr *ngFor="let product of assignedProductsList">
+                                                <td>
+                                                    <div class="logo">
+                                                    <img [src]="getItemImageUrl(product.itemMedia)" class="logo-img bg-img" style="background-image: url(img/3.jpeg)" />
+                                                    </div>
+                                                </td>
+                                                <td>{{product.name}}</td>
+                                                <td>
+                                                    <span class="rate positive">4.9</span>
+                                                </td>
+                                                <td>{{product.itemCategory.name}}</td>
+                                                <td>{{getProductPrice(product.itemPrices) | number: '1.2-2'}}</td>
+                                                <td>{{getProductQuantity(product.itemPrices)}}</td>
+                                                <td>10-06-2024</td>
+                                                <td>
+                                                    <span class="item-count">
+                                                        <input type="number" [(ngModel)]="product.count" [ngModelOptions]="{standalone: true}">
+                                                    </span>
+                                                </td>
+                                                <td class="action-icon">
+                                                    <i class="fa-solid fa-circle-xmark" title="remove" (click)="onRemoveAssignedProduct(product.id)"></i>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="footer-btn">
+                                <div></div>
+                                <div class="btn-section">
+                                    <button class="btn btn-back" (click)="previous()">
+                                        <i class="fa-solid fa-arrow-left"></i>Back
+                                    </button>
+                                    <button class="btn btn-next" (click)="next()">Next
+                                        <i class="fa-solid fa-arrow-right"></i>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="footer-btn">
-                            <div></div>
-                            <div class="btn-section">
-                                <button class="btn btn-back" (click)="previous()">
-                                    <i class="fa-solid fa-arrow-left"></i>Back
-                                </button>
-                                <button class="btn btn-next" (click)="next()">Next
-                                    <i class="fa-solid fa-arrow-right"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
-                <form>
                     <div class="images-and-videos" *ngIf="step == 3">
                         <div class="hint-text">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -230,9 +256,7 @@
                             </div>
                         </div>
                     </div>
-                </form>
 
-                <form [formGroup]="packageDetails">
                     <div class="package-details" *ngIf="step == 4">
                         <div class="hint-text">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -245,7 +269,7 @@
                             <span style="float: right;">Fill all information below</span>
                         </div>
 
-                        <div class="summary-details">
+                        <!-- <div class="summary-details">
                             <div class="row">
                                 <div class="col-md-4">
                                     <label>Total Price</label><br>
@@ -260,22 +284,51 @@
                                     <span class="summary-item">6 Items</span>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
 
                         <fieldset *ngIf="step == 4">
                             <div class="row">
-                                <div class="col-md-12">
-                                    <label>Title</label><br>
-                                    <input 
-                                        type="text"
+                                <div class="col-md-4 group">
+                                    <label>Price</label>
+                                    <input
+                                        type="number"
                                         class="form-control"
-                                        formControlName="title"
-                                        [ngClass]="{'is-invalid' : Title?.touched && Title?.invalid}"
-                                        placeholder="Package Title"/>
+                                        formControlName="price"
+                                        [ngClass]="{'is-invalid': Price.touched && Price.invalid}"
+                                        placeholder="Price" />
+                                    <div *ngIf="Price.touched && Price.invalid" class="invalid-tooltip">
+                                        <div *ngIf="Price.errors?.required">Price is required.</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 group">
+                                    <label>Duration</label>
+                                    <input
+                                        type="number"
+                                        class="form-control"
+                                        formControlName="duration"
+                                        [ngClass]="{'is-invalid': Duration.touched && Duration.invalid}"
+                                        placeholder="Duration" />
+                                    <div *ngIf="Duration.touched && Duration.invalid" class="invalid-tooltip">
+                                        <div *ngIf="Duration.errors?.required">Duration is required.</div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-12">
+                                <div class="col-md-12 group">
+                                    <label>Package Name</label><br>
+                                    <input 
+                                        type="text"
+                                        class="form-control"
+                                        formControlName="packageName"
+                                        [ngClass]="{'is-invalid' : PackageName?.touched && PackageName?.invalid}"
+                                        placeholder="Package Name"/>
+                                    <div *ngIf="PackageName.touched && PackageName.invalid" class="invalid-tooltip">
+                                        <div *ngIf="PackageName.errors?.required">Package Name is required.</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 group">
                                     <label>Package Description</label><br>
                                     <textarea
                                         class="form-control"
@@ -284,9 +337,12 @@
                                         rows="4"
                                         placeholder="Enter Package Description">
                                     </textarea>
+                                    <div *ngIf="Description.touched && Description.invalid" class="invalid-tooltip">
+                                        <div *ngIf="Description.errors?.required">Description is required.</div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="hint-text">
+                            <!-- <div class="hint-text">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M21.6602 10.44L20.6802 14.62C19.8402 18.23 18.1802 19.69 15.0602 19.39C14.5602 19.35 14.0202 19.26 13.4402 19.12L11.7602 18.72C7.59018 17.73 6.30018 15.67 7.28018 11.49L8.26018 7.30001C8.46018 6.45001 8.70018 5.71001 9.00018 5.10001C10.1702 2.68001 12.1602 2.03001 15.5002 2.82001L17.1702 3.21001C21.3602 4.19001 22.6402 6.26001 21.6602 10.44Z" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                                     <path opacity="0.4" d="M15.0603 19.3901C14.4403 19.8101 13.6603 20.1601 12.7103 20.4701L11.1303 20.9901C7.16034 22.2701 5.07034 21.2001 3.78034 17.2301L2.50034 13.2801C1.22034 9.3101 2.28034 7.2101 6.25034 5.9301L7.83034 5.4101C8.24034 5.2801 8.63034 5.1701 9.00034 5.1001C8.70034 5.7101 8.46034 6.4501 8.26034 7.3001L7.28034 11.4901C6.30034 15.6701 7.59034 17.7301 11.7603 18.7201L13.4403 19.1201C14.0203 19.2601 14.5603 19.3501 15.0603 19.3901Z" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -305,7 +361,7 @@
                                         [ngClass]="{'is-invalid' : LineDiscount?.touched && LineDiscount?.invalid}"
                                         placeholder="Enter Line Discount"/>
                                 </div>
-                            </div>
+                            </div> -->
                         </fieldset>
 
                         <div class="row">
@@ -338,7 +394,7 @@
                                     <button class="btn btn-back" (click)="previous()">
                                         <i class="fa-solid fa-arrow-left"></i>Back
                                     </button>
-                                    <button class="btn btn-next" (click)="savePackage()">Save
+                                    <button class="btn btn-next" [disabled]="packageDetails.invalid" (click)="onSave()">{{formMode == 'Add' ? 'Save' : 'Update'}}
                                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path fill-rule="evenodd" clip-rule="evenodd" d="M5 2C4.44772 2 4 2.44772 4 3V21.382C4 22.1253 4.78231 22.6088 5.44721 22.2764L11.5528 19.2236C11.8343 19.0828 12.1657 19.0828 12.4472 19.2236L18.5528 22.2764C19.2177 22.6088 20 22.1253 20 21.382V3C20 2.44772 19.5523 2 19 2H5ZM18 4H6V20L12 17L18 20V4Z" fill="var(--inner-btn-color)"/>
                                             <path d="M14.8284 7.87865C14.4379 7.48812 13.8047 7.48812 13.4142 7.87865L11.2929 9.99994L10.5858 9.2928C10.1952 8.90228 9.56208 8.90228 9.17156 9.2928C8.78103 9.68333 8.78103 10.3165 9.17156 10.707L10.5797 12.1151C10.5817 12.1172 10.5837 12.1192 10.5858 12.1213C10.9763 12.5118 11.6095 12.5118 12 12.1213L14.8284 9.29286C15.2189 8.90234 15.2189 8.26917 14.8284 7.87865Z" fill="var(--inner-btn-color)"/>

@@ -99,8 +99,11 @@ export class SideNavComponent implements OnInit {
 
   navigateToPages(pageName: string, outletId: number) {
     switch(pageName) {
-      case 'Product' :
+      case 'Product':
         this.router.navigate([`/product/`], { queryParams: { outletId: outletId }});
+        break;
+      case 'Package':
+        this.router.navigate(['package/'], { queryParams: { outletId: outletId }});
         break;
       default:
         break;
