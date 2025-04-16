@@ -43,6 +43,7 @@ export class AddServiceCategoryPopupComponent {
   }
 
   onSave() {
+    this.commonService.isLoading = true;
     if (this.isAddNewFile) {
       this.commonService.saveMedia(this.loginId, this.formData).subscribe((res: any) => {
         if (res.code == 200) {
@@ -72,6 +73,7 @@ export class AddServiceCategoryPopupComponent {
       } else {
         this.toastr.error("Something went wrong");
       }
+      this.commonService.isLoading = false;
     })
   }
   

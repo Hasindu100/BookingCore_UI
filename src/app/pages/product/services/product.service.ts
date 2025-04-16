@@ -8,7 +8,7 @@ import { environment } from 'src/environment';
 })
 export class ProductService {
 
-  baseUrl = environment.apiUrl + "product/"
+  baseUrl = environment.apiUrl + "product/";
   refreshProductCategories = new Subject<any>();
   
   constructor(private http: HttpClient) { }
