@@ -1,0 +1,93 @@
+<div class="container">
+    <div class="package-list">
+        <div class="packages table-responsive">
+            <div class="package-menu-bar">
+                <div class="browse">
+                    <input type="search" placeholder="Search" class="record-search">
+                </div>
+                <div class="filter-section">
+                    <label>Rating</label>
+                    <select class="drp-sort" name="" id="">
+                        <option value="">Choose</option>
+                    </select>
+                    <label>Category</label>
+                    <select class="drp-sort" name="" id="">
+                        <option value="">Choose</option>
+                    </select>
+                    <label>Status</label>
+                    <select class="drp-sort" name="" id="">
+                        <option value="">Choose</option>
+                    </select>
+                </div>
+                <div class="btn-section">
+                    <button class="btn btn-add" (click)="AssignEmployees()">Assign Employee</button>
+                    <button class="btn btn-export">Export</button>
+                </div>
+            </div>
+            <div class="package-table">
+                <table width="100%">
+                    <thead>
+                        <tr>
+                            <th style="width: 40px;"><input type="checkbox" [checked]="isAllCheckBoxChecked()" (change)="checkAllCheckBox($event)"></th>
+                            <th style="width: 100px;"><span class="las la-sort"></span> Image</th>
+                            <th style="width: 200px;"><span class="las la-sort"></span> Employee Name</th>
+                            <th style="width: 80px;"><span class="las la-sort"></span> Rating</th>
+                            <th style="width: 200px;"><span class="las la-sort"></span> Address</th>
+                            <th style="width: 160px;"><span class="las la-sort"></span> Mobile Number</th>
+                            <th style="width: 80px;"><span class="las la-sort"></span> Status</th>
+                            <th style="width: 80px;"><span class="las la-sort"></span> Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let employee of employeeList | paginate: {itemsPerPage: pageSize, currentPage: pageNumber, totalItems: totalElements}; let i = index">
+                            <td><input type="checkbox"></td>
+                            <td>
+                                <div class="logo">
+                                   <img [src]="mediaUrl + employee.profileImage" class="logo-img bg-img" />
+                                </div>
+                            </td>
+                            <td>{{employee.firstName + " " + employee.lastName}}</td>
+                            <td>
+                                <span class="rate positive">4.9</span>
+                            </td>
+                            <td>{{employee.address}}</td>
+                            <td>{{employee.mobileNumber}}</td>
+                            <td>
+                                <span *ngIf="employee.isActive" class="active">Active</span>
+                                <span *ngIf="!employee.isActive" class="deactive">Deactive</span>
+                            </td>
+                            <td class="action-icon">
+                                <i *ngIf="employee.isActive" class="fa-solid fa-trash" title="Remove" (click)="onClickRemove(employee.id)"></i>
+                                <i *ngIf="!employee.isActive" class="fa-regular fa-circle-check" title="Active" (click)="enableEmployee(employee.id)"></i>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="footer-section">
+                <div class="table-data-size">
+                    <label>Showing Products 1 to {{pageSize}} of {{totalElements}}</label>
+                    <label>Display</label>
+                    <select class="drp-table-size" (change)="onTableSizeChange($event)">
+                        <option *ngFor="let size of tableSizes">
+                            {{size + "/" + totalElements}}
+                        </option>
+                    </select>
+                </div>
+                <div class="btn-section">
+                    <pagination-controls
+            previousLabel="Prev"
+            nextLabel="Next"
+            (pageChange)="onTableDataChange($event)"></pagination-controls>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<app-warning-popup *ngIf="isDisplayWarningPopup"
+    (onClickYes)="onClickYesWarningPopup()"
+    (onClickClose)="closeWarningPopup()"></app-warning-popup>
+

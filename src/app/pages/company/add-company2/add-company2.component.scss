@@ -309,3 +309,7 @@ table tbody tr {
         }
     }
 }
+
+::ng-deep ng-select.ng-invalid.ng-touched .ng-select-container {
+    border-color: #dc3545;
+}

@@ -16,7 +16,7 @@
                     </select>
                 </div>
                 <div class="btn-section">
-                    <button class="btn btn-add" [routerLink]="['/outlet/add']">
+                    <button class="btn btn-add" [routerLink]="['/outlet/add']" [queryParams]="{ companyId: companyId }">
                         <i class="fa-solid fa-plus"></i> Add Outlet
                     </button>
                 </div>
@@ -25,7 +25,7 @@
 
         <div class="row">
             <div class="col-md-4" *ngFor="let outlet of outletList">
-                <div class="card company-summary-card" routerLink="/outlet/add" [queryParams]="{id: outlet.id}">
+                <div class="card company-summary-card" routerLink="/outlet/add" [queryParams]="{id: outlet.id, companyId: companyId}">
                     <div class="card-body">
                         <div class="card-header">
                             <img class="company-logo bg-img" [src]="mediaUrl + outlet.branchMedia[0].url" alt="">

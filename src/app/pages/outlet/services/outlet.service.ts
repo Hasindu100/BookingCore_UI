@@ -11,6 +11,7 @@ export class OutletService {
   baseUrl = environment.apiUrl + "shop/"
   refreshOutletDetails = new Subject();
   refreshOutletDetails$ = this.refreshOutletDetails.asObservable();
+  outletId: number = 0;
   
   constructor(private http: HttpClient) { }
 
@@ -32,5 +33,15 @@ export class OutletService {
   updateShop(shopDetails: any) {
     let url = this.baseUrl + "update";
     return this.http.put(url, shopDetails);
+  }
+
+  getShopAssignedEmployees(shopId: number, pageSize: number, pageNumber: number) {
+    let url = this.baseUrl + "employees/" + pageSize + "/" + pageNumber + "?shopId=" + shopId;
+    return this.http.get(url);
+  }
+
+  assignEmployeestoShop(employeeIdList: any, shopId: number) {
+    let url = this.baseUrl + "addEmployees?shopId=" + shopId;
+    return this.http.put(url, employeeIdList);
   }
 }

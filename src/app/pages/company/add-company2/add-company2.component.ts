@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ImageFile } from 'src/app/models/models';
+import { ImageFile, UserLogin } from 'src/app/models/models';
 import { CompanyService } from '../services/company.service';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { OutletService } from '../../outlet/services/outlet.service';
+import { LoginService } from '../../login-details/services/login.service';
+import { UserType } from 'src/app/models/enum';
 
 @Component({
   selector: 'app-add-company2',
@@ -15,6 +17,7 @@ import { OutletService } from '../../outlet/services/outlet.service';
 export class AddCompany2Component implements OnInit {
   step: number = 1;
   generalInformation: any;
+  loginDetails: any;
   imageDataList: ImageFile[] = [];
   formData = new FormData();
   fileData: any[] = [];
@@ -23,13 +26,17 @@ export class AddCompany2Component implements OnInit {
   loginId: number = this.commonService.user.loginId;
   ownerId: number = this.commonService.user.userId;
   companyLogo: string = '';
+  formMode: string = "Add";
+  companyLoginId: number = 0;
+  isAddNewFile: boolean = false;
 
   constructor(private formBuilder: FormBuilder, 
     private companyService: CompanyService,
     private commonService: CommonService,
     private toastr: ToastrService,
     private router: Router,
-    private outletService: OutletService) {
+    private outletService: OutletService,
+    private loginService: LoginService) {
     this.createFormControllers();
   }
 
@@ -72,16 +79,31 @@ export class AddCompany2Component implements OnInit {
 
   //#endregion
 
+  //#region  getters for loginDetails
+  get CompanyEmail() {
+    return this.loginDetails.get('companyEmail');
+  }
+
+  get CompanyPassword() {
+    return this.loginDetails.get('companyPassword');
+  }
+  //#endregion
+
   createFormControllers() {
     this.generalInformation = this.formBuilder.group({
       companyName: ['', Validators.required],
       companyDescription: ['', Validators.required],
       ownerName: ['', Validators.required],
       companyCategory: [0, Validators.min(1)],
-      taxID: ['', Validators.required],
+      taxID: [''],
       phone: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      websiteURL: ['', Validators.required]
+      websiteURL: ['']
+    });
+
+    this.loginDetails = this.formBuilder.group({
+      companyEmail: ['', [Validators.required, Validators.email]],
+      companyPassword: ['', [Validators.required]]
     })
   }
 
@@ -98,12 +120,22 @@ export class AddCompany2Component implements OnInit {
   }
 
   onSave() {
-    this.commonService.saveMedia(this.loginId, this.formData).subscribe((res: any) => {
-      if (res.code == 200) {
-        this.companyLogo = res.object;
+    if (this.formMode == 'Add') {
+      this.registerCompany();
+    }
+    else {
+      if (this.isAddNewFile) {
+        this.commonService.saveMedia(this.loginId, this.formData).subscribe((res: any) => {
+          if (res.code == 200) {
+            this.companyLogo = res.object;
+            this.saveCompany();
+          }
+        });
+      }
+      else { 
         this.saveCompany();
       }
-    });
+    }
   }
 
   saveCompany() {
@@ -117,7 +149,7 @@ export class AddCompany2Component implements OnInit {
         'id': this.ownerId
       },
       'userLogin': {
-        'id': this.loginId
+        'id': this.companyLoginId
       }
     }
 
@@ -135,6 +167,51 @@ export class AddCompany2Component implements OnInit {
     })
   }
 
+  registerCompany() {
+    let loginDetails: UserLogin = {
+      userName: this.CompanyEmail.value,
+      password: this.CompanyPassword.value,
+      userTypes: {
+        id: UserType.Company
+      }
+    }
+
+    this.commonService.isLoading = true;
+    this.loginService.checkUserName(this.CompanyEmail.value).subscribe((res: any) => {
+      if (res.message == "User Exist") {
+        this.toastr.error("This email is already registered. Please try another email");
+        this.commonService.isLoading = false;
+        return;
+      }
+      else if (res.message == 'No User for This email') {
+        this.loginService.saveLoginSub(loginDetails).subscribe((res: any) => {
+          if (res.code == 200) {
+            this.companyLoginId = res.object.id;;
+            if (this.isAddNewFile) {
+              this.commonService.saveMedia(this.loginId, this.formData).subscribe((res2: any) => {
+                if (res2.code == 200) {
+                  this.companyLogo = res2.object;
+                  this.saveCompany();
+                }
+              });
+            }
+            else {
+              this.saveCompany();
+            }
+          }
+          else {
+            this.toastr.error(res.message);
+            this.commonService.isLoading = false;
+          }
+        });
+      }
+      else {
+        this.toastr.error("Something went wrong");
+        this.commonService.isLoading = false;
+      }
+    });
+  }
+
   next() {
     if(this.step==1){
       this.step++
@@ -150,6 +227,7 @@ export class AddCompany2Component implements OnInit {
 
   getFile(event: any) {
     if (event.target.files) {
+      this.isAddNewFile = true;
       for(let i=0; i < event.target.files.length; i++) {
         var id = i;
         var file = event.target.files[i];
