@@ -70,6 +70,18 @@ export class VerifyAccountComponent implements OnInit {
     });
   }
 
+  resendCode() {
+    this.commonService.isLoading = true;
+    this.loginService.resendCode(this.userName).subscribe((res: any) => {
+      if (res.code == 200) {
+        this.toastr.success("Code sent to your email. Please check your email");
+      } else {
+        this.toastr.error(res.message);
+      }
+      this.commonService.isLoading = false;
+    });
+  }
+
   moveFocus(event: Event, nextElementId: string | null) {
     const input = event.target as HTMLInputElement;
     if (input.value.length === 1 && nextElementId) {

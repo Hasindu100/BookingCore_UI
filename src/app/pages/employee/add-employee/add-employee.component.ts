@@ -17,6 +17,7 @@ export class AddEmployeeComponent implements OnInit {
   step: number = 1;
   generalInformation: any;
   pricingDetails: any;
+  loginDetails: any;
   fileData: any[] = [];
   imageUrls: any[] = [];
   imageDataList: ImageFile[] = [];
@@ -91,6 +92,16 @@ export class AddEmployeeComponent implements OnInit {
   }
   //#endregion
 
+  //#region  getters for loginDetails
+  get EmployeeEmail() {
+    return this.loginDetails.get('employeeEmail');
+  }
+
+  get EmployeePassword() {
+    return this.loginDetails.get('employeePassword');
+  }
+  //#endregion
+
   createFormControllers() {
     this.generalInformation = this.formBuilder.group({
       firstName: ['', Validators.required],
@@ -107,7 +118,12 @@ export class AddEmployeeComponent implements OnInit {
       assignedShop: ['', Validators.required],
       ratePerHour: ['', Validators.required],
       allowance: ['', Validators.required]
-    })
+    });
+
+    this.loginDetails = this.formBuilder.group({
+      employeeEmail: ['', [Validators.required, Validators.email]],
+      employeePassword: ['', [Validators.required]]
+    });
   }
 
   setEmployeeData(employeeId: any) {
@@ -123,6 +139,10 @@ export class AddEmployeeComponent implements OnInit {
           this.generalInformation.controls['currentAddress'].setValue(data.address);
           this.generalInformation.controls['mobile'].setValue(data.mobileNumber);
           this.generalInformation.controls['email'].setValue(data.email);
+          this.loginDetails.controls['employeeEmail'].setValue(data.email);
+          this.loginDetails.controls['employeeEmail'].disable();
+          this.loginDetails.controls['employeePassword'].setValue(1234);
+          this.loginDetails.controls['employeePassword'].disable();
           this.profilePicture = data.profileImage;
           var image = {
             id: 0,
@@ -263,30 +283,45 @@ export class AddEmployeeComponent implements OnInit {
 
   registerEmployee() {
     let loginDetails: UserLogin = {
-      userName: this.Email.value,
-      password: this.generatePassword(10),
+      userName: this.EmployeeEmail.value,
+      password: this.EmployeePassword.value,
       userTypes: {
         id: 2
       }
     }
 
-    this.loginService.saveLogin(loginDetails).subscribe((res: any) => {
-      if (res.code == 200) {
-        this.employeeLoginId = res.object.id;;
-        if (this.isAddNewFile) {
-          this.commonService.saveMedia(this.loginId, this.formData).subscribe((res2: any) => {
-            if (res2.code == 200) {
-              this.profilePicture = res2.object;
+    this.commonService.isLoading = true;
+    this.loginService.checkUserName(this.EmployeeEmail.value).subscribe((res: any) => {
+      if (res.message == "User Exist") {
+        this.toastr.error("This email is already registered. Please try another email");
+        this.commonService.isLoading = false;
+        return;
+      }
+      else if (res.message == 'No User for This email') {
+        this.loginService.saveLoginSub(loginDetails).subscribe((res: any) => {
+          if (res.code == 200) {
+            this.employeeLoginId = res.object.id;;
+            if (this.isAddNewFile) {
+              this.commonService.saveMedia(this.loginId, this.formData).subscribe((res2: any) => {
+                if (res2.code == 200) {
+                  this.profilePicture = res2.object;
+                  this.saveEmployee();
+                }
+              });
+            }
+            else {
               this.saveEmployee();
             }
-          });
-        }
-        else {
-          this.saveEmployee();
-        }
+          }
+          else {
+            this.toastr.error(res.message);
+            this.commonService.isLoading = false;
+          }
+        });
       }
       else {
-        this.toastr.error(res.message);
+        this.toastr.error("Something went wrong");
+        this.commonService.isLoading = false;
       }
     });
   }

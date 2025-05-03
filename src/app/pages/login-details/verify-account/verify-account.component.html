@@ -20,6 +20,9 @@
                 <div class="inputBx">
                     <button type="submit" class="btn btn-verify" name="" [disabled]="OTPForm.invalid" (click)="verify()">Verify & Continue</button>
                 </div>
+                <div class="resend-code-section">
+                    <span>Don't receive code?</span><span class="resend" (click)="resendCode()">Resend code</span>
+                </div>
             </form>
         </div>
     </div>

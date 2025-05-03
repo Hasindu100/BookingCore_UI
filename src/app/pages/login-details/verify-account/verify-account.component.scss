@@ -58,3 +58,13 @@ section .contentBx .formBx .inputBx .btn-verify {
     border-radius: 30px;
     width: 100%;
 }
+
+.resend-code-section {
+    color: var(--ele-text-color);
+    .resend {
+        color: blue;
+        cursor: pointer;
+        text-decoration: underline;
+        padding-left: 10px;
+    }
+}

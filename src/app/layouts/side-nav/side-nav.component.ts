@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { CompanyService } from 'src/app/pages/company/services/company.service';
 import { OutletService } from 'src/app/pages/outlet/services/outlet.service';
 import { CommonService } from 'src/app/shared/services/common.service';
 declare const window: any;
@@ -12,13 +13,16 @@ declare const window: any;
 export class SideNavComponent implements OnInit {
   label: any;
   isShowProfileNav: boolean = false;
+  companyList: any[] = [];
   outletList: any[] = [];
   user: any;
+  ownerId: number = 7;
   profileImage: string = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSppkoKsaYMuIoNLDH7O8ePOacLPG1mKXtEng&s';
   
   constructor(private router: Router,
     private outletService: OutletService,
-    private commonService: CommonService) {
+    private commonService: CommonService,
+    private companyService: CompanyService) {
   }
 
   get mediaUrl() {
@@ -35,27 +39,42 @@ export class SideNavComponent implements OnInit {
 
   ngOnInit(): void {
     this.showHideProfileNav();
-    this.commonService.isLoading = true;
+    this.user = window?.user;
     setTimeout(() => {
+      var ownerId = this.user?.userId;
       this.outletService.refreshOutletDetails$.subscribe(() => {
-        this.getOutletByCompanyId(this.companyId, 10, 0);
+        this.getCompanyDetailsByOwnerId(ownerId);
       });
       this.outletService.refreshOutletDetails.next(null);
     }, 1000);
-    this.user = window?.user;
     this.profileImage = this.mediaUrl + this.user?.profileImage;
   }
 
+  getCompanyDetailsByOwnerId(ownerId: number) {
+    this.commonService.isLoading = true;
+    this.companyService.getCompanyDetialsByOwnerId(ownerId).subscribe((res: any) => {
+      if (res.code == 200) {
+        this.companyList = res.object;
+      }
+      this.commonService.isLoading = false;
+    });
+
+  }
+
   getOutletByCompanyId(companyId: number, pageSize: number, pageNumber: number) {
+    this.commonService.isLoading = true;
     this.outletService.getOutletByCompanyId(companyId, pageSize, pageNumber).subscribe((res: any) => {
       if (res.code == 200) {
+        var company = this.companyList.find(x => x.id == companyId);
+        company.outletList = res.object.content;
         this.outletList = res.object.content;
-        this.commonService.isLoading = false;
       }
-      else {
-        
-      }
+      this.commonService.isLoading = false;
     });
+  }
+
+  getOutletDataByCompany(companyId: number) {
+    this.getOutletByCompanyId(companyId, 10, 0);
   }
 
   showHideProfileNav() {
@@ -105,8 +124,15 @@ export class SideNavComponent implements OnInit {
       case 'Package':
         this.router.navigate(['package/'], { queryParams: { outletId: outletId }});
         break;
+      case 'ShopEmployee':
+        this.router.navigate(['outlet/employee/'], { queryParams: { outletId: outletId }});
+        break;
       default:
         break;
     }
+  }
+
+  navigateToOutlet(companyId: number) {
+    this.router.navigate(['outlet/'], { queryParams: { companyId: companyId }})
   }
 }

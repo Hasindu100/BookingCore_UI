@@ -31,6 +31,7 @@ import { VerifyAccountComponent } from './pages/login-details/verify-account/ver
 import { ProfileComponent } from './pages/profile/profile/profile.component';
 import { ServicePricingDetailsComponent } from './pages/service/service-pricing-details/service-pricing-details.component';
 import { AuthGuard } from './shared/guards/auth.guard';
+import { ShopAssignedEmployeeListComponent } from './pages/employee/shop-assigned-employee-list/shop-assigned-employee-list.component';
 
 const routes: Routes = [
   { path: '', 
@@ -55,6 +56,7 @@ const routes: Routes = [
       { path: 'outlet', component: OutletDashboardComponent, canActivate: [AuthGuard] },
       { path: 'outlet/add', component: AddOutletComponent, canActivate: [AuthGuard] },
       { path: 'outlet/summary', component: OutletSummaryComponent, canActivate: [AuthGuard] },
+      { path: 'outlet/employee', component: ShopAssignedEmployeeListComponent, canActivate: [AuthGuard] },
       { path: 'employee', component: EmployeeListComponent, canActivate: [AuthGuard] },
       { path: 'employee/add', component: AddEmployeeComponent, canActivate: [AuthGuard] },
       { path: 'serviceRequest', component: ServiceRequestListComponent, canActivate: [AuthGuard] },

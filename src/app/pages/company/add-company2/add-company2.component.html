@@ -7,7 +7,7 @@
                     <ul id="titlebar">
                         <li [ngClass]="step==1 ? 'active' : 'inactive'">General Information</li>
                         <li [ngClass]="step==2 ? 'active' : 'inactive'">Company Image and Videos</li>
-                        <li [ngClass]="step==3 ? 'active' : 'inactive'">Assign Outlets to Company</li>
+                        <li [ngClass]="step==3 ? 'active' : 'inactive'">Login Details</li>
                     </ul>
                     
                     <div class="general-info" *ngIf="step == 1">
@@ -130,7 +130,7 @@
                                 <path opacity="0.4" d="M12.6406 8.52979L17.4906 9.75979" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                                 <path opacity="0.4" d="M11.6602 12.3999L14.5602 13.1399" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                             </svg>
-                            <span>Upload company images and videos</span>
+                            <span>Upload company logo</span>
                         </div>
 
                         <div class="uploaded-image">
@@ -174,7 +174,7 @@
                     </div>
                 </form>
 
-                <form>
+                <form hidden="true">
                     <div class="assign-outlets" *ngIf="step == 3">
                         <div class="hint-text">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -280,6 +280,83 @@
                                         <i class="fa-solid fa-arrow-left"></i>Back
                                     </button>
                                     <button class="btn btn-next" (click)="onSave()">Save
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" clip-rule="evenodd" d="M5 2C4.44772 2 4 2.44772 4 3V21.382C4 22.1253 4.78231 22.6088 5.44721 22.2764L11.5528 19.2236C11.8343 19.0828 12.1657 19.0828 12.4472 19.2236L18.5528 22.2764C19.2177 22.6088 20 22.1253 20 21.382V3C20 2.44772 19.5523 2 19 2H5ZM18 4H6V20L12 17L18 20V4Z" fill="var(--inner-btn-color)"/>
+                                            <path d="M14.8284 7.87865C14.4379 7.48812 13.8047 7.48812 13.4142 7.87865L11.2929 9.99994L10.5858 9.2928C10.1952 8.90228 9.56208 8.90228 9.17156 9.2928C8.78103 9.68333 8.78103 10.3165 9.17156 10.707L10.5797 12.1151C10.5817 12.1172 10.5837 12.1192 10.5858 12.1213C10.9763 12.5118 11.6095 12.5118 12 12.1213L14.8284 9.29286C15.2189 8.90234 15.2189 8.26917 14.8284 7.87865Z" fill="var(--inner-btn-color)"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+                <form [formGroup]="loginDetails">
+                    <div class="assign-outlets" *ngIf="step == 3">
+                        <div class="hint-text">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M21.6602 10.44L20.6802 14.62C19.8402 18.23 18.1802 19.69 15.0602 19.39C14.5602 19.35 14.0202 19.26 13.4402 19.12L11.7602 18.72C7.59018 17.73 6.30018 15.67 7.28018 11.49L8.26018 7.30001C8.46018 6.45001 8.70018 5.71001 9.00018 5.10001C10.1702 2.68001 12.1602 2.03001 15.5002 2.82001L17.1702 3.21001C21.3602 4.19001 22.6402 6.26001 21.6602 10.44Z" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path opacity="0.4" d="M15.0603 19.3901C14.4403 19.8101 13.6603 20.1601 12.7103 20.4701L11.1303 20.9901C7.16034 22.2701 5.07034 21.2001 3.78034 17.2301L2.50034 13.2801C1.22034 9.3101 2.28034 7.2101 6.25034 5.9301L7.83034 5.4101C8.24034 5.2801 8.63034 5.1701 9.00034 5.1001C8.70034 5.7101 8.46034 6.4501 8.26034 7.3001L7.28034 11.4901C6.30034 15.6701 7.59034 17.7301 11.7603 18.7201L13.4403 19.1201C14.0203 19.2601 14.5603 19.3501 15.0603 19.3901Z" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path opacity="0.4" d="M12.6406 8.52979L17.4906 9.75979" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path opacity="0.4" d="M11.6602 12.3999L14.5602 13.1399" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span>Company login details</span>
+                        </div>
+
+                        <fieldset *ngIf="step == 3">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>Email</label>
+                                    <input 
+                                        class="form-control"
+                                        type="text"
+                                        formControlName="companyEmail"
+                                        [ngClass]="{'is-invalid' : CompanyEmail?.touched && CompanyEmail?.invalid}"
+                                        placeholder="Enter company email"/>
+                                </div>
+                                <div class="col-md-6">
+                                    <label>Password</label>
+                                    <input 
+                                        class="form-control"
+                                        type="password"
+                                        formControlName="companyPassword"
+                                        [ngClass]="{'is-invalid' : CompanyPassword?.touched && CompanyPassword?.invalid}"
+                                        placeholder="Enter password"/>
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <div class="row">
+                            <div class="footer-btn">
+                                <div class="company-status">
+                                    <label>Company Status</label>
+                                    <div class="form-check">
+                                        <div class="radio-btn">
+                                            <input type="radio" class="form-check-input" id="online" name="status" value="online">
+                                            <label class="form-check-label" for="online">
+                                                Online
+                                            </label>
+                                        </div>
+                                        <div class="radio-btn">
+                                            <input type="radio" class="form-check-input" id="offline" name="status" value="offline">
+                                            <label class="form-check-label" for="offline">
+                                                Offline
+                                            </label>
+                                        </div>
+                                        <div class="radio-btn">
+                                            <input type="radio" class="form-check-input" id="draft" name="status" value="draft">
+                                            <label class="form-check-label" for="draft">
+                                                Draft
+                                            </label>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                                <div class="btn-section">
+                                    <button class="btn btn-back" (click)="previous()">
+                                        <i class="fa-solid fa-arrow-left"></i>Back
+                                    </button>
+                                    <button class="btn btn-next" [disabled]="generalInformation.invalid || loginDetails.invalid" (click)="onSave()">Save
                                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path fill-rule="evenodd" clip-rule="evenodd" d="M5 2C4.44772 2 4 2.44772 4 3V21.382C4 22.1253 4.78231 22.6088 5.44721 22.2764L11.5528 19.2236C11.8343 19.0828 12.1657 19.0828 12.4472 19.2236L18.5528 22.2764C19.2177 22.6088 20 22.1253 20 21.382V3C20 2.44772 19.5523 2 19 2H5ZM18 4H6V20L12 17L18 20V4Z" fill="var(--inner-btn-color)"/>
                                             <path d="M14.8284 7.87865C14.4379 7.48812 13.8047 7.48812 13.4142 7.87865L11.2929 9.99994L10.5858 9.2928C10.1952 8.90228 9.56208 8.90228 9.17156 9.2928C8.78103 9.68333 8.78103 10.3165 9.17156 10.707L10.5797 12.1151C10.5817 12.1172 10.5837 12.1192 10.5858 12.1213C10.9763 12.5118 11.6095 12.5118 12 12.1213L14.8284 9.29286C15.2189 8.90234 15.2189 8.26917 14.8284 7.87865Z" fill="var(--inner-btn-color)"/>

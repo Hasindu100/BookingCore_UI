@@ -37,24 +37,28 @@
             <li>
               <span class="folder root company" (click)="openMenu($event, 'company')">Companies</span>
               <ul class="nested">
-                <li class="file-css">{{companyName}}</li>
-                <li>
-                  <span class="folder" (click)="openMenu($event, 'outlet')">Shops</span>
+                <li class="file-css" *ngFor="let company of companyList">
+                  <span class="folder" (click)="openMenu($event); getOutletDataByCompany(company.id)">{{company.name}}</span>
                   <ul class="nested">
-                    <li *ngFor="let outlet of outletList">
-                      <span class="folder" (click)="openMenu($event)">{{outlet.name}}</span>
+                    <li>
+                      <span class="folder" (click)="openMenu($event); navigateToOutlet(company.id)">Shops</span>
                       <ul class="nested">
-                        <li>
-                          <span class="folder" (click)="openMenu($event)">Orders</span>
+                        <li *ngFor="let outlet of company?.outletList">
+                          <span class="folder" (click)="openMenu($event)">{{outlet.name}}</span>
                           <ul class="nested">
-                            <li class="img" [routerLink]="['/serviceRequest']">Service Requests</li>
-                            <li class="img" [routerLink]="['/order']">Order List</li>
+                            <li>
+                              <span class="folder" (click)="openMenu($event)">Orders</span>
+                              <ul class="nested">
+                                <li class="img" [routerLink]="['/serviceRequest']">Service Requests</li>
+                                <li class="img" [routerLink]="['/order']">Order List</li>
+                              </ul>
+                            </li>
+                            <li class="img" (click)="navigateToPages('Product', outlet.id)">Items</li>
+                            <li class="img" [routerLink]="['/service']" [queryParams]="{ outletId: outlet.id}">Services</li>
+                            <li class="img" (click)="navigateToPages('Package', outlet.id)">Packages</li>
+                            <li class="img" (click)="navigateToPages('ShopEmployee', outlet.id)">Employees</li>
                           </ul>
                         </li>
-                        <li class="img" (click)="navigateToPages('Product', outlet.id)">Items</li>
-                        <li class="img" [routerLink]="['/service']" [queryParams]="{ outletId: outlet.id}">Services</li>
-                        <li class="img" (click)="navigateToPages('Package', outlet.id)">Packages</li>
-                        <li class="img" [routerLink]="['/package']">Employees</li>
                       </ul>
                     </li>
                   </ul>

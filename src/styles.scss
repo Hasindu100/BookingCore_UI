@@ -22,7 +22,7 @@ body {
     overflow-y: hidden;
 }
 
-.form-control.is-invalid {
+.form-control.is-invalid, .file-container.is-invalid {
     border-color: var(--bs-form-invalid-border-color) !important;
 }
 

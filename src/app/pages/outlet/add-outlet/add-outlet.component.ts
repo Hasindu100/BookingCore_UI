@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { ImageFile } from 'src/app/models/models';
+import { ImageFile, UserLogin } from 'src/app/models/models';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { OutletService } from '../services/outlet.service';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
+import { UserType } from 'src/app/models/enum';
+import { LoginService } from '../../login-details/services/login.service';
 
 @Component({
   selector: 'app-add-outlet',
@@ -14,6 +16,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class AddOutletComponent implements OnInit {
   step: number = 1;
   generalInformation: any;
+  loginDetails: any;
   fileData: any[] = [];
   imageUrls: any[] = [];
   imageDataList: ImageFile[] = [];
@@ -26,16 +29,22 @@ export class AddOutletComponent implements OnInit {
   outletId: number = 0;
   formMode: string = 'Add';
   isAddNewFile: boolean = false;
+  companyId: number = 0;
+  outletLoginId: number = 0;
 
   constructor(private formBuilder: FormBuilder,
     private commonService: CommonService,
     private outletService: OutletService,
+    private loginService: LoginService,
     private toastr: ToastrService,
     private router: Router,
     private route: ActivatedRoute) {
     this.createFormControllers();
 
     this.route.queryParams.subscribe((res: any) => {
+      if (res.companyId) {
+        this.companyId = res.companyId;
+      }
       if (res.id) {
         this.outletId = res.id;
         this.formMode = 'Edit'
@@ -46,10 +55,6 @@ export class AddOutletComponent implements OnInit {
 
   get mediaUrl() {
     return this.commonService.mediaUrl;
-  }
-
-  get companyId() {
-    return this.commonService.companyId;
   }
 
   ngOnInit(): void {
@@ -105,6 +110,16 @@ export class AddOutletComponent implements OnInit {
   }
   //#endregion
 
+  //#region  getters for loginDetails
+  get ShopEmail() {
+    return this.loginDetails.get('shopEmail');
+  }
+
+  get ShopPassword() {
+    return this.loginDetails.get('shopPassword');
+  }
+  //#endregion
+
   createFormControllers() {
     this.generalInformation = this.formBuilder.group({
       shopName: ['', Validators.required],
@@ -122,6 +137,11 @@ export class AddOutletComponent implements OnInit {
       orderGapDuration: [''],
       employeeSelectionEnabled: [''],
       multipleEmployeeSelectionEnabled: ['']
+    });
+
+    this.loginDetails = this.formBuilder.group({
+      shopEmail: ['', [Validators.required, Validators.email]],
+      shopPassword: ['', [Validators.required]]
     });
   }
 
@@ -147,6 +167,10 @@ export class AddOutletComponent implements OnInit {
           this.CloseTime.setValue(data.branchClose);
           this.Mobile.setValue(data.mobileNumber);
           this.Email.setValue(data.email);
+          this.ShopEmail.setValue(data.email);
+          this.ShopEmail.disable();
+          this.ShopPassword.setValue(1234);
+          this.ShopPassword.disable();
           this.OrderGapDuration.setValue(data.orderGapDuration);
           this.getDistrictList(data.city.district.province.id);
           this.getCityList(data.city.district.id);
@@ -271,6 +295,15 @@ export class AddOutletComponent implements OnInit {
   }
 
   onSave() {
+    if (this.formMode == 'Add') {
+      this.registerOutlet();
+    }
+    else {
+      this.prepareSaveOutletData();
+    }
+  }
+
+  prepareSaveOutletData() {
     let count = 0;
     this.commonService.isLoading = true;
     if (this.isAddNewFile) {
@@ -333,11 +366,51 @@ export class AddOutletComponent implements OnInit {
         else {
           this.toastr.success("Outlet updated successfully!");
         }
-        this.router.navigateByUrl('/outlet');
+        this.router.navigate(['outlet/'], { queryParams: { companyId: this.companyId }});
       } else {
         this.toastr.error("Something went wrong");
       }
       this.commonService.isLoading = false;
     })
+  }
+
+  registerOutlet() {
+    let loginDetails: UserLogin = {
+      userName: this.ShopEmail.value,
+      password: this.ShopPassword.value,
+      userTypes: {
+        id: UserType.Shop
+      }
+    }
+
+    this.commonService.isLoading = true;
+    this.loginService.checkUserName(this.ShopEmail.value).subscribe((res: any) => {
+      if (res.message == "User Exist") {
+        this.toastr.error("This email is already registered. Please try another email");
+        this.commonService.isLoading = false;
+        return;
+      }
+      else if (res.message == 'No User for This email') {
+        this.loginService.saveLoginSub(loginDetails).subscribe((res: any) => {
+          if (res.code == 200) {
+            this.outletLoginId = res.object.id;;
+            if (this.isAddNewFile) {
+              this.prepareSaveOutletData();
+            }
+            else {
+              this.saveOutlet();
+            }
+          }
+          else {
+            this.toastr.error(res.message);
+            this.commonService.isLoading = false;
+          }
+        });
+      }
+      else {
+        this.toastr.error("Something went wrong");
+        this.commonService.isLoading = false;
+      }
+    });
   }
 }

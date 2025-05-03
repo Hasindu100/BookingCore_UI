@@ -62,6 +62,16 @@ export class LoginService {
     return this.http.get(url);
   }
 
+  resendCode(username: string) {
+    let url = this.baseUrl + "resendcode/" + username;
+    return this.http.get(url);
+  }
+
+  saveLoginSub(loginDetails: any) {
+    let url = this.baseUrl + "save/sub";
+    return this.http.post(url, loginDetails);
+  }
+
   setUser(userDetails: UserDetails) {
     localStorage.setItem("user", JSON.stringify(userDetails));
     this.isLoggedGuard = true;
