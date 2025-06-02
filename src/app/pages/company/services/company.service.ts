@@ -6,7 +6,7 @@ import { environment } from 'src/environment';
   providedIn: 'root'
 })
 export class CompanyService {
-
+  companyOwnerName: string = '';
   baseUrl = environment.apiUrl + "company/"
 
   constructor(private http: HttpClient) {}
@@ -23,6 +23,16 @@ export class CompanyService {
 
   getCompanyDetialsByOwnerId(ownerId: number) {
     let url = this.baseUrl + "byOwnerId?id=" + ownerId;
+    return this.http.get(url);
+  }
+
+  getCompanyById(companyId: number) {
+    let url = this.baseUrl + companyId;
+    return this.http.get(url);
+  }
+
+  getCompanyOwnerDetailsById(ownerId: number) {
+    let url = environment.apiUrl + "owner/" + ownerId;
     return this.http.get(url);
   }
 }

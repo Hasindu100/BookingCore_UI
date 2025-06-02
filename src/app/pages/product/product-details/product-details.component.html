@@ -1,5 +1,6 @@
 <div class="container">
-  <div class="card-wrapper">
+  <div class="product-details-section">
+    <div class="card-wrapper">
       <div class = "card" *ngIf="product != null">
         <!-- card left -->
         <div class = "product-imgs">
@@ -73,43 +74,49 @@
       </div>
     </div>
 
-  <div class="btn-add-section">
-    <button class="btn btn-add" [routerLink]="['/product/price']" [queryParams]="{ outletId: outletId, productId: productId }">
-      <i class="fa-solid fa-plus"></i> Add
-    </button>
-  </div>
+    <div>
+      <div class="btn-add-section">
+        <button class="btn btn-add" [routerLink]="['/product/price']" [queryParams]="{ outletId: outletId, productId: productId }">
+          <i class="fa-solid fa-plus"></i> Add
+        </button>
+      </div>
 
-  <div class="pricing-details table-responsive">
-    <div class="pricing-data-section" *ngFor="let itemPrice of product.itemPrices">
-      <div class="pricing-item">
-        <label>Unit Price</label>
-        <span>LKR {{itemPrice.price}}</span>
-      </div>
-      <div class="pricing-item">
-        <label>Batch Name</label>
-        <span>{{itemPrice.batchName}}</span>
-      </div>
-      <div class="pricing-item">
-        <label>Batch Number</label>
-        <span>{{itemPrice.batchNumber}}</span>
-      </div>
-      <div class="pricing-item">
-        <label>Quantity</label>
-        <span>{{itemPrice.stock}}</span>
-      </div>
-      <div class="pricing-item">
-        <label>Line Discount</label>
-        <span>10%</span>
-      </div>
-      <div class="pricing-item">
-        <label>Trade Discount</label>
-        <span>0%</span>
-      </div>
-      <div class="btn-section">
-          <button class="btn btn-edit" (click)="editPriceDetails(itemPrice.id)">
-            <i class="fa-solid fa-arrow-left"></i> Edit
-          </button>
+      <div class="pricing-details table-responsive">
+        <div class="pricing-data-section" *ngFor="let itemPrice of product.itemPrices">
+          <div class="pricing-item">
+            <label>Unit Price</label>
+            <span>LKR {{itemPrice.price}}</span>
+          </div>
+          <div class="pricing-item">
+            <label>Batch Name</label>
+            <span>{{itemPrice.batchName}}</span>
+          </div>
+          <div class="pricing-item">
+            <label>Batch Number</label>
+            <span>{{itemPrice.batchNumber}}</span>
+          </div>
+          <div class="pricing-item">
+            <label>Quantity</label>
+            <span>{{itemPrice.stock}}</span>
+          </div>
+          <div class="pricing-item">
+            <label>Line Discount</label>
+            <span>10%</span>
+          </div>
+          <div class="pricing-item">
+            <label>Trade Discount</label>
+            <span>0%</span>
+          </div>
+          <div class="btn-section">
+              <button class="btn btn-edit" (click)="editPriceDetails(itemPrice.id)">
+                <i class="fa-solid fa-arrow-left"></i> Edit
+              </button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
+  
+
+  
 </div>

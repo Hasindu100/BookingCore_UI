@@ -44,4 +44,9 @@ export class OutletService {
     let url = this.baseUrl + "addEmployees?shopId=" + shopId;
     return this.http.put(url, employeeIdList);
   }
+
+  getShopUnassignedEmployees(shopId: number, pageSize: number, pageNumber: number) {
+    let url = this.baseUrl + "empsNotInBranchAndNotActive/" + pageSize + "/" + pageNumber + "?shopId=" + shopId;
+    return this.http.get(url);
+  }
 }

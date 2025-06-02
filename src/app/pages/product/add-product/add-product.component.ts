@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ImageFile } from 'src/app/models/models';
 import { DialogService } from 'src/app/shared/dialog/dialog.service';
@@ -18,6 +18,7 @@ export class AddProductComponent implements OnInit {
   step: number = 1;
   generalInformation: any;
   pricingDetails: any;
+  customFiledsInfo: any;
   fileData: any[] = [];
   imageUrls: any[] = [];
   imageDataList: ImageFile[] = [];
@@ -53,6 +54,9 @@ export class AddProductComponent implements OnInit {
         }
       })
     this.createFormControllers();
+    if (this.productId == 0) {
+      this.createDynamicFieldsGroup();
+    }
   }
 
   //#region getters for generalInfo
@@ -90,10 +94,6 @@ export class AddProductComponent implements OnInit {
 
   get Manufacturer() {
     return this.generalInformation.get('manufacturer');
-  }
-
-  get Functionality() {
-    return this.generalInformation.get('functionality');
   }
 
   //#endregion
@@ -181,6 +181,10 @@ export class AddProductComponent implements OnInit {
 
   //#endregion
 
+  get dynamicFields() {
+    return this.customFiledsInfo.get('dynamicFields') as FormArray;
+  }
+
   createFormControllers() {
     this.generalInformation = this.formBuilder.group({
       productName: ['', Validators.required],
@@ -191,7 +195,6 @@ export class AddProductComponent implements OnInit {
       features: [''],
       material: [''],
       manufacturer: ['', Validators.required],
-      functionality: [''],
     });
 
     this.pricingDetails = this.formBuilder.group({
@@ -215,7 +218,31 @@ export class AddProductComponent implements OnInit {
       maximumBonusQuantity: [''],
       bonusStartTime: [''],
       bonusCloseTime: [''],
-    })
+    });
+
+    this.customFiledsInfo = this.formBuilder.group({
+      dynamicFields: this.formBuilder.array([])
+    });
+  }
+
+  createDynamicFieldsGroup(name: string = '', value: string = '') {
+    const group = this.formBuilder.group({
+      customFieldName: [name],
+      customFieldValue: [value]
+    });
+    this.dynamicFields.push(group);
+  }
+
+  onClickAddCustomField() {
+    this.createDynamicFieldsGroup();
+  }
+
+  onClickRemoveCustomField(index: number): void {
+    this.dynamicFields.removeAt(index);
+  }
+
+  test() {
+    var p = this.prepareCustomFieldsData();
   }
 
   ngOnInit(): void {
@@ -245,6 +272,14 @@ export class AddProductComponent implements OnInit {
           this.Category.setValue(data.itemCategory?.id);
           this.Brand.setValue(data.brand);
           this.Manufacturer.setValue(data.manufacturer);
+          if (data.itemInfoFields.length == 0) {
+            this.createDynamicFieldsGroup();
+          }
+          else {
+            data.itemInfoFields.forEach((itemInfo: any) => {
+              this.createDynamicFieldsGroup(itemInfo.name, itemInfo.value);
+            });
+          }
 
           // set pricing data
           if (data.itemPrices.length > 0) {
@@ -411,10 +446,7 @@ export class AddProductComponent implements OnInit {
         "id": this.Category.value
       },
       "itemMedia": this.savedMediaList,
-      "itemInfoFields": [{
-        "name": "string",
-        "value": "string"
-      }],
+      "itemInfoFields": this.prepareCustomFieldsData(),
       "branch": {
         "id": this.outletId
       }
@@ -450,106 +482,10 @@ export class AddProductComponent implements OnInit {
       "isActive": true
     }
 
-    // let discountDetails = {
-    //   "priceId": [],
-    //   "itemPriceDiscount": {
-    //     "description": "string",
-    //     "discountValue": 10,
-    //     "discountPCT": 10,
-    //     "minimumQTY": 10,
-    //     "minimumOrderValue": 10,
-    //     "maximumDiscountValue": 120,
-    //     "startTime": "2022-01-02T10:19",
-    //     "endTime": "2022-01-02T10:19",
-    //     "isActive": true,
-    //     "isDeleted": false,
-    //     "bonusMedia": {
-    //       "name": "string",
-    //       "url": "string",
-    //       "isActive": true,
-    //       "mediaType": {
-    //         "id": 1
-    //       }
-    //     }
-    //   },
-    //   "itemPriceBonus": {
-    //     "bonusItemId": 4,
-    //     "description": "string",
-    //     "bonusQTY": 2,
-    //     "minimumQTY": 10,
-    //     "minimumOrderValue": 10,
-    //     "maximumBonusQTY": 10,
-    //     "startTime": "2022-01-02T10:19",
-    //     "endTime": "2022-01-02T10:19",
-    //     "isActive": true,
-    //     "isDeleted": false,
-    //     "discountMedia": {
-    //       "name": "string",
-    //       "url": "string",
-    //       "isActive": true,
-    //       "mediaType": {
-    //         "id": 1
-    //       }
-    //     }
-    //   }
-    // };
-
-    let discountDetails = {
-      "priceId": [],
-      "itemPriceDiscount": {
-        "id": this.discountId,
-        "description": this.DiscountDescription.value,
-        "discountValue": this.DiscountValue.value,
-        "discountPCT": this.DiscountPercentage.value,
-        "minimumQTY": this.MinimumQuantity.value,
-        "minimumOrderValue": this.MinimumOrderValue.value,
-        "maximumDiscountValue": this.MaximumDiscountValue.value,
-        "startTime": this.DiscountStartTime.value,
-        "endTime": this.DiscountCloseTime.value,
-        "isActive": true,
-        "isDeleted": false,
-        "bonusMedia": {
-          "name": "string",
-          "url": "string",
-          "isActive": true,
-          "mediaType": {
-            "id": 1
-          }
-        }
-      },
-      "itemPriceBonus": {
-        "id": this.bonusId,
-        "bonusItemId": 4,
-        "description": this.BonusDescription.value,
-        "bonusQTY": this.BonusQuantity.value,
-        "minimumQTY": this.MinimumBonusQuantity.value,
-        "minimumOrderValue": this.MinimumBonusOrderValue.value,
-        "maximumBonusQTY": this.MaximumBonusQuantity.value,
-        "startTime": this.BonusStartTime.value,
-        "endTime": this.BonusCloseTime.value,
-        "isActive": true,
-        "isDeleted": false,
-        "discountMedia": {
-          "name": "string",
-          "url": "string",
-          "isActive": true,
-          "mediaType": {
-            "id": 1
-          }
-        }
-      }
-    };
-
     this.productService.savePriceDetails(priceDetails, productId).subscribe((res: any) => {
       if (res.code == 200) {
         this.commonService.isLoading = false;
         this.router.navigate(['/product/details'], { queryParams: { outletId: this.outletId, id: productId }});
-        var priceItemId: any = [];
-        priceItemId.push(res.object.itemPrices[res.object.itemPrices.length - 1].id);
-        discountDetails.priceId = priceItemId;
-        this.productService.saveDiscountDetails(discountDetails).subscribe((res: any) => {
-
-        });
       }
     });
   }
@@ -566,75 +502,26 @@ export class AddProductComponent implements OnInit {
       "isActive": true
     }
 
-    let discountDetails = {
-      "id": this.discountId,
-      "description": this.DiscountDescription.value,
-      "discountValue": this.DiscountValue.value,
-      "discountPCT": this.DiscountPercentage.value,
-      "minimumQTY": this.MinimumQuantity.value,
-      "minimumOrderValue": this.MinimumOrderValue.value,
-      "maximumDiscountValue": this.MaximumDiscountValue.value,
-      "startTime": this.DiscountStartTime.value,
-      "endTime": this.DiscountCloseTime.value,
-      "isActive": true,
-      "isDeleted": false,
-      "bonusMedia": {
-        "name": "string",
-        "url": "string",
-        "isActive": true,
-        "mediaType": {
-          "id": 1
-        }
-      }
-    }
-
-    let bonusDetails = {
-      "id": this.bonusId,
-      "bonusItemId": 4,
-      "description": this.BonusDescription.value,
-      "bonusQTY": this.BonusQuantity.value,
-      "minimumQTY": this.MinimumBonusQuantity.value,
-      "minimumOrderValue": this.MinimumBonusOrderValue.value,
-      "maximumBonusQTY": this.MaximumBonusQuantity.value,
-      "startTime": this.BonusStartTime.value,
-      "endTime": this.BonusCloseTime.value,
-      "isActive": true,
-      "isDeleted": false,
-      "discountMedia": {
-        "name": "string",
-        "url": "string",
-        "isActive": true,
-        "mediaType": {
-          "id": 1
-        }
-      }
-    };
-
-    let saveDiscountModel = {
-      "priceId": [],
-      "itemPriceDiscount": discountDetails,
-      "itemPriceBonus": bonusDetails
-    }
-
     this.productService.updatePriceDetails(priceDetails, productId).subscribe((res: any) => {
       if (res.code == 200) {
         this.commonService.isLoading = false;
         this.router.navigate(['/product/details'], { queryParams: { outletId: this.outletId, id: productId }});
-        var priceItemId: any = [];
-        priceItemId.push(res.object?.id);
-        saveDiscountModel.priceId = priceItemId;
-        if (!(this.isDiscountExist && this.isBonusExist)) {
-          this.productService.saveDiscountDetails(saveDiscountModel).subscribe((res: any) => {});
-        }
-        else {
-          const updateDisountDetails$ = this.productService.updateDiscountDetails(discountDetails);
-          const updateBonusDetails$ = this.productService.updateBonusDetails(bonusDetails);
-
-          let forkJoinArray = [updateDisountDetails$, updateBonusDetails$];
-          forkJoin(forkJoinArray).subscribe();
-        }
       }
     });
+  }
+
+  prepareCustomFieldsData() {
+    var itemInfoFieldList: any[] = [];
+    this.customFiledsInfo.value?.dynamicFields.forEach((field: any) => {
+      if (field.customFieldName != '' && field.customFieldValue != '') {
+        var itemInfoField = {
+          "name": field.customFieldName,
+          "value": field.customFieldValue
+        }
+        itemInfoFieldList.push(itemInfoField);
+      }
+    });
+    return itemInfoFieldList;
   }
 
   formatDateTime(dateStr: string): string {

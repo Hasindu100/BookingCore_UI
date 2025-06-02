@@ -4,7 +4,7 @@ import { ImageFile, UserLogin } from 'src/app/models/models';
 import { CompanyService } from '../services/company.service';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { ToastrService } from 'ngx-toastr';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { OutletService } from '../../outlet/services/outlet.service';
 import { LoginService } from '../../login-details/services/login.service';
 import { UserType } from 'src/app/models/enum';
@@ -29,6 +29,7 @@ export class AddCompany2Component implements OnInit {
   formMode: string = "Add";
   companyLoginId: number = 0;
   isAddNewFile: boolean = false;
+  companyId: number = 0;
 
   constructor(private formBuilder: FormBuilder, 
     private companyService: CompanyService,
@@ -36,8 +37,23 @@ export class AddCompany2Component implements OnInit {
     private toastr: ToastrService,
     private router: Router,
     private outletService: OutletService,
-    private loginService: LoginService) {
-    this.createFormControllers();
+    private loginService: LoginService,
+    private route: ActivatedRoute) {
+      this.route.queryParams.subscribe((res: any) => {
+        if (res.id) {
+          this.companyId = res.id;
+          this.setCompanyData(this.companyId);
+        }
+      });
+      this.createFormControllers();
+
+      setTimeout(() => {
+        this.setDefaultValues();
+      }, 1000);
+  }
+
+  get companyOwnerName() {
+    return this.companyService.companyOwnerName;
   }
 
   //#region getters
@@ -104,11 +120,47 @@ export class AddCompany2Component implements OnInit {
     this.loginDetails = this.formBuilder.group({
       companyEmail: ['', [Validators.required, Validators.email]],
       companyPassword: ['', [Validators.required]]
-    })
+    });
   }
 
   ngOnInit(): void {
     this.getCompanyTypes();
+  }
+
+  setDefaultValues() {
+    this.generalInformation.controls['ownerName'].setValue(this.companyOwnerName);
+    this.generalInformation.controls['ownerName'].disable();
+  }
+
+  setCompanyData(companyId: number) {
+    this.companyService.getCompanyById(companyId).subscribe((res: any) => {
+      if (res.code == 200) {
+        this.formMode = "Edit";
+        var data = res.object;
+        if (data != undefined) {
+          // set general info
+          this.CompanyName.setValue(data.name);
+          this.CompanyCategory.setValue(data?.companyType.id);
+          this.loginDetails.controls['companyEmail'].disable();
+          this.loginDetails.controls['companyPassword'].setValue(1234);
+          this.loginDetails.controls['companyPassword'].disable();
+
+          // set logo
+          if (data.logo != "") {
+          var image = {
+              id: 0,
+              file: '',
+              filePath: data.logo,
+              url: ''
+            }
+            this.imageDataList.push(image);
+            this.imageUrls.push(this.commonService.mediaUrl + data.logo);
+
+            this.companyLogo = data.logo;
+          }
+        }
+      }
+    })
   }
 
   getCompanyTypes() {

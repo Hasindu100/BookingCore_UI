@@ -42,6 +42,11 @@ export class ShopService {
     return this.http.get(url);
   }
 
+  getServicesByBranchIdWithfilter(branchId: number, pageSize: number, pageNumber: number, searchString: string = '') {
+    let url = this.baseUrl + "ByBranchId/" + pageSize + "/" + pageNumber + "?branchId=" + branchId + "&name=" + searchString;
+    return this.http.post(url, null);
+  }
+
   savePriceDetails(priceDetails: any, id: number) {
     let url = environment.apiUrl + "price/service?serviceId=" + id;
     return this.http.post(url, priceDetails);

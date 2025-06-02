@@ -29,9 +29,11 @@ export class BodyComponent implements OnInit {
     let userId = this.user == null ? 0 : this.user.userId;
     if (userType == 4) {
       this.getCompanyDetailsByOwnerId(userId);
+      this.getOwnerDetailsById(userId);
     }
     
   }
+
   getCompanyDetailsByOwnerId(ownerId: number) {
     this.companyService.getCompanyDetialsByOwnerId(ownerId).subscribe((res: any) => {
       if (res.code == 200) {
@@ -39,8 +41,15 @@ export class BodyComponent implements OnInit {
         this.commonService.companyName = res.object.length > 0 ? res.object[0].name : '';
         window['companyId'] = this.commonService.companyId;
       }
-    })
+    });
+  }
 
+  getOwnerDetailsById(ownerId: number) {
+    return this.companyService.getCompanyOwnerDetailsById(ownerId).subscribe((res: any) => {
+      if (res.code == 200) {
+        this.companyService.companyOwnerName = res.object.firstName + " " + res.object.lastName;
+      }
+    });
   }
 
   showHideProfileNavMenu() {
