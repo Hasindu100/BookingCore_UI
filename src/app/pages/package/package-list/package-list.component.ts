@@ -20,6 +20,7 @@ export class PackageListComponent {
   tableSizes: any = [2, 5, 10, 20];
   isDisplayWarningPopup: boolean = false;
   selectedPackageId: number = 0;
+  searchString: string = '';
 
   constructor(private route: ActivatedRoute,
     private commonService: CommonService,
@@ -40,18 +41,23 @@ export class PackageListComponent {
   init() {
     this.commonService.isLoading = true;
     setTimeout(() => {
-      this.getPackagersByBranchId(this.outletId, this.pageSize, this.pageNumber - 1);
+      this.getPackagersByBranchId(this.outletId, this.pageSize, this.pageNumber - 1, this.searchString);
     }, 1000);
   }
 
-  getPackagersByBranchId(outletId: number, pageSize: number, pageNumber: number) {
-    this.packageService.getPackagersByBranchId(outletId, pageSize, pageNumber).subscribe((res: any) => {
+  getPackagersByBranchId(outletId: number, pageSize: number, pageNumber: number, searchString: string = '') {
+    (searchString.trim() == '' ? this.packageService.getPackagersByBranchId(outletId, pageSize, pageNumber) : this.packageService.getPackagersByBranchIdWithFilter(outletId, pageSize, pageNumber, searchString)).subscribe((res: any) => {
       if (res.code == 200) {
         this.packageList = res.object.content;
         this.totalElements = res.object.totalElements;
         this.commonService.isLoading = false;
       }
     });
+  }
+
+  onChangeSearch(event: any) {
+    var searchString = event;
+    this.getPackagersByBranchId(this.outletId, this.pageSize, this.pageNumber - 1, searchString);
   }
 
   onClickRemove(packageId: number) {
@@ -65,7 +71,7 @@ export class PackageListComponent {
         this.commonService.isLoading = false;
         this.isDisplayWarningPopup = false;
         this.toastr.success("Package removed successfully");
-        this.getPackagersByBranchId(this.outletId, this.pageSize, this.pageNumber - 1);
+        this.getPackagersByBranchId(this.outletId, this.pageSize, this.pageNumber - 1, this.searchString);
       }
     })
   }
@@ -80,13 +86,13 @@ export class PackageListComponent {
 
   onTableDataChange(event: any) {
     this.pageNumber = event;
-    this.getPackagersByBranchId(this.outletId, this.pageSize, this.pageNumber - 1);
+    this.getPackagersByBranchId(this.outletId, this.pageSize, this.pageNumber - 1, this.searchString);
   }
 
   onTableSizeChange(event: any): void {
     this.pageSize = event.target.value.split("/")[0];
     this.pageNumber = 1;
-    this.getPackagersByBranchId(this.outletId, this.pageSize, this.pageNumber - 1);
+    this.getPackagersByBranchId(this.outletId, this.pageSize, this.pageNumber - 1, this.searchString);
   }
 
   getPackageImageUrl(mediaList: any) {

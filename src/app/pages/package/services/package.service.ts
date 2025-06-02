@@ -25,6 +25,11 @@ export class PackageService {
     return this.http.get(url);
   }
 
+  getPackagersByBranchIdWithFilter(branchId: number, pageSize: number, pageNumber: number, searchString: string = '') {
+    let url = this.baseUrl + "ByBranchId/" + pageSize + "/" + pageNumber + "?branchId=" + branchId + "&name=" + searchString;
+    return this.http.post(url, null);
+  }
+
   getPackageById(id: number) {
     let url = this.baseUrl + id;
     return this.http.get(url);

@@ -103,3 +103,7 @@ input[type=number] {
     background: transparent !important;
     color: var(--add-btn-color);
 }
+
+input[type=text], input[type=number], input[type=email], textarea, select {
+    color: var(--main-text-color);
+}

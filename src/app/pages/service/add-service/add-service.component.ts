@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ImageFile } from 'src/app/models/models';
 import { AddServiceCategoryPopupComponent } from '../add-service-category-popup/add-service-category-popup.component';
@@ -18,6 +18,7 @@ export class AddServiceComponent implements OnInit {
   step: number = 1;
   generalInformation: any;
   pricingDetails: any;
+  customFiledsInfo: any;
   fileData: any[] = [];
   formData = new FormData();
   imageUrls: any[] = [];
@@ -54,6 +55,9 @@ export class AddServiceComponent implements OnInit {
         }
       });
       this.createFormControllers();
+      if (this.serviceId == 0) {
+      this.createDynamicFieldsGroup();
+    }
   }
 
   //#region getters for generalInfo
@@ -174,6 +178,9 @@ export class AddServiceComponent implements OnInit {
 
   //#endregion
 
+  get dynamicFields() {
+    return this.customFiledsInfo.get('dynamicFields') as FormArray;
+  }
 
   createFormControllers() {
     this.generalInformation = this.formBuilder.group({
@@ -207,7 +214,27 @@ export class AddServiceComponent implements OnInit {
       maximumBonusQuantity: ['', Validators.required],
       bonusStartTime: ['', Validators.required],
       bonusCloseTime: ['', Validators.required],
-    })
+    });
+
+    this.customFiledsInfo = this.formBuilder.group({
+      dynamicFields: this.formBuilder.array([])
+    });
+  }
+
+  createDynamicFieldsGroup(name: string = '', value: string = '') {
+    const group = this.formBuilder.group({
+      customFieldName: [name],
+      customFieldValue: [value]
+    });
+    this.dynamicFields.push(group);
+  }
+
+  onClickAddCustomField() {
+    this.createDynamicFieldsGroup();
+  }
+
+  onClickRemoveCustomField(index: number): void {
+    this.dynamicFields.removeAt(index);
   }
 
   ngOnInit(): void {
@@ -239,6 +266,14 @@ export class AddServiceComponent implements OnInit {
           this.ServiceName.setValue(data.name);
           this.ServiceDescription.setValue(data.description);
           this.Category.setValue(data.fetcherCategory?.id);
+          if (data.fetcherInfoFields.length == 0) {
+            this.createDynamicFieldsGroup();
+          }
+          else {
+            data.fetcherInfoFields.forEach((itemInfo: any) => {
+              this.createDynamicFieldsGroup(itemInfo.name, itemInfo.value);
+            });
+          }
 
           // set image data
           data.fetcherMedia.forEach((item: any, index: number) => {
@@ -404,7 +439,7 @@ export class AddServiceComponent implements OnInit {
         "id": this.outletId
       },
       "fetcherMedia": this.savedMediaList,
-      "fetcherInfoFields": [],
+      "fetcherInfoFields": this.prepareCustomFieldsData(),
       "fetcherCategory": {
         "id": this.Category.value
       }
@@ -438,58 +473,8 @@ export class AddServiceComponent implements OnInit {
       "isActive": true
     }
 
-    let discountDetails = {
-      "priceId": [],
-      "fetcherPriceDiscount": {
-        "id": 0,
-        "description": this.DiscountDescription.value,
-        "discountValue": this.DiscountValue.value,
-        "discountPCT": this.DiscountPercentage.value,
-        "minimumQTY": this.MinimumQuantity.value,
-        "minimumOrderValue": this.MinimumOrderValue.value,
-        "maximumDiscountValue": this.MaximumDiscountValue.value,
-        "startTime":  this.DiscountStartTime.value,
-        "endTime": this.DiscountCloseTime.value,
-        "isActive": true,
-        "isDeleted": false,
-        "bonusMedia": {
-          "name": "string",
-          "url": "string",
-          "isActive": true,
-          "mediaType": {
-            "id": 1
-          }
-        }
-      },
-      "fetcherPriceBonus": {
-        "id": 0,
-        "bonusFetcherId": 4,
-        "description": this.BonusDescription.value,
-        "bonusQTY": this.BonusQuantity.value,
-        "minimumQTY": this.MinimumBonusQuantity.value,
-        "minimumOrderValue": this.MinimumBonusOrderValue.value,
-        "maximumBonusQTY": this.MaximumBonusQuantity.value,
-        "startTime": this.BonusStartTime.value,
-        "endTime": this.BonusCloseTime.value,
-        "isActive": true,
-        "isDeleted": false,
-        "discountMedia": {
-          "name": "string",
-          "url": "string",
-          "isActive": true,
-          "mediaType": {
-            "id": 1
-          }
-        }
-      }
-    };
-
     this.shopService.savePriceDetails(priceDetails, serviceId).subscribe((res: any) => {
       if (res.code == 200) {
-        var priceItemId: any = [];
-        priceItemId.push(res.object.fetcherPrices[res.object.fetcherPrices.length - 1].id);
-        discountDetails.priceId = priceItemId;
-        this.shopService.saveDiscountDetails(discountDetails).subscribe((res: any) => {});
         this.commonService.isLoading = false;
         this.router.navigate(['/service/summary'], { queryParams: { outletId: this.outletId, id: serviceId }});
       }
@@ -507,75 +492,26 @@ export class AddServiceComponent implements OnInit {
       "isActive": true
     }
 
-    let discountDetails = {
-      "id": this.discountId,
-      "description": this.DiscountDescription.value,
-      "discountValue": this.DiscountValue.value,
-      "discountPCT": this.DiscountPercentage.value,
-      "minimumQTY": this.MinimumQuantity.value,
-      "minimumOrderValue": this.MinimumOrderValue.value,
-      "maximumDiscountValue": this.MaximumDiscountValue.value,
-      "startTime":  this.DiscountStartTime.value,
-      "endTime": this.DiscountCloseTime.value,
-      "isActive": true,
-      "isDeleted": false,
-      "bonusMedia": {
-        "name": "string",
-        "url": "string",
-        "isActive": true,
-        "mediaType": {
-          "id": 1
-        }
-      }
-    }
-
-    let bonusDetails = {
-      "id": this.bonusId,
-      "bonusFetcherId": 4,
-      "description": this.BonusDescription.value,
-      "bonusQTY": this.BonusQuantity.value,
-      "minimumQTY": this.MinimumBonusQuantity.value,
-      "minimumOrderValue": this.MinimumBonusOrderValue.value,
-      "maximumBonusQTY": this.MaximumBonusQuantity.value,
-      "startTime": this.BonusStartTime.value,
-      "endTime": this.BonusCloseTime.value,
-      "isActive": true,
-      "isDeleted": false,
-      "discountMedia": {
-        "name": "string",
-        "url": "string",
-        "isActive": true,
-        "mediaType": {
-          "id": 1
-        }
-      }
-    };
-
-    let saveDiscountModel = {
-      "priceId": [],
-      "fetcherPriceDiscount": discountDetails,
-      "fetcherPriceBonus": bonusDetails
-    }
-
     this.shopService.updatePriceDetails(priceDetails, serviceId).subscribe((res: any) => {
       if (res.code == 200) {
         this.commonService.isLoading = false;
         this.router.navigate(['/service/summary'], { queryParams: { outletId: this.outletId, id: serviceId }});
-        var priceItemId: any = [];
-        priceItemId.push(res.object?.id);
-        saveDiscountModel.priceId = priceItemId;
-        if (!(this.isDiscountExist && this.isBonusExist)) {
-          this.shopService.saveDiscountDetails(saveDiscountModel).subscribe((res: any) => {});
-        }
-        else {
-          const updateDisountDetails$ = this.shopService.updateDiscountDetails(discountDetails);
-          const updateBonusDetails$ = this.shopService.updateBonusDetails(bonusDetails);
-
-          let forkJoinArray = [updateDisountDetails$, updateBonusDetails$];
-          forkJoin(forkJoinArray).subscribe();
-        }
       }
     });
+  }
+
+  prepareCustomFieldsData() {
+    var itemInfoFieldList: any[] = [];
+    this.customFiledsInfo.value?.dynamicFields.forEach((field: any) => {
+      if (field.customFieldName != '' && field.customFieldValue != '') {
+        var itemInfoField = {
+          "name": field.customFieldName,
+          "value": field.customFieldValue
+        }
+        itemInfoFieldList.push(itemInfoField);
+      }
+    });
+    return itemInfoFieldList;
   }
 
   formatDateTime(dateStr: string): string {

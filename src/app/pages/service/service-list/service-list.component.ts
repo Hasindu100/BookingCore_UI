@@ -19,6 +19,7 @@ export class ServiceListComponent implements OnInit {
   tableSizes: any = [2, 5, 10, 20];
   selectedServiceId: number = 0;
   isDisplayWarningPopup: boolean = false;
+  searchString: string = '';
 
   constructor(private route: ActivatedRoute,
     private shopService: ShopService,
@@ -46,16 +47,21 @@ export class ServiceListComponent implements OnInit {
   init() {
     this.commonService.isLoading = true;
     setTimeout(() => {
-      this.getServicesByBranchId(this.outletId, this.pageSize, this.pageNumber - 1);
+      this.getServicesByBranchId(this.outletId, this.pageSize, this.pageNumber - 1, this.searchString);
     }, 500);
   }
 
-  getServicesByBranchId(outletId: number, pageSize: number, pageNumber: number) {
-    this.shopService.getServicesByBranchId(outletId, pageSize, pageNumber).subscribe((res: any) => {
+  getServicesByBranchId(outletId: number, pageSize: number, pageNumber: number, searchString: string = '') {
+    (searchString.trim() == '' ? this.shopService.getServicesByBranchId(outletId, pageSize, pageNumber) : this.shopService.getServicesByBranchIdWithfilter(outletId, pageSize, pageNumber, searchString)).subscribe((res: any) => {
         this.servicesList = res.object.content;
         this.totalElements = res.object.totalElements;
         this.commonService.isLoading = false;
     })
+  }
+
+  onChangeSearch(event: any) {
+    var searchString = event;
+    this.getServicesByBranchId(this.outletId, this.pageSize, this.pageNumber - 1, searchString);
   }
 
   getServiceImageUrl(mediaList: any) {
@@ -68,13 +74,13 @@ export class ServiceListComponent implements OnInit {
 
   onTableDataChange(event: any) {
     this.pageNumber = event;
-    this.getServicesByBranchId(this.outletId, this.pageSize, this.pageNumber - 1);
+    this.getServicesByBranchId(this.outletId, this.pageSize, this.pageNumber - 1, this.searchString);
   }
 
   onTableSizeChange(event: any): void {
     this.pageSize = event.target.value.split("/")[0];
     this.pageNumber = 1;
-    this.getServicesByBranchId(this.outletId, this.pageSize, this.pageNumber - 1);
+    this.getServicesByBranchId(this.outletId, this.pageSize, this.pageNumber - 1, this.searchString);
   }
 
   getServicePrice(priceList: any) {
@@ -103,7 +109,7 @@ export class ServiceListComponent implements OnInit {
         this.commonService.isLoading = false;
         this.isDisplayWarningPopup = false;
         this.toastr.success("Item removed successfully");
-        this.getServicesByBranchId(this.outletId, this.pageSize, this.pageNumber - 1);
+        this.getServicesByBranchId(this.outletId, this.pageSize, this.pageNumber - 1, this.searchString);
       }
     })
   }

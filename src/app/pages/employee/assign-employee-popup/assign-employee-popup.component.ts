@@ -31,11 +31,20 @@ export class AssignEmployeePopupComponent implements OnInit {
   init() {
     this.commonService.isLoading = true;
     this.companyId = this.commonService.companyId;
-    this.getEmployeeByCompanyId(this.companyId, 100, 0);
+    this.getUnassignedEmployees(100, 0);
   }
 
   getEmployeeByCompanyId(companyId: number, pageSize: number, pageNumber: number) {
     this.employeeService.getEmployeeByCompanyId(companyId, pageSize, pageNumber).subscribe((res: any) => {
+      if (res.code == 200) {
+        this.employeeList = res.object.content;
+      }
+      this.commonService.isLoading = false;
+    });
+  }
+
+  getUnassignedEmployees(pageSize: number, pageNumber: number) {
+    this.outletService.getShopUnassignedEmployees(this.outletService.outletId, pageSize, pageNumber).subscribe((res: any) => {
       if (res.code == 200) {
         this.employeeList = res.object.content;
       }

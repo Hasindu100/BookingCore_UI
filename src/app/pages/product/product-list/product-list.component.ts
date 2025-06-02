@@ -19,6 +19,7 @@ export class ProductListComponent implements OnInit {
   tableSizes: any = [2, 5, 10, 20];
   isDisplayWarningPopup: boolean = false;
   selectedProductId: number = 0;
+  searchString: string = '';
 
   constructor(private route: ActivatedRoute,
     private productService: ProductService,
@@ -47,18 +48,23 @@ export class ProductListComponent implements OnInit {
   init() {
     this.commonService.isLoading = true;
     setTimeout(() => {
-      this.getProductsByCompanyId(this.outletId, this.pageSize, this.pageNumber - 1);
+      this.getProductsByCompanyId(this.outletId, this.pageSize, this.pageNumber - 1, this.searchString);
     }, 1000);
   }
 
-  getProductsByCompanyId(outletId: number, pageSize: number, pageNumber: number) {
+  getProductsByCompanyId(outletId: number, pageSize: number, pageNumber: number, searchString: string = '') {
     this.commonService.isLoading = true;
-    this.productService.getProductsByBranchId(outletId, pageSize, pageNumber).subscribe((res: any) => {
+    (searchString.trim() == '' ? this.productService.getProductsByBranchId(outletId, pageSize, pageNumber) : this.productService.getProductsByCompanyIdWithFilter(outletId, pageSize, pageNumber, searchString)).subscribe((res: any) => {
         //this.productList = res.object.content.filter((x: any) => x.isActive);
         this.productList = res.object.content;
         this.totalElements = res.object.totalElements;
         this.commonService.isLoading = false;
     })
+  }
+
+  onChangeSearch(event: any) {
+    var searchString = event;
+    this.getProductsByCompanyId(this.outletId, this.pageSize, this.pageNumber - 1, searchString);
   }
 
   getProductImageUrl(mediaList: any) {
@@ -71,13 +77,13 @@ export class ProductListComponent implements OnInit {
 
   onTableDataChange(event: any) {
     this.pageNumber = event;
-    this.getProductsByCompanyId(this.outletId, this.pageSize, this.pageNumber - 1);
+    this.getProductsByCompanyId(this.outletId, this.pageSize, this.pageNumber - 1, this.searchString);
   }
 
   onTableSizeChange(event: any): void {
     this.pageSize = event.target.value.split("/")[0];
     this.pageNumber = 1;
-    this.getProductsByCompanyId(this.outletId, this.pageSize, this.pageNumber - 1);
+    this.getProductsByCompanyId(this.outletId, this.pageSize, this.pageNumber - 1, this.searchString);
   }
 
   getProductPrice(priceList: any) {
@@ -106,7 +112,7 @@ export class ProductListComponent implements OnInit {
         this.commonService.isLoading = false;
         this.isDisplayWarningPopup = false;
         this.toastr.success("Item removed successfully");
-        this.getProductsByCompanyId(this.outletId, this.pageSize, this.pageNumber - 1);
+        this.getProductsByCompanyId(this.outletId, this.pageSize, this.pageNumber - 1, this.searchString);
       }
     })
   }

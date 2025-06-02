@@ -16,6 +16,7 @@ export class EditProductPricingDetailsComponent implements OnInit {
   productId: number = 0;
   pricingDetails: any;
   discountDetails: any;
+  bonusDetails: any;
   formMode: string = 'Add';
   itemPriceId: number = 0;
   product: any;
@@ -45,7 +46,7 @@ export class EditProductPricingDetailsComponent implements OnInit {
       this.createFormControllers();
   }
 
-  //#region getters
+  //#region getters for price
   get Description() {
     return this.pricingDetails.get('description');
   }
@@ -61,8 +62,11 @@ export class EditProductPricingDetailsComponent implements OnInit {
   get Quantity() {
     return this.pricingDetails.get('quantity');
   }
-  get PriceId() {
-    return this.discountDetails.get('priceId');
+  //#endregion
+
+  //#region getters for discount
+  get DiscountPriceId() {
+    return this.discountDetails.get('discountPriceId');
   }
   get DiscountDescription() {
     return this.discountDetails.get('discountDescription');
@@ -88,26 +92,32 @@ export class EditProductPricingDetailsComponent implements OnInit {
   get DiscountCloseTime() {
     return this.discountDetails.get('discountCloseTime');
   }
+  //#endregion
+
+  //#region getters for bonus
+  get BonusPriceId() {
+    return this.bonusDetails.get('bonusPriceId');
+  }
   get BonusDescription() {
-    return this.discountDetails.get('bonusDescription');
+    return this.bonusDetails.get('bonusDescription');
   }
   get BonusQuantity() {
-    return this.discountDetails.get('bonusQuantity');
+    return this.bonusDetails.get('bonusQuantity');
   }
   get MinimumBonusQuantity() {
-    return this.discountDetails.get('minimumBonusQuantity');
+    return this.bonusDetails.get('minimumBonusQuantity');
   }
   get MinimumBonusOrderValue() {
-    return this.discountDetails.get('minimumBonusOrderValue');
+    return this.bonusDetails.get('minimumBonusOrderValue');
   }
   get MaximumBonusQuantity() {
-    return this.discountDetails.get('maximumBonusQuantity');
+    return this.bonusDetails.get('maximumBonusQuantity');
   }
   get BonusStartTime() {
-    return this.discountDetails.get('bonusStartTime');
+    return this.bonusDetails.get('bonusStartTime');
   }
   get BonusCloseTime() {
-    return this.discountDetails.get('bonusCloseTime');
+    return this.bonusDetails.get('bonusCloseTime');
   }
   //#endregion
 
@@ -117,11 +127,11 @@ export class EditProductPricingDetailsComponent implements OnInit {
       unitPrice: ['', Validators.required],
       batchName: ['', Validators.required],
       batchNumber: ['', Validators.required],
-      quantity: [''],
+      quantity: ['', Validators.required],
     });
 
     this.discountDetails = this.formBuilder.group({
-      priceId: [0, Validators.min(1)],
+      discountPriceId: [0, Validators.min(1)],
       discountDescription: ['', Validators.required],
       discountValue: ['', Validators.required],
       discountPercentage: ['', Validators.required],
@@ -129,14 +139,18 @@ export class EditProductPricingDetailsComponent implements OnInit {
       minimumOrderValue: ['', Validators.required],
       maximumDiscountValue: ['', Validators.required],
       discountStartTime: ['', Validators.required],
-      discountCloseTime: ['', Validators.required],
+      discountCloseTime: ['', Validators.required]
+    });
+
+    this.bonusDetails = this.formBuilder.group({
+      bonusPriceId: [0, Validators.min(1)],
       bonusDescription: ['', Validators.required],
       bonusQuantity: ['', Validators.required],
       minimumBonusQuantity: ['', Validators.required],
       minimumBonusOrderValue: ['', Validators.required],
       maximumBonusQuantity: ['', Validators.required],
       bonusStartTime: ['', Validators.required],
-      bonusCloseTime: ['', Validators.required],
+      bonusCloseTime: ['', Validators.required]
     });
   }
 
@@ -174,9 +188,9 @@ export class EditProductPricingDetailsComponent implements OnInit {
       this.isDiscountExist = true;
       var discountData = data.discounts[0];
       this.discountId = discountData.id;
-      var selectedPrice: any[] = []
-      selectedPrice.push(this.itemPriceId);
-      this.PriceId.setValue(selectedPrice);
+      var selectedDiscPrice: any[] = []
+      selectedDiscPrice.push(this.itemPriceId);
+      this.DiscountPriceId.setValue(selectedDiscPrice);
       this.DiscountDescription.setValue(discountData.description);
       this.DiscountValue.setValue(discountData.discountValue);
       this.DiscountPercentage.setValue(discountData.discountPCT);
@@ -192,6 +206,9 @@ export class EditProductPricingDetailsComponent implements OnInit {
       this.isBonusExist = true;
       var bonusData = data.bonuses[0];
       this.bonusId = bonusData.id;
+      var selectedBonusPrice: any[] = []
+      selectedBonusPrice.push(this.itemPriceId);
+      this.BonusPriceId.setValue(selectedBonusPrice);
       this.BonusDescription.setValue(bonusData.description);
       this.BonusQuantity.setValue(bonusData.bonusQTY);
       this.MinimumBonusQuantity.setValue(bonusData.minimumQTY);
@@ -253,6 +270,33 @@ export class EditProductPricingDetailsComponent implements OnInit {
       }
     };
 
+    let saveDiscountModel = {
+      "priceId": this.DiscountPriceId.value,
+      "itemPriceDiscount": discountDetails
+    };
+
+   this.commonService.isLoading = true;
+   if (!(this.isDiscountExist && this.isBonusExist)) {
+      this.productService.saveDiscountDetails(saveDiscountModel).subscribe((res: any) => {
+        if (res.code == 200) {
+          this.commonService.isLoading = false;
+          this.toastr.success("Discount details added successfully");
+        }
+      });
+    }
+    else {
+      this.productService.updateDiscountDetails(discountDetails).subscribe((res: any) => {
+        this.commonService.isLoading = false;
+        if (res.code == 200) {
+          this.toastr.success("Discount details updated successfully");
+        } else {
+          this.toastr.error("Something went wrong");
+        }
+      });
+    }
+  }
+
+  onSaveBonusDetails() {
     let bonusDetails = {
       "id": this.bonusId,
       "bonusItemId": 4,
@@ -276,8 +320,7 @@ export class EditProductPricingDetailsComponent implements OnInit {
     }
 
     let saveDiscountModel = {
-      "priceId": this.PriceId.value,
-      "itemPriceDiscount": discountDetails,
+      "priceId": this.BonusPriceId.value,
       "itemPriceBonus": bonusDetails
     };
 
@@ -286,19 +329,15 @@ export class EditProductPricingDetailsComponent implements OnInit {
       this.productService.saveDiscountDetails(saveDiscountModel).subscribe((res: any) => {
         if (res.code == 200) {
           this.commonService.isLoading = false;
-          this.toastr.success("Discount details added successfully");
+          this.toastr.success("Bonus details added successfully");
         }
       });
     }
     else {
-      const updateDisountDetails$ = this.productService.updateDiscountDetails(discountDetails);
-      const updateBonusDetails$ = this.productService.updateBonusDetails(bonusDetails);
-
-      let forkJoinArray = [updateDisountDetails$, updateBonusDetails$];
-      forkJoin(forkJoinArray).subscribe((res: any) => {
+      this.productService.updateBonusDetails(bonusDetails).subscribe((res: any) => {
         this.commonService.isLoading = false;
-        if (res[0].code == 200 && res[0].code == 200) {
-          this.toastr.success("Discount details updated successfully");
+        if (res.code == 200) {
+          this.toastr.success("Bonus details updated successfully");
         } else {
           this.toastr.error("Something went wrong");
         }

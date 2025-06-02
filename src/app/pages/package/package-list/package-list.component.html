@@ -3,7 +3,7 @@
         <div class="packages table-responsive">
             <div class="package-menu-bar">
                 <div class="browse">
-                    <input type="search" placeholder="Search" class="record-search">
+                    <input type="search" placeholder="Search" class="record-search" [(ngModel)]="searchString" (ngModelChange)="onChangeSearch($event)">
                 </div>
                 <div class="filter-section">
                     <label>Rating</label>

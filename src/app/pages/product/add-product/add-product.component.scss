@@ -57,7 +57,7 @@
     }
 
     fieldset {
-        .row:not(.row:last-child) {
+        .row {
             margin-bottom: 20px;
         }
     }
@@ -78,7 +78,6 @@
         border-style: solid;
         border-color: var(--border-color);
         margin-right: 30px;
-        color: var(--inner-box-text-color);
         font-size: 14px;
     }
 
@@ -330,6 +329,28 @@ table tbody tr {
     color: var(--inner-btn-color);
     background: var(--ele-text-color);
     cursor: pointer;
+}
+
+.remove-field {
+    text-align: center;
+    margin-top: auto;
+    margin-bottom: auto;
+
+    i {
+        color: rgba(255, 0, 0, 1);
+        cursor: pointer;
+    }
+}
+
+.price-link {
+    color: #2783df;
+    border-bottom: 1px solid;
+    width: max-content;
+    line-height: normal;
+    cursor: pointer;
+    i {
+        padding-right: 5px;
+    }
 }
 
 ::ng-deep .ng-select .ng-select-container {
