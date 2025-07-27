@@ -205,7 +205,7 @@
                         </div>
 
                         <div class="file-container" *ngIf="imageDataList.length <= 3">
-                            <input type="file" class="file" (change)="getFile($event)" multiple="true">
+                            <input type="file" class="file" (change)="getFile($event)" accept="image/*" multiple="true">
                             <label>
                                 <svg width="54" height="54" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <g opacity="0.4">

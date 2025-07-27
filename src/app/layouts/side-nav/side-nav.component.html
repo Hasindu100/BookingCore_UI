@@ -3,8 +3,8 @@
       <div *ngIf="!isShowProfileNav" class="page-side-nav">
         <div class="profile">
           <img class="profile-img bg-img" [src]="profileImage" alt="">
-          <h4>{{user.firstName}}</h4>
-          <small>Owner</small>
+          <h4>{{user.firstName + " " + user.lastName}}</h4>
+          <small>{{userType}}</small>
         </div>
 
         <div id="test" class="menu-list">

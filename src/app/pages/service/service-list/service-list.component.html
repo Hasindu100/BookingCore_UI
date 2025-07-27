@@ -2,23 +2,29 @@
     <div class="service-list">
         <div class="services table-responsive">
             <div class="service-menu-bar">
-                <div class="browse">
-                    <input type="search" placeholder="Search" class="record-search" [(ngModel)]="searchString" (ngModelChange)="onChangeSearch($event)">
-                </div>
                 <div class="filter-section">
-                    <label>Rating</label>
-                    <select class="drp-sort" name="" id="">
-                        <option value="">Choose</option>
-                    </select>
-                    <label>Category</label>
-                    <select class="drp-sort" name="" id="">
-                        <option value="">Choose</option>
-                    </select>
-                    <label>Status</label>
-                    <select class="drp-sort" name="" id="">
-                        <option value="">Choose</option>
-                    </select>
+                    <div class="browse">
+                        <input type="search" placeholder="Search" class="record-search" [(ngModel)]="searchString" (ngModelChange)="onChangeSearch($event)">
+                    </div>
+                    <div class="filter-selection">
+                        <!-- <label>Rating</label>
+                        <select class="drp-sort" name="" id="">
+                            <option value="">Choose</option>
+                        </select> -->
+                        <label>Category</label>
+                        <ng-select
+                            name="category"
+                            placeholder="Choose"
+                            (change)="onChangeCategory($event)">
+                            <ng-option *ngFor="let category of categoryList" [value]="category.id">{{category.name}}</ng-option>
+                        </ng-select>
+                        <!-- <label>Status</label>
+                        <select class="drp-sort" name="" id="">
+                            <option value="">Choose</option>
+                        </select> -->
+                    </div>
                 </div>
+                
                 <div class="btn-section">
                     <button class="btn btn-add" [routerLink]="['/service/add']" [queryParams]="{ outletId: outletId}">
                         <i class="fa-solid fa-plus"></i> Add Service

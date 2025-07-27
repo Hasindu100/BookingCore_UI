@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { ImageFile } from 'src/app/models/models';
 import { EmployeeService } from '../services/employee.service';
 import { CommonService } from 'src/app/shared/services/common.service';
@@ -107,9 +107,9 @@ export class AddEmployeeComponent implements OnInit {
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       publicName: ['', Validators.required],
-      nic: ['', Validators.required],
+      nic: ['', [Validators.required, this.commonService.sriLankanNicValidator()]],
       email: ['', [Validators.required, Validators.email]],
-      mobile: ['', Validators.required],
+      mobile: ['', [Validators.required, this.commonService.sriLankanPhoneValidator]],
       currentAddress: ['', [Validators.required]]
     });
 
@@ -137,7 +137,7 @@ export class AddEmployeeComponent implements OnInit {
           this.generalInformation.controls['publicName'].setValue(data.publicName);
           this.generalInformation.controls['nic'].setValue(data.nic);
           this.generalInformation.controls['currentAddress'].setValue(data.address);
-          this.generalInformation.controls['mobile'].setValue(data.mobileNumber);
+          this.generalInformation.controls['mobile'].setValue("0" + data.mobileNumber);
           this.generalInformation.controls['email'].setValue(data.email);
           this.loginDetails.controls['employeeEmail'].setValue(data.email);
           this.loginDetails.controls['employeeEmail'].disable();
@@ -152,6 +152,11 @@ export class AddEmployeeComponent implements OnInit {
           }
           this.imageDataList.push(image);
           this.imageUrls.push(this.commonService.mediaUrl + data.profileImage);
+
+          var file = {
+            name: "uploaded-img"
+          }
+          this.fileData.push(file);
         }
       }
       else {
@@ -177,7 +182,6 @@ export class AddEmployeeComponent implements OnInit {
     if (event.target.files) {
       this.isAddNewFile = true;
       for(let i=0; i < event.target.files.length; i++) {
-        var id = i;
         var file = event.target.files[i];
         this.fileData.push(file);
         this.formData.append('file', file);
@@ -203,6 +207,13 @@ export class AddEmployeeComponent implements OnInit {
     this.imageDataList.splice(index, 1);
     this.imageUrls.splice(index, 1);
     this.fileData.splice(index, 1);
+    var hasNewFile = false;
+    this.fileData.forEach((file: any) => {
+      if (file.name != "uploaded-img") {
+        hasNewFile = true;
+      }
+    });
+    this.isAddNewFile = hasNewFile;
   }
 
   onSave() {
@@ -212,6 +223,8 @@ export class AddEmployeeComponent implements OnInit {
     else {
       this.commonService.isLoading = true;
       if (this.isAddNewFile) {
+        this.formData = new FormData();
+        this.formData.append('file', this.fileData[0]);
         this.commonService.saveMedia(this.loginId, this.formData).subscribe((res: any) => {
           if (res.code == 200) {
             this.profilePicture = res.object;
@@ -337,3 +350,5 @@ export class AddEmployeeComponent implements OnInit {
   }
 
 }
+
+

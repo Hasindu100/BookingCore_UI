@@ -16,10 +16,12 @@ export class ServiceListComponent implements OnInit {
   servicesList: any[] = [];
   totalElements: number = 0;
   tableSize: number = 10;
-  tableSizes: any = [2, 5, 10, 20];
+  tableSizes: any = [10, 20, 50, 100];
   selectedServiceId: number = 0;
   isDisplayWarningPopup: boolean = false;
   searchString: string = '';
+  categoryList: any[] = [];
+  filteredCategoryId: number = 0;
 
   constructor(private route: ActivatedRoute,
     private shopService: ShopService,
@@ -48,15 +50,31 @@ export class ServiceListComponent implements OnInit {
     this.commonService.isLoading = true;
     setTimeout(() => {
       this.getServicesByBranchId(this.outletId, this.pageSize, this.pageNumber - 1, this.searchString);
+      this.getServiceCategories();
     }, 500);
   }
 
   getServicesByBranchId(outletId: number, pageSize: number, pageNumber: number, searchString: string = '') {
-    (searchString.trim() == '' ? this.shopService.getServicesByBranchId(outletId, pageSize, pageNumber) : this.shopService.getServicesByBranchIdWithfilter(outletId, pageSize, pageNumber, searchString)).subscribe((res: any) => {
+    var filterCategory = [];
+    filterCategory.push(this.filteredCategoryId);
+    var filterData = {
+      "fetcherIds":[],
+      "fetcherCategoryIds": this.filteredCategoryId == 0 ? [] : filterCategory
+    };
+
+    this.shopService.getServicesByBranchIdWithfilter(outletId, pageSize, pageNumber, searchString, filterData).subscribe((res: any) => {
         this.servicesList = res.object.content;
         this.totalElements = res.object.totalElements;
         this.commonService.isLoading = false;
-    })
+    });
+  }
+
+  getServiceCategories() {
+    this.shopService.getAllServiceCategories().subscribe((res: any) => {
+      if (res.code == 200) {
+        this.categoryList = res.object;
+      }
+    });
   }
 
   onChangeSearch(event: any) {
@@ -120,6 +138,11 @@ export class ServiceListComponent implements OnInit {
 
   closeWarningPopup() {
     this.isDisplayWarningPopup = false;
+  }
+
+  onChangeCategory(categoryId: any) {
+    this.filteredCategoryId = categoryId != undefined ? categoryId : 0;
+    this.getServicesByBranchId(this.outletId, this.pageSize, this.pageNumber - 1, this.searchString);
   }
 
 }

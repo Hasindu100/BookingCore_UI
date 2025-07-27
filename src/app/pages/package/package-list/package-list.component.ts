@@ -17,7 +17,7 @@ export class PackageListComponent {
   packageList: any[] = [];
   totalElements: number = 0;
   tableSize: number = 10;
-  tableSizes: any = [2, 5, 10, 20];
+  tableSizes: any = [10, 20, 50, 100];
   isDisplayWarningPopup: boolean = false;
   selectedPackageId: number = 0;
   searchString: string = '';

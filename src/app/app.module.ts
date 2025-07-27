@@ -58,6 +58,7 @@ import { WarningPopupComponent } from './shared/warning-popup/warning-popup.comp
 import { CustomMaxLengthDirective } from './shared/directive/custom-max-length.directive';
 import { ShopAssignedEmployeeListComponent } from './pages/employee/shop-assigned-employee-list/shop-assigned-employee-list.component';
 import { AssignEmployeePopupComponent } from './pages/employee/assign-employee-popup/assign-employee-popup.component';
+import { RestrictNumberInputDirective } from './shared/directive/restrict-number-input.directive';
 
 @NgModule({
   declarations: [
@@ -106,7 +107,8 @@ import { AssignEmployeePopupComponent } from './pages/employee/assign-employee-p
     WarningPopupComponent,
     CustomMaxLengthDirective,
     ShopAssignedEmployeeListComponent,
-    AssignEmployeePopupComponent
+    AssignEmployeePopupComponent,
+    RestrictNumberInputDirective
   ],
   imports: [
     BrowserModule,

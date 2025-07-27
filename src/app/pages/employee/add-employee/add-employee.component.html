@@ -6,7 +6,7 @@
                     <!-- progressbar -->
                     <ul id="titlebar">
                         <li [ngClass]="step==1 ? 'active' : 'inactive'">General Information</li>
-                        <li [ngClass]="step==2 ? 'active' : 'inactive'">Employee Image and Videos</li>
+                        <li [ngClass]="step==2 ? 'active' : 'inactive'">Employee Image</li>
                         <li [ngClass]="step==3 ? 'active' : 'inactive'">Login Details</li>
                     </ul>
                     
@@ -71,6 +71,7 @@
                                         placeholder="NIC number"/>
                                     <div *ngIf="NIC.touched && NIC.invalid" class="invalid-tooltip">
                                         <div *ngIf="NIC.errors?.required">NIC Number is required.</div>
+                                        <div *ngIf="!NIC.errors?.required && NIC.errors?.invalidNic">Please enter a valid NIC Number.</div>
                                     </div>
                                 </div>
                             </div>
@@ -95,9 +96,12 @@
                                         class="form-control"
                                         formControlName="mobile"
                                         [ngClass]="{'is-invalid' : Mobile?.touched && Mobile?.invalid}"
+                                        [appCustomMaxLength]="10"
+                                        appRestrictNumberInput
                                         placeholder="Mobile Number"/>
                                     <div *ngIf="Mobile.touched && Mobile.invalid" class="invalid-tooltip">
                                         <div *ngIf="Mobile.errors?.required">Mobile Number is required.</div>
+                                        <div *ngIf="!Mobile.errors?.required && Mobile.errors?.sriLankanPhone">Please enter a valid mobile number.</div>
                                     </div>
                                 </div>
                             </div>
@@ -138,7 +142,7 @@
                                 <path opacity="0.4" d="M12.6406 8.52979L17.4906 9.75979" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                                 <path opacity="0.4" d="M11.6602 12.3999L14.5602 13.1399" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                             </svg>
-                            <span>Upload employee images and videos</span>
+                            <span>Upload employee image</span>
                         </div>
 
                         <div class="uploaded-image">
@@ -152,7 +156,7 @@
                         </div>
 
                         <div class="file-container" *ngIf="imageDataList.length == 0">
-                            <input type="file" class="file" (change)="getFile($event)" multiple="true">
+                            <input type="file" class="file" (change)="getFile($event)" accept="image/*">
                             <label>
                                 <svg width="54" height="54" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <g opacity="0.4">

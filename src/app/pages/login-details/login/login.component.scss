@@ -93,10 +93,10 @@ section .contentBx .formBx .inputBx .forgot-pwd {
     font-size: 14px;
     font-weight: 500;
     float: right;
-    a {
-        color: var(--sub-ele-text-color);
-        text-decoration: none;
-    }
+    // a {
+    //     color: var(--sub-ele-text-color);
+    //     text-decoration: none;
+    // }
 }
 section .contentBx .formBx .inputBx input {
     width: 100%;
@@ -136,10 +136,6 @@ section .contentBx .acc-link p {
     color: var(--sub-ele-text-color);
     text-align: center;
 }
-section .contentBx .acc-link p a {
-    color: var(--ele-text-color);
-    text-decoration: none;
-}
 section .contentBx .help {
     position: relative;
     height: 100px;
@@ -153,14 +149,6 @@ section .contentBx .help {
         color: var(--sub-ele-text-color);
         text-align: center;
     }
-    p a {
-        color: var(--ele-text-color);
-        text-decoration: none;
-    }
-}
-section .contentBx .acc-link p a {
-    color: var(--ele-text-color);
-    text-decoration: none;
 }
 section .contentBx .formBx h3 {
     color: #607d8b;

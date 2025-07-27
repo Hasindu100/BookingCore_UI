@@ -16,10 +16,12 @@ export class ProductListComponent implements OnInit {
   productList: any[] = [];
   totalElements: number = 0;
   tableSize: number = 10;
-  tableSizes: any = [2, 5, 10, 20];
+  tableSizes: any = [10, 20, 50, 100];
   isDisplayWarningPopup: boolean = false;
   selectedProductId: number = 0;
   searchString: string = '';
+  categoryList: any[] = [];
+  filteredCategoryId: number = 0;
 
   constructor(private route: ActivatedRoute,
     private productService: ProductService,
@@ -48,13 +50,20 @@ export class ProductListComponent implements OnInit {
   init() {
     this.commonService.isLoading = true;
     setTimeout(() => {
-      this.getProductsByCompanyId(this.outletId, this.pageSize, this.pageNumber - 1, this.searchString);
+      this.getProductsByBranchId(this.outletId, this.pageSize, this.pageNumber - 1, this.searchString);
+      this.getProductCategories();
     }, 1000);
   }
 
-  getProductsByCompanyId(outletId: number, pageSize: number, pageNumber: number, searchString: string = '') {
+  getProductsByBranchId(outletId: number, pageSize: number, pageNumber: number, searchString: string = '') {
     this.commonService.isLoading = true;
-    (searchString.trim() == '' ? this.productService.getProductsByBranchId(outletId, pageSize, pageNumber) : this.productService.getProductsByCompanyIdWithFilter(outletId, pageSize, pageNumber, searchString)).subscribe((res: any) => {
+    var filterCategory = [];
+    filterCategory.push(this.filteredCategoryId);
+    var filterData = {
+      "productIds":[],
+      "productCategoryIds": this.filteredCategoryId == 0 ? [] : filterCategory
+    };
+    this.productService.getProductsByBranchIdWithFilter(outletId, pageSize, pageNumber, searchString, filterData).subscribe((res: any) => {
         //this.productList = res.object.content.filter((x: any) => x.isActive);
         this.productList = res.object.content;
         this.totalElements = res.object.totalElements;
@@ -62,9 +71,17 @@ export class ProductListComponent implements OnInit {
     })
   }
 
+  getProductCategories() {
+    this.productService.getProductCategories().subscribe((res: any) => {
+      if (res.code == 200) {
+        this.categoryList = res.object;
+      }
+    })
+  }
+
   onChangeSearch(event: any) {
     var searchString = event;
-    this.getProductsByCompanyId(this.outletId, this.pageSize, this.pageNumber - 1, searchString);
+    this.getProductsByBranchId(this.outletId, this.pageSize, this.pageNumber - 1, searchString);
   }
 
   getProductImageUrl(mediaList: any) {
@@ -77,13 +94,13 @@ export class ProductListComponent implements OnInit {
 
   onTableDataChange(event: any) {
     this.pageNumber = event;
-    this.getProductsByCompanyId(this.outletId, this.pageSize, this.pageNumber - 1, this.searchString);
+    this.getProductsByBranchId(this.outletId, this.pageSize, this.pageNumber - 1, this.searchString);
   }
 
   onTableSizeChange(event: any): void {
     this.pageSize = event.target.value.split("/")[0];
     this.pageNumber = 1;
-    this.getProductsByCompanyId(this.outletId, this.pageSize, this.pageNumber - 1, this.searchString);
+    this.getProductsByBranchId(this.outletId, this.pageSize, this.pageNumber - 1, this.searchString);
   }
 
   getProductPrice(priceList: any) {
@@ -112,7 +129,7 @@ export class ProductListComponent implements OnInit {
         this.commonService.isLoading = false;
         this.isDisplayWarningPopup = false;
         this.toastr.success("Item removed successfully");
-        this.getProductsByCompanyId(this.outletId, this.pageSize, this.pageNumber - 1, this.searchString);
+        this.getProductsByBranchId(this.outletId, this.pageSize, this.pageNumber - 1, this.searchString);
       }
     })
   }
@@ -123,6 +140,11 @@ export class ProductListComponent implements OnInit {
 
   closeWarningPopup() {
     this.isDisplayWarningPopup = false;
+  }
+
+  onChangeCategory(categoryId: any) {
+    this.filteredCategoryId = categoryId != undefined ? categoryId : 0;
+    this.getProductsByBranchId(this.outletId, this.pageSize, this.pageNumber - 1, this.searchString);
   }
 
 }

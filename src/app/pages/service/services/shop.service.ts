@@ -42,9 +42,9 @@ export class ShopService {
     return this.http.get(url);
   }
 
-  getServicesByBranchIdWithfilter(branchId: number, pageSize: number, pageNumber: number, searchString: string = '') {
+  getServicesByBranchIdWithfilter(branchId: number, pageSize: number, pageNumber: number, searchString: string = '', filterData: any) {
     let url = this.baseUrl + "ByBranchId/" + pageSize + "/" + pageNumber + "?branchId=" + branchId + "&name=" + searchString;
-    return this.http.post(url, null);
+    return this.http.post(url, filterData);
   }
 
   savePriceDetails(priceDetails: any, id: number) {

@@ -43,9 +43,9 @@ export class ProductService {
     return this.http.get(url);
   }
 
-  getProductsByCompanyIdWithFilter(branchId: number, pageSize: number, pageNumber: number, searchString: string = '') {
+  getProductsByBranchIdWithFilter(branchId: number, pageSize: number, pageNumber: number, searchString: string = '', filterData: any) {
     let url = this.baseUrl + "ByBranchId/" + pageSize + "/" + pageNumber + "?branchId=" + branchId + "&name=" + searchString;
-    return this.http.post(url, null);
+    return this.http.post(url, filterData);
   }
 
   getProductById(id: any) {

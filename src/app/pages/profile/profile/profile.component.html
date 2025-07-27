@@ -5,15 +5,16 @@
             <div class="row">
                 <div class="col-md-3">
                     <div class="profile-img">
-                        <img class="bg-img" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSppkoKsaYMuIoNLDH7O8ePOacLPG1mKXtEng&s" alt=""><br>
-                        <button class="btn btn-change">Change</button>
+                        <img class="bg-img" [src]="profileImageUrl" alt=""><br>
+                        <button class="btn btn-change" (click)="openFileSelector()">Change</button>
+                        <input type="file" style="display: none;" (change)="getFile($event)" #profileImgInput>
                     </div>
                 </div>
                 <div class="col-md-9">
                     <form [formGroup]="accountInfo">
                         <fieldset>
                             <div class="row">
-                                <div class="col-md-12">
+                                <div class="col-md-12 group">
                                     <label>First Name</label><br>
                                     <input 
                                         type="text"
@@ -21,10 +22,13 @@
                                         formControlName="firstName"
                                         [ngClass]="{'is-invalid' : FirstName?.touched && FirstName?.invalid}"
                                         placeholder="First Name"/>
+                                    <div *ngIf="FirstName.touched && FirstName.invalid" class="invalid-tooltip">
+                                        <div *ngIf="FirstName.errors?.required">First Name is required.</div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-12">
+                                <div class="col-md-12 group">
                                     <label>Last Name</label><br>
                                     <input 
                                         type="text"
@@ -32,6 +36,9 @@
                                         formControlName="lastName"
                                         [ngClass]="{'is-invalid' : LastName?.touched && LastName?.invalid}"
                                         placeholder="Last Name"/>
+                                    <div *ngIf="LastName.touched && LastName.invalid" class="invalid-tooltip">
+                                        <div *ngIf="LastName.errors?.required">Last Name is required.</div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="row">
@@ -46,30 +53,39 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-12">
+                                <div class="col-md-12 group">
                                     <label>Mobile Number</label><br>
                                     <input 
                                         type="number"
                                         class="form-control"
                                         formControlName="mobile"
                                         [ngClass]="{'is-invalid' : Mobile?.touched && Mobile?.invalid}"
+                                        [appCustomMaxLength]="10"
+                                        appRestrictNumberInput
                                         placeholder="Mobile Number"/>
+                                    <div *ngIf="Mobile.touched && Mobile.invalid" class="invalid-tooltip">
+                                        <div *ngIf="Mobile.errors?.required">Mobile Number is required.</div>
+                                        <div *ngIf="!Mobile.errors?.required && Mobile.errors?.sriLankanPhone">Please enter a valid mobile number.</div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-12">
+                                <div class="col-md-12 group">
                                     <label>Current Address</label><br>
                                     <input 
-                                        type="number"
+                                        type="text"
                                         class="form-control"
                                         formControlName="address"
                                         [ngClass]="{'is-invalid' : Address?.touched && Address?.invalid}"
                                         placeholder="Enter current address"/>
+                                    <div *ngIf="Address.touched && Address.invalid" class="invalid-tooltip">
+                                        <div *ngIf="Address.errors?.required">Current Address is required.</div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-12">
-                                    <button class="btn btn-update">Update</button>
+                                    <button class="btn btn-update" (click)="onClickUpdate()">Update</button>
                                 </div>
                             </div>
                         </fieldset>
