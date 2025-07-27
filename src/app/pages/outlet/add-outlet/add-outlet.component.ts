@@ -193,10 +193,15 @@ export class AddOutletComponent implements OnInit {
               }
             }
             this.mediaList.push(media);
-          })
+
+            var file = {
+              name: "uploaded-img"
+            }
+            this.fileData.push(file);
+          });
         }
       }
-    })
+    });
   }
 
   getProvinceList() {
@@ -292,6 +297,13 @@ export class AddOutletComponent implements OnInit {
     this.imageUrls.splice(index, 1);
     this.fileData.splice(index, 1);
     this.mediaList.splice(index, 1);
+    var hasNewFile = false;
+    this.fileData.forEach((file: any) => {
+      if (file.name != "uploaded-img") {
+        hasNewFile = true;
+      }
+    });
+    this.isAddNewFile = hasNewFile;
   }
 
   onSave() {
@@ -308,7 +320,11 @@ export class AddOutletComponent implements OnInit {
     this.commonService.isLoading = true;
     if (this.isAddNewFile) {
       this.fileData.forEach((file: any, index: number) => {
-        this.formData = new FormData();
+        if (file.name == "uploaded-img") {
+          this.fileData.splice(index, 1);
+        }
+        else {
+          this.formData = new FormData();
           this.formData.append('file', file);
           this.commonService.saveMedia(this.loginId, this.formData).subscribe((res: any) => {
             if (res.code == 200) {
@@ -327,6 +343,7 @@ export class AddOutletComponent implements OnInit {
               }
             }
           });
+        }
       })
     }
     else {

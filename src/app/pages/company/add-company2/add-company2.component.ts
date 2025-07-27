@@ -112,7 +112,7 @@ export class AddCompany2Component implements OnInit {
       ownerName: ['', Validators.required],
       companyCategory: [0, Validators.min(1)],
       taxID: [''],
-      phone: ['', Validators.required],
+      phone: ['', [Validators.required, this.commonService.sriLankanPhoneValidator]],
       email: ['', [Validators.required, Validators.email]],
       websiteURL: ['']
     });
@@ -240,6 +240,8 @@ export class AddCompany2Component implements OnInit {
           if (res.code == 200) {
             this.companyLoginId = res.object.id;;
             if (this.isAddNewFile) {
+              this.formData = new FormData();
+              this.formData.append('file', this.fileData[0]);
               this.commonService.saveMedia(this.loginId, this.formData).subscribe((res2: any) => {
                 if (res2.code == 200) {
                   this.companyLogo = res2.object;
@@ -307,6 +309,13 @@ export class AddCompany2Component implements OnInit {
     this.imageDataList.splice(index, 1);
     this.imageUrls.splice(index, 1);
     this.fileData.splice(index, 1);
+    var hasNewFile = false;
+    this.fileData.forEach((file: any) => {
+      if (file.name != "uploaded-img") {
+        hasNewFile = true;
+      }
+    });
+    this.isAddNewFile = hasNewFile;
   }
   
 }

@@ -1,5 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { environment } from 'src/environment';
 
 @Injectable({
@@ -37,5 +38,37 @@ export class CommonService {
     headers.append('Content-Type', 'multipart/form-data');
     headers.append('Accept', 'application/json');
     return this.http.post(url, formData , {'headers': headers});
+  }
+
+  getUserDetailsByUserId(userId: number) {
+    let url = this.baseUrl + "user/" + userId;
+    return this.http.get(url);
+  }
+
+  updateUserDetails(userData: any) {
+    let url = this.baseUrl + "user/update";
+    return this.http.put(url, userData);
+  }
+
+  sriLankanNicValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const nic = control.value;
+
+      if (!nic) return null;
+
+      const oldNicPattern = /^[0-9]{9}[vVxX]$/;
+      const newNicPattern = /^[0-9]{12}$/;
+
+      const isValid = oldNicPattern.test(nic) || newNicPattern.test(nic);
+
+      return isValid ? null : { invalidNic: true };
+    };
+  }
+
+
+  sriLankanPhoneValidator(control: AbstractControl): ValidationErrors | null {
+    const phoneRegex = /^(?:\+94|0)?7\d{8}$/;
+    const valid = phoneRegex.test(control.value);
+    return valid ? null : { sriLankanPhone: true };
   }
 }

@@ -6,7 +6,7 @@
                     <!-- progressbar -->
                     <ul id="titlebar">
                         <li [ngClass]="step==1 ? 'active' : 'inactive'">General Information</li>
-                        <li [ngClass]="step==2 ? 'active' : 'inactive'">Company Image and Videos</li>
+                        <li [ngClass]="step==2 ? 'active' : 'inactive'">Company Logo</li>
                         <li [ngClass]="step==3 ? 'active' : 'inactive'">Login Details</li>
                     </ul>
                     
@@ -23,7 +23,7 @@
 
                         <fieldset *ngIf="step == 1">
                             <div class="row">
-                                <div class="col-md-12">
+                                <div class="col-md-12 group">
                                     <label>Company Name</label><br>
                                     <input 
                                         type="text"
@@ -31,10 +31,13 @@
                                         formControlName="companyName"
                                         [ngClass]="{'is-invalid' : CompanyName?.touched && CompanyName?.invalid}"
                                         placeholder="Company Name"/>
+                                    <div *ngIf="CompanyName.touched && CompanyName.invalid" class="invalid-tooltip">
+                                        <div *ngIf="CompanyName.errors?.required">Company name is required.</div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-12">
+                                <div class="col-md-12 group">
                                     <label>Company Description</label><br>
                                     <textarea
                                         class="form-control"
@@ -43,6 +46,9 @@
                                         rows="4" 
                                         placeholder="Enter Company Description">
                                     </textarea>
+                                    <div *ngIf="CompanyDescription.touched && CompanyDescription.invalid" class="invalid-tooltip">
+                                        <div *ngIf="CompanyDescription.errors?.required">Company Description is required.</div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="row">
@@ -55,7 +61,7 @@
                                         [ngClass]="{'is-invalid' : OwnerName?.touched && OwnerName?.invalid}"
                                         placeholder="Owner Name"/>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-6 group">
                                     <label>Company Category</label><br>
                                     <ng-select
                                         [ngClass]="{'is-invalid' : CompanyCategory?.touched && CompanyCategory?.invalid}"
@@ -64,6 +70,9 @@
                                         <ng-option [value]="0">Choose type</ng-option>
                                         <ng-option *ngFor="let category of companyTypes" [value]="category.id">{{category.name}}</ng-option>
                                     </ng-select>
+                                    <div *ngIf="CompanyCategory.touched && CompanyCategory.invalid" class="invalid-tooltip">
+                                        <div *ngIf="CompanyCategory.errors?.min">Company Category is required.</div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="row">
@@ -76,19 +85,24 @@
                                         [ngClass]="{'is-invalid' : TaxID?.touched && TaxID?.invalid}"
                                         placeholder="Company Tax ID"/>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-6 group">
                                     <label>Contact Phone</label><br>
                                     <input 
                                         class="form-control"
                                         type="number"
                                         formControlName="phone"
                                         [ngClass]="{'is-invalid' : Phone?.touched && Phone?.invalid}"
-                                        placeholder="Enter Contact Phone"
-                                        maxlength="10"/>
+                                        [appCustomMaxLength]="10"
+                                        appRestrictNumberInput
+                                        placeholder="Enter Contact Phone" />
+                                    <div *ngIf="Phone.touched && Phone.invalid" class="invalid-tooltip">
+                                        <div *ngIf="Phone.errors?.required">Contact Phone is required.</div>
+                                        <div *ngIf="!Phone.errors?.required && Phone.errors?.sriLankanPhone">Please enter a valid mobile number.</div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-6 group">
                                     <label>Email</label><br>
                                     <input 
                                         class="form-control"
@@ -96,6 +110,10 @@
                                         formControlName="email"
                                         [ngClass]="{'is-invalid' : Email?.touched && Email?.invalid}"
                                         placeholder="Enter Company Email"/>
+                                    <div *ngIf="Email.touched && Email.invalid" class="invalid-tooltip">
+                                        <div *ngIf="Email.errors?.required">Email is required.</div>
+                                        <div *ngIf="Email.errors?.email">Please enter a valid email.</div>
+                                    </div>
                                 </div>
                                 <div class="col-md-6">
                                     <label>Website URL</label><br>
@@ -111,7 +129,7 @@
                                 <div class="footer-btn">
                                     <div></div>
                                     <div class="btn-section">
-                                        <button class="btn btn-next" (click)="next()">Next
+                                        <button class="btn btn-next" [disabled]="generalInformation.invalid" (click)="next()">Next
                                             <i class="fa-solid fa-arrow-right"></i>
                                         </button>
                                     </div>
@@ -144,7 +162,7 @@
                         </div>
 
                         <div class="file-container" *ngIf="imageDataList.length == 0">
-                            <input type="file" class="file" (change)="getFile($event)">
+                            <input type="file" class="file" (change)="getFile($event)" accept="image/*">
                             <label>
                                 <svg width="54" height="54" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <g opacity="0.4">

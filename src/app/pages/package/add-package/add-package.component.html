@@ -7,7 +7,7 @@
                     <ul id="titlebar">
                         <li [ngClass]="step==1 ? 'active' : 'inactive'" title="Assign Services to Package">Assign Services to Package</li>
                         <li [ngClass]="step==2 ? 'active' : 'inactive'" title="Assign Items to Package">Assign Items to Package</li>
-                        <li [ngClass]="step==3 ? 'active' : 'inactive'" title="Package Image and Videos">Package Image and Videos</li>
+                        <li [ngClass]="step==3 ? 'active' : 'inactive'" title="Package Image and Videos">Package Images</li>
                         <li [ngClass]="step==4 ? 'active' : 'inactive'" title="Package Details">Package Details</li>
                     </ul>
                     <div class="assign-services" *ngIf="step == 1">
@@ -214,7 +214,7 @@
                                 <path opacity="0.4" d="M12.6406 8.52979L17.4906 9.75979" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                                 <path opacity="0.4" d="M11.6602 12.3999L14.5602 13.1399" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                             </svg>
-                            <span>Upload company images and videos</span>
+                            <span>Upload package images</span>
                         </div>
 
                         <div class="uploaded-image">
@@ -228,7 +228,7 @@
                         </div>
 
                         <div class="file-container" *ngIf="imageDataList.length <= 3">
-                            <input type="file" class="file" (change)="getFile($event)" multiple="true">
+                            <input type="file" class="file" (change)="getFile($event)" accept="image/*" multiple="true">
                             <label>
                                 <svg width="54" height="54" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <g opacity="0.4">

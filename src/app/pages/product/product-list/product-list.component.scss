@@ -59,7 +59,7 @@
         align-items: center;
     }
     
-    .filter-section, .browse, .btn-section {
+    .filter-section, .browse, .btn-section, .filter-selection {
         display: flex;
         align-items: center;
     }
@@ -248,5 +248,13 @@ table tbody tr {
     .ngx-pagination li.pagination-next a:hover, .ngx-pagination li.pagination-previous a:hover{
         background: transparent !important;
         color: var(--add-btn-color);
+    }
+}
+
+::ng-deep .filter-section {
+    .ng-select-container {
+        height: 30px !important;
+        width: 100px !important;
+        min-height: 30px;
     }
 }

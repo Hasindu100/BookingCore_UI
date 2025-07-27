@@ -67,7 +67,7 @@ export class SignupComponent implements OnInit {
   }
 
   init() {
-    this.step = 1;
+    this.step = 2;
     this.setDefaultValues();
     this.getUserTypes();
     this.getProvinceList();
@@ -170,12 +170,25 @@ export class SignupComponent implements OnInit {
     this.loginService.saveLogin(loginDetails).subscribe((res: any) => {
       if (res.code == 200) {
         this.loginId = res.object.id;
-        this.commonService.saveMedia(this.loginId, this.formData).subscribe((res: any) => {
-          if (res.code == 200) {
-            this.profileImage = res.object;
-            this.saveUserDetails();
+        this.commonService.saveMedia(this.loginId, this.formData).subscribe({
+          next: (res: any) => {
+            if (res.code == 200) {
+              this.profileImage = res.object;
+              this.saveUserDetails();
+            }
+            else {
+              this.toastr.error(res.message);
+            }
+          },
+          error: (err: any) => {
+            this.toastr.error(err);
+            this.commonService.isLoading = false;
           }
         });
+      }
+      else {
+        this.toastr.error(res.message);
+        this.commonService.isLoading = false;
       }
     });
   }

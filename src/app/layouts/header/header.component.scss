@@ -39,6 +39,7 @@ header {
 .header-menu .notify-icon {
     margin-right: 2rem;
     position: relative;
+    cursor: pointer;
 }
 
 .header-menu label span,
@@ -123,6 +124,7 @@ header {
 
 .settings {
     margin-left: 15px;
+    cursor: pointer;
 }
 
 .right-side {

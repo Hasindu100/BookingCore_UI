@@ -295,6 +295,11 @@ export class AddServiceComponent implements OnInit {
               }
             }
             this.savedMediaList.push(media);
+
+            var file = {
+              name: "uploaded-img"
+            }
+            this.fileData.push(file);
           });
 
           // set pricing data
@@ -393,32 +398,44 @@ export class AddServiceComponent implements OnInit {
     this.imageUrls.splice(index, 1);
     this.fileData.splice(index, 1);
     this.savedMediaList.splice(index, 1);
+    var hasNewFile = false;
+    this.fileData.forEach((file: any) => {
+      if (file.name != "uploaded-img") {
+        hasNewFile = true;
+      }
+    });
+    this.isAddNewFile = hasNewFile;
   }
 
   onSave() {
     this.commonService.isLoading = true;
     if (this.isAddNewFile) {
       let count = 0;
-      this.fileData.forEach((file: any) => {
-        this.formData = new FormData();
-        this.formData.append('file', file);
-        this.commonService.saveMedia(this.loginId, this.formData).subscribe((res: any) => {
-          if (res.code == 200) {
-            var media = {
-              name: file.name,
-              url: res.object,
-              isActive: true,
-              mediaType: {
-                id: file.type.split("/")[0] == "image" ? 1 : 2
+      this.fileData.forEach((file: any, index: number) => {
+        if (file.name == "uploaded-img") {
+          this.fileData.splice(index, 1);
+        }
+        else {
+          this.formData = new FormData();
+          this.formData.append('file', file);
+          this.commonService.saveMedia(this.loginId, this.formData).subscribe((res: any) => {
+            if (res.code == 200) {
+              var media = {
+                name: file.name,
+                url: res.object,
+                isActive: true,
+                mediaType: {
+                  id: file.type.split("/")[0] == "image" ? 1 : 2
+                }
+              }
+              this.savedMediaList.push(media);
+              count += 1;
+              if (this.fileData.length == count) {
+                this.saveService();
               }
             }
-            this.savedMediaList.push(media);
-            count += 1;
-            if (this.fileData.length == count) {
-              this.saveService();
-            }
-          }
-        });
+          });
+        }
       })
     }
     else {

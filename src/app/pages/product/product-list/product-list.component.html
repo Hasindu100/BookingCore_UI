@@ -2,22 +2,27 @@
     <div class="product-list">
         <div class="products table-responsive">
             <div class="product-menu-bar">
-                <div class="browse">
-                    <input type="search" placeholder="Search" class="record-search" [(ngModel)]="searchString" (ngModelChange)="onChangeSearch($event)">
-                </div>
                 <div class="filter-section">
-                    <label>Rating</label>
-                    <select class="drp-sort" name="" id="">
-                        <option value="">Choose</option>
-                    </select>
-                    <label>Category</label>
-                    <select class="drp-sort" name="" id="">
-                        <option value="">Choose</option>
-                    </select>
-                    <label>Status</label>
-                    <select class="drp-sort" name="" id="">
-                        <option value="">Choose</option>
-                    </select>
+                    <div class="browse">
+                        <input type="search" placeholder="Search" class="record-search" [(ngModel)]="searchString" (ngModelChange)="onChangeSearch($event)">
+                    </div>
+                    <div class="filter-selection">
+                        <!-- <label>Rating</label>
+                        <select class="drp-sort" name="" id="">
+                            <option value="">Choose</option>
+                        </select> -->
+                        <label>Category</label>
+                        <ng-select
+                            name="category"
+                            placeholder="Choose"
+                            (change)="onChangeCategory($event)">
+                            <ng-option *ngFor="let category of categoryList" [value]="category.id">{{category.name}}</ng-option>
+                            </ng-select>
+                        <!-- <label>Status</label>
+                        <select class="drp-sort" name="" id="">
+                            <option value="">Choose</option>
+                        </select> -->
+                    </div>
                 </div>
                 <div class="btn-section">
                     <button class="btn btn-add" [routerLink]="['/product/add']" [queryParams]="{ outletId: outletId }">

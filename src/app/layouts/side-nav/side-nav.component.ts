@@ -18,6 +18,8 @@ export class SideNavComponent implements OnInit {
   user: any;
   ownerId: number = 7;
   profileImage: string = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSppkoKsaYMuIoNLDH7O8ePOacLPG1mKXtEng&s';
+  userTypeId: number = 0;
+  userType: string = "";
   
   constructor(private router: Router,
     private outletService: OutletService,
@@ -40,8 +42,28 @@ export class SideNavComponent implements OnInit {
   ngOnInit(): void {
     this.showHideProfileNav();
     this.user = window?.user;
+    var ownerId = this.user?.userId;
+    this.userTypeId = this.user?.userTypeId;
+    switch(this.userTypeId) {
+      case 1:
+        this.userType = "User";
+        break;
+      case 2:
+        this.userType = "Employee";
+        break;
+      case 3:
+        this.userType = "Shop";
+        break;
+      case 4:
+        this.userType = "Owner";
+        break;
+      case 5:
+        this.userType = "Company";
+        break;
+      default:
+        break;
+    }
     setTimeout(() => {
-      var ownerId = this.user?.userId;
       this.outletService.refreshOutletDetails$.subscribe(() => {
         this.getCompanyDetailsByOwnerId(ownerId);
       });
