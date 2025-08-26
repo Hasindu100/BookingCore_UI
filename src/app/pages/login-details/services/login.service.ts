@@ -32,8 +32,14 @@ export class LoginService {
     return this.http.get(url);
   }
 
-  saveLogin(loginDetails: any) {
-    let url = this.baseUrl + "save";
+  saveLogin(loginDetails: any, userTypeId: number) {
+    let url = "";
+    if (userTypeId == 1 || userTypeId == 4) {
+      url = this.baseUrl + "save";
+    }
+    else {
+      url = this.baseUrl + "save/sub";
+    }
     return this.http.post(url, loginDetails);
   }
 

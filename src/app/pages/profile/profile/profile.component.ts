@@ -3,6 +3,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { BodyComponent } from 'src/app/body/body.component';
 import { CommonService } from 'src/app/shared/services/common.service';
+import { CompanyService } from '../../company/services/company.service';
 declare const window: any;
 
 @Component({
@@ -20,13 +21,15 @@ export class ProfileComponent implements OnInit, AfterViewInit, OnDestroy {
   formData = new FormData();
   profileImage: string = '';
   profileImageUrl: string = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSppkoKsaYMuIoNLDH7O8ePOacLPG1mKXtEng&s';
+  userTypeId: number = 0;
 
   @ViewChild('profileImgInput') profileImgInput!: ElementRef<HTMLInputElement>;
 
   constructor(private formBuilder: FormBuilder,
     @Optional() private bodyComponent: BodyComponent,
     private commonService: CommonService,
-    private toastrService: ToastrService) {
+    private toastrService: ToastrService,
+    private companyService: CompanyService) {
     this.createFormControllers();
   }
 
@@ -40,6 +43,7 @@ export class ProfileComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit(): void {
     var user = window?.user;
+    this.userTypeId = user == null ? 0 : user.userTypeId;
     this.userId = user?.userId;
     this.getUserDetails(this.userId);
   }
@@ -90,7 +94,7 @@ export class ProfileComponent implements OnInit, AfterViewInit, OnDestroy {
 
   getUserDetails(userId: number) {
     this.commonService.isLoading = true;
-    this.commonService.getUserDetailsByUserId(userId).subscribe((res: any) => {
+    (this.userTypeId == 4 ? this.companyService.getCompanyOwnerDetailsById(userId) : this.commonService.getUserDetailsByUserId(userId)).subscribe((res: any) => {
       if (res.code == 200) {
         var data = res.object;
         if (data != undefined) {
@@ -152,9 +156,9 @@ export class ProfileComponent implements OnInit, AfterViewInit, OnDestroy {
       "profileImage": this.profileImage,
       "address": this.Address.value,
       "mobileNumber": this.Mobile.value,
-    }
+    };
 
-    this.commonService.updateUserDetails(userData).subscribe((res: any) => {
+    (this.userTypeId == 4 ? this.companyService.updateOwnerDetails(userData) : this.commonService.updateUserDetails(userData)).subscribe((res: any) => {
       if (res.code == 200) {
         this.toastrService.success("User data updated successfully.");
         this.commonService.isLoading = false;

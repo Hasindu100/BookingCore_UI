@@ -8,6 +8,7 @@ import { ShopService } from '../services/shop.service';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { ToastrService } from 'ngx-toastr';
 import { forkJoin } from 'rxjs';
+import { OutletService } from '../../outlet/services/outlet.service';
 
 @Component({
   selector: 'app-add-service',
@@ -37,6 +38,7 @@ export class AddServiceComponent implements OnInit {
   isAddedDiscount: boolean = false;
   isDiscountExist: boolean = false;
   isBonusExist: boolean = false;
+  companyTypeId: number = 0;
 
   constructor(private formBuilder: FormBuilder,
     private router: Router,
@@ -44,7 +46,8 @@ export class AddServiceComponent implements OnInit {
     private dialog: DialogService,
     private toastr: ToastrService,
     private shopService: ShopService,
-    private commonService: CommonService) {
+    private commonService: CommonService,
+    private outletService: OutletService) {
       this.route.queryParams.subscribe((res: any) => {
         if (res.outletId) {
           this.outletId = res.outletId;
@@ -245,6 +248,7 @@ export class AddServiceComponent implements OnInit {
     this.sub = this.shopService.refreshServiceCategories.subscribe(() => {
       this.getServiceCategories();
     });
+    this.getOutletDetailsById();
     this.sub.next();
   }
 
@@ -252,6 +256,14 @@ export class AddServiceComponent implements OnInit {
     this.shopService.getAllServiceCategories().subscribe((res: any) => {
       if (res.code == 200) {
         this.categoryList = res.object;
+      }
+    })
+  }
+
+  getOutletDetailsById() {
+    this.outletService.getOutletById(this.outletId).subscribe((res: any) => {
+      if (res.code == 200) {
+        this.companyTypeId = res.object?.company?.companyType?.id;
       }
     })
   }
@@ -459,6 +471,9 @@ export class AddServiceComponent implements OnInit {
       "fetcherInfoFields": this.prepareCustomFieldsData(),
       "fetcherCategory": {
         "id": this.Category.value
+      },
+      "companyType": {
+        "id": this.companyTypeId
       }
     };
     

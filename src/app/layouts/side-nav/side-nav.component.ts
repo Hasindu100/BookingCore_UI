@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { UserType } from 'src/app/models/enum';
 import { CompanyService } from 'src/app/pages/company/services/company.service';
 import { OutletService } from 'src/app/pages/outlet/services/outlet.service';
 import { CommonService } from 'src/app/shared/services/common.service';

@@ -14,7 +14,7 @@ export class ProductService {
   constructor(private http: HttpClient) { }
 
   getProductCategories() {
-    let url = this.baseUrl + "categories";
+    let url = this.baseUrl + "categories/all";
     return this.http.get(url);
   }
 

@@ -8,6 +8,7 @@ import { ProductService } from '../services/product.service';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { ToastrService } from 'ngx-toastr';
 import { forkJoin } from 'rxjs';
+import { OutletService } from '../../outlet/services/outlet.service';
 
 @Component({
   selector: 'app-add-product',
@@ -36,12 +37,14 @@ export class AddProductComponent implements OnInit {
   bonusId: number = 0;
   isDiscountExist: boolean = false;
   isBonusExist: boolean = false;
+  companyTypeId: number = 0;
 
   constructor(private formBuilder: FormBuilder,
     private router: Router,
     private dialog: DialogService,
     private productService: ProductService,
     private commonService: CommonService,
+    private outletService: OutletService,
     private route: ActivatedRoute,
     private toastr: ToastrService) {
       this.route.queryParams.subscribe((res: any) => {
@@ -241,21 +244,26 @@ export class AddProductComponent implements OnInit {
     this.dynamicFields.removeAt(index);
   }
 
-  test() {
-    var p = this.prepareCustomFieldsData();
-  }
-
   ngOnInit(): void {
     this.sub = this.productService.refreshProductCategories.subscribe(() => {
       this.getProductCategories();
     });
     this.sub.next();
+    this.getOutletDetailsById();
   }
 
   getProductCategories() {
     this.productService.getProductCategories().subscribe((res: any) => {
       if (res.code == 200) {
         this.categoryList = res.object;
+      }
+    })
+  }
+
+  getOutletDetailsById() {
+    this.outletService.getOutletById(this.outletId).subscribe((res: any) => {
+      if (res.code == 200) {
+        this.companyTypeId = res.object?.company?.companyType?.id;
       }
     })
   }
@@ -284,15 +292,17 @@ export class AddProductComponent implements OnInit {
           // set pricing data
           if (data.itemPrices.length > 0) {
             var pricingData = data.itemPrices.find((x: any) => x.isDefault == true);
-            this.itemPriceId = pricingData.id;
-            this.PriceDescription.setValue(pricingData.description);
-            this.Quantity.setValue(pricingData.stock);
-            this.UnitPrice.setValue(pricingData.price);
-            this.BatchName.setValue(pricingData.batchName);
-            this.BatchNumber.setValue(pricingData.batchNumber);
+            if (pricingData) {
+              this.itemPriceId = pricingData.id;
+              this.PriceDescription.setValue(pricingData.description);
+              this.Quantity.setValue(pricingData.stock);
+              this.UnitPrice.setValue(pricingData.price);
+              this.BatchName.setValue(pricingData.batchName);
+              this.BatchNumber.setValue(pricingData.batchNumber);
+            }
 
             //set discunt data
-            if (pricingData.discounts.length > 0) {
+            if (pricingData?.discounts.length > 0) {
               this.isDiscountExist = true;
               var discountData = pricingData.discounts[0];
               this.discountId = discountData.id;
@@ -307,7 +317,7 @@ export class AddProductComponent implements OnInit {
             }
 
             // set bonus data
-            if (pricingData.bonuses.length > 0) {
+            if (pricingData?.bonuses.length > 0) {
               this.isBonusExist = true;
               var bonusData = pricingData.bonuses[0];
               this.bonusId = bonusData.id;
@@ -466,6 +476,9 @@ export class AddProductComponent implements OnInit {
       "itemInfoFields": this.prepareCustomFieldsData(),
       "branch": {
         "id": this.outletId
+      },
+      "companyType": {
+        "id": this.companyTypeId
       }
     };
     

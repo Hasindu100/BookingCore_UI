@@ -153,10 +153,13 @@
                             type="number" 
                             class="form-control"
                             [ngClass]="{'is-invalid' : userRegFC.mobile.touched && userRegFC.mobile.invalid}"
+                            [appCustomMaxLength]="10"
+                            appRestrictNumberInput
                             name="mobile"
                             formControlName="mobile">
                         <div *ngIf="userRegFC.mobile.touched && userRegFC.mobile.invalid" class="invalid-tooltip">
                             <div *ngIf="userRegFC.mobile.errors?.required">Mobile number is required.</div>
+                            <div *ngIf="!userRegFC.mobile.errors?.required && userRegFC.mobile.errors?.sriLankanPhone">Please enter a valid mobile number.</div>
                         </div>
                     </div>
                     <div class="row">

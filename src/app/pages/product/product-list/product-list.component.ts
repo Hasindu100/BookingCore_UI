@@ -106,14 +106,14 @@ export class ProductListComponent implements OnInit {
   getProductPrice(priceList: any) {
     var price = 0;
     var priceData = priceList.find((x: any) => x.isDefault == true);
-    price = priceData.price;
+    price = priceData?.price;
     return price;
   }
 
   getProductQuantity(priceList: any) {
     var quantity = 0;
     var priceData = priceList.find((x: any) => x.isDefault == true);
-    quantity = priceData.stock;
+    quantity = priceData?.stock;
     return quantity;
   }
 

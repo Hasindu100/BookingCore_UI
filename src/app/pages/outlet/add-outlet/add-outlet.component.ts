@@ -132,7 +132,7 @@ export class AddOutletComponent implements OnInit {
       longitude: ['', Validators.required],
       openTime: ['', Validators.required],
       closeTime: ['', Validators.required],
-      mobile: ['', Validators.required],
+      mobile: ['', [Validators.required, this.commonService.sriLankanPhoneValidator]],
       email: ['', [Validators.required, Validators.email]],
       orderGapDuration: [''],
       employeeSelectionEnabled: [''],

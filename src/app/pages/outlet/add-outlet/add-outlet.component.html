@@ -168,9 +168,12 @@
                                         type="number"
                                         formControlName="mobile"
                                         [ngClass]="{'is-invalid' : Mobile?.touched && Mobile?.invalid}"
+                                        [appCustomMaxLength]="10"
+                                        appRestrictNumberInput
                                         placeholder="Your Mobile Number"/>
                                     <div *ngIf="Mobile.touched && Mobile.invalid" class="invalid-tooltip">
                                         <div *ngIf="Mobile.errors?.required">Mobile is required.</div>
+                                        <div *ngIf="!Mobile.errors?.required && Mobile.errors?.sriLankanPhone">Please enter a valid mobile number.</div>
                                     </div>
                                 </div>
                                 <div class="col-md-6 group">
