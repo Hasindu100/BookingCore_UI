@@ -35,4 +35,9 @@ export class CompanyService {
     let url = environment.apiUrl + "owner/" + ownerId;
     return this.http.get(url);
   }
+
+  updateOwnerDetails(ownerDeails: any) {
+    let url = environment.apiUrl + "owner/update";
+    return this.http.put(url, ownerDeails);
+  }
 }

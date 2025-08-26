@@ -7,7 +7,7 @@
           <small>{{userType}}</small>
         </div>
 
-        <div id="test" class="menu-list">
+        <div id="test" class="menu-list" *ngIf="userType != 'Employee'">
           <ul>
             <li>
               <span class="folder root dashboard" (click)="openMenu($event, 'dashboard')">Dashboard</span>
@@ -71,6 +71,19 @@
             </li>
           </ul>
         </div>
+
+        <!-- side nav for shop owner -->
+          <div class="shop-owner-nav" *ngIf="userType == 'Shop'">
+            <h3 class="company-name">A & D Saloon</h3>
+            <h3 class="shop-name">Prince Saloon 1</h3>
+            <ul>
+              <li>Items</li>
+              <li>Services</li>
+              <li>Packages</li>
+              <li>Employees</li>
+            </ul>
+          </div>
+        <!-- end -->
       </div>
 
       <div *ngIf="isShowProfileNav" class="profile-side-nav">

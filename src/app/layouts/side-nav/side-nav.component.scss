@@ -309,3 +309,16 @@ span:not(.root).selected::before {
 .active-link {
     color: var(--add-btn-color) !important;
 }
+
+.shop-owner-nav {
+    .company-name {
+        color: var(--ele-text-color) !important;
+        text-transform: capitalize;
+        font-size: 18px;
+    }
+    .shop-name {
+        color: #ccc;
+        text-transform: capitalize;
+        font-size: 18px;
+    }
+}

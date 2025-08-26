@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { ToastrService } from 'ngx-toastr';
 import { UserDetails } from 'src/app/models/models';
+import { UserType } from 'src/app/models/enum';
 
 @Component({
   selector: 'app-login',
@@ -52,15 +53,41 @@ export class LoginComponent {
       if (res.code == 200) {
         var userDetails = res.object.details[0];
         var loginDetails = res.object.login;
-        var user: UserDetails = {
-          userId: userDetails.id,
-          email: userDetails.email,
-          firstName: userDetails.firstName,
-          lastName: userDetails.lastName,
-          mobileNumber: userDetails.mobileNumber,
-          profileImage: userDetails.profileImage,
-          userTypeId: loginDetails.userTypes.id,
-          loginId: loginDetails.id
+        var userTypeId = loginDetails.userTypes?.id;
+        var user:UserDetails = {
+          userId: 0,
+          email: '',
+          firstName: '',
+          lastName: '',
+          mobileNumber: '',
+          profileImage: '',
+          userTypeId: 0,
+          loginId: 0
+        };
+
+        if (userTypeId == UserType.Company) {
+          user = {
+            userId: userDetails.id,
+            email: "",
+            firstName: userDetails.name,
+            lastName: "",
+            mobileNumber: "",
+            profileImage: userDetails.logo,
+            userTypeId: userTypeId,
+            loginId: loginDetails.id
+          }
+        }
+        else if (userTypeId == UserType.Owner || userTypeId == UserType.Employee) {
+          user = {
+            userId: userDetails.id,
+            email: userDetails.email,
+            firstName: userDetails.firstName,
+            lastName: userDetails.lastName,
+            mobileNumber: userDetails.mobileNumber,
+            profileImage: userDetails.profileImage,
+            userTypeId: loginDetails.userTypes.id,
+            loginId: loginDetails.id
+          }
         }
         this.loginService.setUser(user);
         this.router.navigateByUrl("/dashboard");

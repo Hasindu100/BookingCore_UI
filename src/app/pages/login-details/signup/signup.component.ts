@@ -42,7 +42,7 @@ export class SignupComponent implements OnInit {
       lastName: ['', Validators.required],
       publicName: ['', Validators.required],
       address: ['', Validators.required],
-      mobile: ['', Validators.required],
+      mobile: ['', [Validators.required, this.commonService.sriLankanPhoneValidator]],
       province: ['', Validators.min(1)],
       district: [0, Validators.min(1)],
       city: [0, Validators.min(1)],
@@ -67,7 +67,7 @@ export class SignupComponent implements OnInit {
   }
 
   init() {
-    this.step = 2;
+    this.step = 1;
     this.setDefaultValues();
     this.getUserTypes();
     this.getProvinceList();
@@ -82,7 +82,7 @@ export class SignupComponent implements OnInit {
   getUserTypes() {
     this.loginService.getLoginUserTypes().subscribe((res: any) => {
       if (res.code == 200) {
-        this.userTypeList = res.object.filter((x: any) => x.id == 1 || x.id == 4);
+        this.userTypeList = res.object.filter((x: any) => x.id == 1 || x.id == 4 || x.id == 3);
       }
     })
   }
@@ -157,17 +157,18 @@ export class SignupComponent implements OnInit {
   }
 
   onSaveUser() {
+    let userTypeId = parseInt(this.signUpFC.userType.value)
     this.saveDisabled = true;
     let loginDetails: UserLogin = {
       userName: this.signUpFC.email.value,
       password: this.signUpFC.pwd.value,
       userTypes: {
-        id: this.signUpFC.userType.value
+        id: userTypeId
       }
     }
 
     this.commonService.isLoading = true;
-    this.loginService.saveLogin(loginDetails).subscribe((res: any) => {
+    this.loginService.saveLogin(loginDetails, userTypeId).subscribe((res: any) => {
       if (res.code == 200) {
         this.loginId = res.object.id;
         this.commonService.saveMedia(this.loginId, this.formData).subscribe({
