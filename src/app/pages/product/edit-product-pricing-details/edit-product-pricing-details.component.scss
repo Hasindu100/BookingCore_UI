@@ -144,3 +144,81 @@ input[type=text], input[type=number] {
         line-height: 1;
     }
 }
+
+.discount-details {
+    box-shadow: 0px 5px 5px -5px rgb(0 0 0 / 10%);
+    background: #fff;
+    border-radius: 3px;
+    overflow-x: auto;
+    padding: 15px 10px 15px 15px;
+}
+
+.discount-data-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+
+    .pricing-item {
+        display: grid;
+        min-width: fit-content;
+        label {
+            font-weight: 500;
+            line-height: 24.2px;
+            color: var(--sub-ele-text-color);
+        }
+        span {
+            font-weight: 500;
+            line-height: 24.2px;
+            color: var(--main-text-color);
+        }
+    }
+    button {
+        outline: none;
+    }
+    .action-icons {
+        display: flex;
+        align-items: center;
+        i {
+            color: var(--ele-text-color);
+            cursor: pointer;
+        }
+    }
+    .btn-edit {
+        height: 30px;
+        width: 75px;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 1;
+        color: var(--inner-btn-color);
+        background-color: var(--sub-ele-text-color);
+    }
+}
+
+.default-price-label, .isActive-label {
+    margin-left: 15px;
+    color: var(--ele-text-color);
+}
+
+.active, .deactive {
+    display: inline-block;
+    text-align: center;
+    font-weight: 500;
+    padding: 0.3rem 0.5rem;
+    border-radius: 5px;
+    font-size: 12px;
+    font-size: 12px;
+    line-height: 1;
+}
+
+.active {
+    color: var(--inner-btn-color);
+    background: var(--sub-btn-color);
+}
+
+.deactive {
+    color: var(--inner-btn-color);
+    background: rgba(255, 0, 0, 1);
+}

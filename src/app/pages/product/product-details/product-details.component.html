@@ -100,12 +100,12 @@
             <span>{{itemPrice.stock}}</span>
           </div>
           <div class="pricing-item">
-            <label>Line Discount</label>
-            <span>10%</span>
+            <label>No. Discounts</label>
+            <span>{{itemPrice.discounts.length}}</span>
           </div>
           <div class="pricing-item">
-            <label>Trade Discount</label>
-            <span>0%</span>
+            <label>No. Bonus</label>
+            <span>{{itemPrice.bonuses.length}}</span>
           </div>
           <div class="btn-section">
               <button class="btn btn-edit" (click)="editPriceDetails(itemPrice.id)">

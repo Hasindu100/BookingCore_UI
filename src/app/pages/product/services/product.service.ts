@@ -83,4 +83,14 @@ export class ProductService {
     return this.http.put(url, null);
   }
 
+  activeDiscount(discountId: number, isActive: boolean) {
+    let url = environment.apiUrl + `dis_bonus/item_dis/active?disId=${discountId}&isActive=${isActive}`
+    return this.http.put(url, null);
+  }
+
+  activeBonus(bonusId: number, isActive: boolean) {
+    let url = environment.apiUrl + `dis_bonus/item_bonus/active?bonusId=${bonusId}&isActive=${isActive}`;
+    return this.http.put(url, null);
+  }
+
 }

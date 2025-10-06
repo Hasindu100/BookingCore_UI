@@ -81,4 +81,14 @@ export class ShopService {
     let url = this.baseUrl + "disable?shopFetcherId=" + serviceId;
     return this.http.put(url, null);
   }
+
+  activeDiscount(discountId: number, isActive: boolean) {
+    let url = environment.apiUrl + `dis_bonus/service_dis/active?disId=${discountId}&isActive=${isActive}`
+    return this.http.put(url, null);
+  }
+
+  activeBonus(bonusId: number, isActive: boolean) {
+    let url = environment.apiUrl + `dis_bonus/service_bonus/active?bonusId=${bonusId}&isActive=${isActive}`;
+    return this.http.put(url, null);
+  }
 }
