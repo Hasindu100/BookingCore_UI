@@ -25,6 +25,10 @@ export class ServicePricingDetailsComponent {
   bonusId: number = 0;
   isDiscountExist: boolean = false;
   isBonusExist: boolean = false;
+  discountList: any[] = [];
+  bonusList: any[] = [];
+  isEditDiscountData: boolean = false;
+  isEditBonusData: boolean = false;
 
   constructor(private formBuilder: FormBuilder,
     private route: ActivatedRoute,
@@ -59,6 +63,9 @@ export class ServicePricingDetailsComponent {
   get Duration() {
     return this.pricingDetails.get('duration');
   }
+  get IsDefaultPrice() {
+    return this.pricingDetails.get('isDefaultPrice');
+  }
   //#endregion
 
   //#region getters for discount
@@ -89,6 +96,9 @@ export class ServicePricingDetailsComponent {
   get DiscountCloseTime() {
     return this.discountDetails.get('discountCloseTime');
   }
+  get DiscountIsActive() {
+    return this.discountDetails.get('discountIsActive');
+  }
   //#endregion
 
   //#region getters for bonus
@@ -116,6 +126,9 @@ export class ServicePricingDetailsComponent {
   get BonusCloseTime() {
     return this.bonusDetails.get('bonusCloseTime');
   }
+  get BonusIsActive() {
+    return this.bonusDetails.get('bonusIsActive');
+  }
   //#endregion
 
   createFormControllers() {
@@ -124,6 +137,7 @@ export class ServicePricingDetailsComponent {
       servicePrice: ['', Validators.required],
       priceName: ['', Validators.required],
       duration: [''],
+      isDefaultPrice: ['']
     });
 
     this.discountDetails = this.formBuilder.group({
@@ -135,7 +149,8 @@ export class ServicePricingDetailsComponent {
       minimumOrderValue: ['', Validators.required],
       maximumDiscountValue: ['', Validators.required],
       discountStartTime: ['', Validators.required],
-      discountCloseTime: ['', Validators.required]
+      discountCloseTime: ['', Validators.required],
+      discountIsActive: ['']
     });
 
     this.bonusDetails = this.formBuilder.group({
@@ -146,7 +161,8 @@ export class ServicePricingDetailsComponent {
       minimumBonusOrderValue: ['', Validators.required],
       maximumBonusQuantity: ['', Validators.required],
       bonusStartTime: ['', Validators.required],
-      bonusCloseTime: ['', Validators.required]
+      bonusCloseTime: ['', Validators.required],
+      bonusIsActive: ['']
     });
   }
 
@@ -165,6 +181,8 @@ export class ServicePricingDetailsComponent {
         var priceData = res.object?.fetcherPrices.find((x: any) => x.id == this.itemPriceId);
         if (priceData != null && priceData != undefined) {
           this.setFormData(priceData);
+          this.discountList = priceData?.discounts;
+          this.bonusList = priceData?.bonuses;
         }
       }
     })
@@ -177,42 +195,7 @@ export class ServicePricingDetailsComponent {
     this.ServicePrice.setValue(data.price);
     this.Duration.setValue(data.duration);
     this.PriceName.setValue(data.name);
-
-    // set discount data
-    if (data.discounts.length > 0) {
-      this.isDiscountExist = true;
-      var discountData = data.discounts[0];
-      this.discountId = discountData.id;
-      var selectedDiscPrice: any[] = []
-      selectedDiscPrice.push(this.itemPriceId);
-      this.DiscountPriceId.setValue(selectedDiscPrice);
-      this.DiscountDescription.setValue(discountData.description);
-      this.DiscountValue.setValue(discountData.discountValue);
-      this.DiscountPercentage.setValue(discountData.discountPCT);
-      this.MinimumQuantity.setValue(discountData.minimumQTY);
-      this.MinimumOrderValue.setValue(discountData.minimumOrderValue);
-      this.MaximumDiscountValue.setValue(discountData.maximumDiscountValue);
-      this.DiscountStartTime.setValue(discountData.startTime != null ? this.formatDateTime(discountData.startTime) : discountData.startTime);
-      this.DiscountCloseTime.setValue(discountData.endTime != null ? this.formatDateTime(discountData.endTime) : discountData.endTime);
-    }
-
-    // set bonus data
-    if (data.bonuses.length > 0) {
-      this.isBonusExist = true;
-      var bonusData = data.bonuses[0];
-      this.bonusId = bonusData.id;
-      var selectedBonusPrice: any[] = []
-      selectedBonusPrice.push(this.itemPriceId);
-      this.BonusPriceId.setValue(selectedBonusPrice);
-      this.BonusDescription.setValue(bonusData.description);
-      this.BonusQuantity.setValue(bonusData.bonusQTY);
-      this.MinimumBonusQuantity.setValue(bonusData.minimumQTY);
-      this.MinimumBonusOrderValue.setValue(bonusData.minimumOrderValue);
-      this.MaximumBonusQuantity.setValue(bonusData.maximumBonusQTY);
-      this.BonusStartTime.setValue(bonusData.startTime != null ? this.formatDateTime(bonusData.startTime) : bonusData.startTime);
-      this.BonusCloseTime.setValue(bonusData.endTime != null ? this.formatDateTime(bonusData.endTime) : bonusData.endTime);
-    }
-    
+    this.IsDefaultPrice.setValue(data.isDefault);
   }
 
   onSavePriceDetails() {
@@ -223,7 +206,7 @@ export class ServicePricingDetailsComponent {
       "description": this.Description.value,
       "price": this.ServicePrice.value,
       "isDefault": false,
-      "isActive": true
+      "isActive": this.IsDefaultPrice.value
     };
 
     this.commonService.isLoading = true;
@@ -252,7 +235,7 @@ export class ServicePricingDetailsComponent {
       "maximumDiscountValue": this.MaximumDiscountValue.value,
       "startTime":  this.DiscountStartTime.value,
       "endTime": this.DiscountCloseTime.value,
-      "isActive": true,
+      "isActive": this.DiscountIsActive.value,
       "isDeleted": false,
       "bonusMedia": {
         "name": "string",
@@ -276,6 +259,9 @@ export class ServicePricingDetailsComponent {
           this.commonService.isLoading = false;
           this.isDiscountExist = true;
           this.toastr.success("Discount details added successfully");
+          this.getServiceDetailsById();
+          this.discountDetails.reset();
+          this.isEditDiscountData = true;
         }
       });
     }
@@ -284,6 +270,9 @@ export class ServicePricingDetailsComponent {
         this.commonService.isLoading = false;
         if (res.code == 200) {
           this.toastr.success("Discount details updated successfully");
+          this.getServiceDetailsById();
+          this.discountDetails.reset();
+          this.isEditDiscountData = true;
         } else {
           this.toastr.error("Something went wrong");
         }
@@ -302,7 +291,7 @@ export class ServicePricingDetailsComponent {
       "maximumBonusQTY": this.MaximumBonusQuantity.value,
       "startTime": this.BonusStartTime.value,
       "endTime": this.BonusCloseTime.value,
-      "isActive": true,
+      "isActive": this.BonusIsActive.value,
       "isDeleted": false,
       "discountMedia": {
         "name": "string",
@@ -326,6 +315,9 @@ export class ServicePricingDetailsComponent {
           this.commonService.isLoading = false;
           this.isBonusExist = true;
           this.toastr.success("Bonus details added successfully");
+          this.getServiceDetailsById();
+          this.bonusDetails.reset();
+          this.isEditBonusData = false;
         }
       });
     }
@@ -334,11 +326,83 @@ export class ServicePricingDetailsComponent {
         this.commonService.isLoading = false;
         if (res.code == 200) {
           this.toastr.success("Bonus details updated successfully");
+          this.getServiceDetailsById();
+          this.bonusDetails.reset();
+          this.isEditBonusData = false;
         } else {
           this.toastr.error("Something went wrong");
         }
       });
     }
+  }
+
+  editDiscountDetails(discountData: any) {
+    // set discount data
+    if (discountData != null) {
+      this.isEditDiscountData = true;
+      this.isDiscountExist = true;
+      this.discountId = discountData.id;
+      var selectedDiscPrice: any[] = []
+      selectedDiscPrice.push(this.itemPriceId);
+      this.DiscountPriceId.setValue(selectedDiscPrice);
+      this.DiscountDescription.setValue(discountData.description);
+      this.DiscountValue.setValue(discountData.discountValue);
+      this.DiscountPercentage.setValue(discountData.discountPCT);
+      this.MinimumQuantity.setValue(discountData.minimumQTY);
+      this.MinimumOrderValue.setValue(discountData.minimumOrderValue);
+      this.MaximumDiscountValue.setValue(discountData.maximumDiscountValue);
+      this.DiscountStartTime.setValue(discountData.startTime != null ? this.formatDateTime(discountData.startTime) : discountData.startTime);
+      this.DiscountCloseTime.setValue(discountData.endTime != null ? this.formatDateTime(discountData.endTime) : discountData.endTime);
+      this.DiscountIsActive.setValue(discountData.isActive);
+    }
+  }
+
+  editBonusDetails(bonusData: any) {
+    // set bonus data
+    if (bonusData != null) {
+      this.isEditBonusData = true;
+      this.isBonusExist = true;
+      this.bonusId = bonusData.id;
+      var selectedBonusPrice: any[] = []
+      selectedBonusPrice.push(this.itemPriceId);
+      this.BonusPriceId.setValue(selectedBonusPrice);
+      this.BonusDescription.setValue(bonusData.description);
+      this.BonusQuantity.setValue(bonusData.bonusQTY);
+      this.MinimumBonusQuantity.setValue(bonusData.minimumQTY);
+      this.MinimumBonusOrderValue.setValue(bonusData.minimumOrderValue);
+      this.MaximumBonusQuantity.setValue(bonusData.maximumBonusQTY);
+      this.BonusStartTime.setValue(bonusData.startTime != null ? this.formatDateTime(bonusData.startTime) : bonusData.startTime);
+      this.BonusCloseTime.setValue(bonusData.endTime != null ? this.formatDateTime(bonusData.endTime) : bonusData.endTime);
+      this.BonusIsActive.setValue(bonusData.isActive);
+    }
+  }
+
+  changeDiscountStatus(discountId: number, isActive: boolean) {
+    this.commonService.isLoading = true;
+    this.shopService.activeDiscount(discountId, isActive).subscribe((res: any) => {
+      if (res.code == 200) {
+        this.getServiceDetailsById();
+        this.toastr.success(`Discount ${isActive ? 'enabled' : 'removed'} successfully`);
+      }
+      else {
+        this.toastr.error("Something went wrong");
+      }
+      this.commonService.isLoading = false;
+    });
+  }
+
+  changeBonusStatus(bonusId: number, isActive: boolean) {
+    this.commonService.isLoading = true;
+    this.shopService.activeBonus(bonusId, isActive).subscribe((res: any) => {
+      if (res.code == 200) {
+        this.getServiceDetailsById();
+        this.toastr.success(`Bonus ${isActive ? 'enabled' : 'removed'} successfully`);
+      }
+      else {
+        this.toastr.error("Something went wrong");
+      }
+      this.commonService.isLoading = false;
+    });
   }
 
   formatDateTime(dateStr: string): string {

@@ -16,13 +16,14 @@
 
                     <div class="row">
                         <div class="col-md-4">
-                            <label>Description</label>
+                            <label>Service Price (LKR)</label><br>
                             <input 
-                                type="text"
+                                type="number"
                                 class="form-control"
-                                formControlName="description"
-                                [ngClass]="{'is-invalid' : Description?.touched && Description?.invalid}"
-                                placeholder="Description"/>
+                                formControlName="servicePrice"
+                                format="{n2}"
+                                [ngClass]="{'is-invalid' : ServicePrice?.touched && ServicePrice?.invalid}"
+                                placeholder="Service Price"/>
                         </div>
                         <div class="col-md-4">
                             <label>Name</label><br>
@@ -36,16 +37,6 @@
                     </div>
                     <div class="row">
                         <div class="col-md-4">
-                            <label>Service Price (LKR)</label><br>
-                            <input 
-                                type="number"
-                                class="form-control"
-                                formControlName="servicePrice"
-                                format="{n2}"
-                                [ngClass]="{'is-invalid' : ServicePrice?.touched && ServicePrice?.invalid}"
-                                placeholder="Service Price"/>
-                        </div>
-                        <div class="col-md-4">
                             <label>Duration</label><br>
                             <input 
                                 type="number"
@@ -53,6 +44,27 @@
                                 formControlName="duration"
                                 [ngClass]="{'is-invalid' : Duration?.touched && Duration?.invalid}"
                                 placeholder="Duration"/>
+                        </div>
+                        <div class="col-md-4">
+                             <label></label><br><br>
+                            <input 
+                                type="checkbox"
+                                formControlName="isDefaultPrice"
+                                [ngClass]="{'is-invalid' : IsDefaultPrice?.touched && IsDefaultPrice?.invalid}"/>
+                            <span class="default-price-label">Set As Default Price</span><br>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <label>Description</label>
+                            <textarea 
+                                rows="4"
+                                cols="5"
+                                class="form-control"
+                                formControlName="description"
+                                [ngClass]="{'is-invalid' : Description?.touched && Description?.invalid}"
+                                placeholder="Description">
+                            </textarea>
                         </div>
                     </div>
                     <div class="row">
@@ -87,7 +99,7 @@
                             <path opacity="0.4" d="M12.6406 8.52979L17.4906 9.75979" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                             <path opacity="0.4" d="M11.6602 12.3999L14.5602 13.1399" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
-                        <span>Add Discount Details</span>
+                        <span>{{isEditDiscountData ? 'Update' : 'Add'}} Discount Details</span>
                     </div>
                     <div class="row">
                         <div class="col-md-4">
@@ -102,15 +114,6 @@
                                 placeholder="Choose Price">
                                 <ng-option *ngFor="let price of priceList" [value]="price.id">{{price.price}}</ng-option>
                             </ng-select>
-                        </div>
-                        <div class="col-md-4">
-                            <label>Discount Description</label><br>
-                            <input 
-                                class="form-control"
-                                type="text"
-                                formControlName="discountDescription"
-                                [ngClass]="{'is-invalid' : DiscountDescription?.touched && DiscountDescription?.invalid}"
-                                placeholder="Enter Discount Description"/>
                         </div>
                     </div>
                     <div class="row">
@@ -135,7 +138,7 @@
                     </div>
                     <div class="row">
                         <div class="col-md-4">
-                            <label>Minimum Quantity</label><br>
+                            <label>Minimum Order Duration</label><br>
                             <input 
                                 class="form-control"
                                 type="text"
@@ -152,6 +155,26 @@
                                 [ngClass]="{'is-invalid' : MinimumOrderValue?.touched && MinimumOrderValue?.invalid}"
                                 placeholder="Enter Minimum Order Value"/>
                         </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label>Start Date Time</label>
+                            <input 
+                                class="form-control" 
+                                type="datetime-local" 
+                                formControlName="discountStartTime"
+                                [ngClass]="{'is-invalid' : DiscountStartTime?.touched && DiscountStartTime?.invalid }" />
+                        </div>
+                        <div class="col-md-4">
+                            <label>End Date Time</label>
+                            <input 
+                                class="form-control" 
+                                type="datetime-local" 
+                                formControlName="discountCloseTime"
+                                [ngClass]="{'is-invalid' : DiscountCloseTime?.touched && DiscountCloseTime?.invalid }" />
+                        </div>
+                    </div>
+                    <div class="row">
                         <div class="col-md-4">
                             <label>Maximum Discount Value</label><br>
                             <input 
@@ -161,23 +184,26 @@
                                 [ngClass]="{'is-invalid' : MaximumDiscountValue?.touched && MaximumDiscountValue?.invalid}"
                                 placeholder="Enter Maximum Discount Value"/>
                         </div>
+                        <div class="col-md-4">
+                             <label></label><br><br>
+                            <input 
+                                type="checkbox"
+                                formControlName="discountIsActive"
+                                [ngClass]="{'is-invalid' : DiscountIsActive?.touched && DiscountIsActive?.invalid}"/>
+                            <span class="isActive-label">Is Active</span><br>
+                        </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-4">
-                            <label>Start Time</label>
-                            <input 
-                                class="form-control" 
-                                type="datetime-local" 
-                                formControlName="discountStartTime"
-                                [ngClass]="{'is-invalid' : DiscountStartTime?.touched && DiscountStartTime?.invalid }" />
-                        </div>
-                        <div class="col-md-4">
-                            <label>Close Time</label>
-                            <input 
-                                class="form-control" 
-                                type="datetime-local" 
-                                formControlName="discountCloseTime"
-                                [ngClass]="{'is-invalid' : DiscountCloseTime?.touched && DiscountCloseTime?.invalid }" />
+                        <div class="col-md-8">
+                            <label>Description</label>
+                            <textarea 
+                                rows="4"
+                                cols="5"
+                                class="form-control"
+                                formControlName="discountDescription"
+                                [ngClass]="{'is-invalid' : DiscountDescription?.touched && DiscountDescription?.invalid}"
+                                placeholder="Enter Description">
+                            </textarea>
                         </div>
                     </div>
                     <div class="row">
@@ -186,7 +212,7 @@
                                 <button class="btn btn-cancel" [routerLink]="['/service/summary']" [queryParams]="{ outletId: outletId, id: serviceId }">
                                     <i class="fa-solid fa-arrow-left"></i>Cancel
                                 </button>
-                                <button class="btn btn-update" (click)="onSaveDiscountDetails()">{{!isDiscountExist ? 'Save' : 'Update'}}
+                                <button class="btn btn-update" (click)="onSaveDiscountDetails()">{{isEditDiscountData? 'Update' : 'Save'}}
                                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M15 22.75H9C3.57 22.75 1.25 20.43 1.25 15V9C1.25 3.57 3.57 1.25 9 1.25H15C20.43 1.25 22.75 3.57 22.75 9V15C22.75 20.43 20.43 22.75 15 22.75ZM9 2.75C4.39 2.75 2.75 4.39 2.75 9V15C2.75 19.61 4.39 21.25 9 21.25H15C19.61 21.25 21.25 19.61 21.25 15V9C21.25 4.39 19.61 2.75 15 2.75H9Z" fill="rgba(255, 255, 255, 1)"/>
                                         <path d="M10.5795 15.5801C10.3795 15.5801 10.1895 15.5001 10.0495 15.3601L7.21945 12.5301C6.92945 12.2401 6.92945 11.7601 7.21945 11.4701C7.50945 11.1801 7.98945 11.1801 8.27945 11.4701L10.5795 13.7701L15.7195 8.6301C16.0095 8.3401 16.4895 8.3401 16.7795 8.6301C17.0695 8.9201 17.0695 9.4001 16.7795 9.6901L11.1095 15.3601C10.9695 15.5001 10.7795 15.5801 10.5795 15.5801Z" fill="rgba(255, 255, 255, 1)"/>
@@ -196,6 +222,46 @@
                         </div>
                     </div>
                 </form>
+                <hr />
+                <div>
+                    <div class="discount-details table-responsive">
+                        <div class="discount-data-section" *ngFor="let discount of discountList">
+                            <div class="pricing-item">
+                                <label>Discount Val/Pct</label>
+                                <span>LKR {{discount.discountValue}}</span>
+                            </div>
+                            <div class="pricing-item">
+                                <label>Max Discount Value</label>
+                                <span>LKR {{discount.maximumDiscountValue}}</span>
+                            </div>
+                            <div class="pricing-item">
+                                <label>Min Dur.</label>
+                                <span>{{discount.minimumQTY}}</span>
+                            </div>
+                            <div class="pricing-item">
+                                <label>Min Order Value</label>
+                                <span>LKR {{discount.minimumOrderValue}}</span>
+                            </div>
+                            <div class="pricing-item">
+                                <label>Start</label>
+                                <span>{{discount.startTime | date:'yyyy/MM/dd h:mm'}}</span>
+                            </div>
+                            <div class="pricing-item">
+                                <label>End</label>
+                                <span>{{discount.endTime | date:'yyyy/MM/dd h:mm'}}</span>
+                            </div>
+                            <div class="status">
+                                <span *ngIf="discount.isActive" class="active">Active</span>
+                                <span *ngIf="!discount.isActive" class="deactive">Deactive</span>
+                            </div>
+                            <div class="action-icons">
+                                <i class="fa-regular fa-pen-to-square" style="margin-right: 10px;" title="Edit" (click)="editDiscountDetails(discount)"></i>
+                                <i *ngIf="discount.isActive" class="fa-solid fa-trash" title="Remove" (click)="changeDiscountStatus(discount.id, false)"></i>
+                                <i *ngIf="!discount.isActive" class="fa-regular fa-circle-check" title="Active" (click)="changeDiscountStatus(discount.id, true)"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -212,7 +278,7 @@
                             <path opacity="0.4" d="M12.6406 8.52979L17.4906 9.75979" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                             <path opacity="0.4" d="M11.6602 12.3999L14.5602 13.1399" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
-                        <span>Add Bonus Details</span>
+                        <span>{{isEditBonusData ? 'Update' : 'Add'}} Add Bonus Details</span>
                     </div>
                     <div class="row">
                         <div class="col-md-4">
@@ -228,19 +294,10 @@
                                 <ng-option *ngFor="let price of priceList" [value]="price.id">{{price.price}}</ng-option>
                             </ng-select>
                         </div>
-                        <div class="col-md-4">
-                            <label>Bonus Description</label>
-                            <input 
-                                class="form-control" 
-                                type="text"
-                                formControlName="bonusDescription"
-                                [ngClass]="{'is-invalid': BonusDescription?.touched && BonusDescription?.invalid}"
-                                placeholder="Enter Bonus Description" />
-                        </div>
                     </div>
                     <div class="row">
                         <div class="col-md-4">
-                            <label>Bonus Quantity</label>
+                            <label>Bonus Duration</label>
                             <input 
                                 class="form-control" 
                                 type="number"
@@ -249,27 +306,7 @@
                                 placeholder="Enter Bonus Quantity" />
                         </div>
                         <div class="col-md-4">
-                            <label>Minimum Bonus Quantity</label>
-                            <input 
-                                class="form-control" 
-                                type="number"
-                                formControlName="minimumBonusQuantity"
-                                [ngClass]="{'is-invalid': MinimumBonusQuantity?.touched && MinimumBonusQuantity?.invalid}"
-                                placeholder="Enter Minimum Bonus Quantity" />
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-4">
-                            <label>Minimum Order Value</label>
-                            <input 
-                                class="form-control" 
-                                type="number"
-                                formControlName="minimumBonusOrderValue"
-                                [ngClass]="{'is-invalid': MinimumBonusOrderValue?.touched && MinimumBonusOrderValue?.invalid}"
-                                placeholder="Enter Minimum Bonus Order Value" />
-                        </div>
-                        <div class="col-md-4">
-                            <label>Maximum Bonus Quantity</label>
+                            <label>Maximum Bonus Duration</label>
                             <input 
                                 class="form-control" 
                                 type="number"
@@ -280,7 +317,27 @@
                     </div>
                     <div class="row">
                         <div class="col-md-4">
-                            <label>Start Time</label>
+                            <label>Minimum Bonus Duration</label>
+                            <input 
+                                class="form-control" 
+                                type="number"
+                                formControlName="minimumBonusQuantity"
+                                [ngClass]="{'is-invalid': MinimumBonusQuantity?.touched && MinimumBonusQuantity?.invalid}"
+                                placeholder="Enter Minimum Bonus Quantity" />
+                        </div>
+                        <div class="col-md-4">
+                            <label>Minimum Order Value</label>
+                            <input 
+                                class="form-control" 
+                                type="number"
+                                formControlName="minimumBonusOrderValue"
+                                [ngClass]="{'is-invalid': MinimumBonusOrderValue?.touched && MinimumBonusOrderValue?.invalid}"
+                                placeholder="Enter Minimum Bonus Order Value" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label>Start Date Time</label>
                             <input 
                                 class="form-control" 
                                 type="datetime-local" 
@@ -288,12 +345,33 @@
                                 [ngClass]="{'is-invalid' : BonusStartTime?.touched && BonusStartTime?.invalid }" />
                         </div>
                         <div class="col-md-4">
-                            <label>Close Time</label>
+                            <label>Close Date Time</label>
                             <input 
                                 class="form-control" 
                                 type="datetime-local" 
                                 formControlName="bonusCloseTime"
                                 [ngClass]="{'is-invalid' : BonusCloseTime?.touched && BonusCloseTime?.invalid }" />
+                        </div>
+                        <div class="col-md-4">
+                             <label></label><br><br>
+                            <input 
+                                type="checkbox"
+                                formControlName="bonusIsActive"
+                                [ngClass]="{'is-invalid' : BonusIsActive?.touched && BonusIsActive?.invalid}"/>
+                            <span class="isActive-label">Is Active</span><br>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <label>Description</label>
+                            <textarea 
+                                rows="4"
+                                cols="5"
+                                class="form-control"
+                                formControlName="bonusDescription"
+                                [ngClass]="{'is-invalid' : BonusDescription?.touched && BonusDescription?.invalid}"
+                                placeholder="Enter Description">
+                            </textarea>
                         </div>
                     </div>
                     <div class="row">
@@ -302,7 +380,7 @@
                                 <button class="btn btn-cancel" [routerLink]="['/service/summary']" [queryParams]="{ outletId: outletId, id: serviceId }">
                                     <i class="fa-solid fa-arrow-left"></i>Cancel
                                 </button>
-                                <button class="btn btn-update" (click)="onSaveBonusDetails()">{{!isBonusExist ? 'Save' : 'Update'}}
+                                <button class="btn btn-update" (click)="onSaveBonusDetails()">{{isEditBonusData ? 'Update' : 'Save'}}
                                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M15 22.75H9C3.57 22.75 1.25 20.43 1.25 15V9C1.25 3.57 3.57 1.25 9 1.25H15C20.43 1.25 22.75 3.57 22.75 9V15C22.75 20.43 20.43 22.75 15 22.75ZM9 2.75C4.39 2.75 2.75 4.39 2.75 9V15C2.75 19.61 4.39 21.25 9 21.25H15C19.61 21.25 21.25 19.61 21.25 15V9C21.25 4.39 19.61 2.75 15 2.75H9Z" fill="rgba(255, 255, 255, 1)"/>
                                         <path d="M10.5795 15.5801C10.3795 15.5801 10.1895 15.5001 10.0495 15.3601L7.21945 12.5301C6.92945 12.2401 6.92945 11.7601 7.21945 11.4701C7.50945 11.1801 7.98945 11.1801 8.27945 11.4701L10.5795 13.7701L15.7195 8.6301C16.0095 8.3401 16.4895 8.3401 16.7795 8.6301C17.0695 8.9201 17.0695 9.4001 16.7795 9.6901L11.1095 15.3601C10.9695 15.5001 10.7795 15.5801 10.5795 15.5801Z" fill="rgba(255, 255, 255, 1)"/>
@@ -312,6 +390,46 @@
                         </div>
                     </div>
                 </form>
+                <hr />
+                <div>
+                    <div class="discount-details table-responsive">
+                        <div class="discount-data-section" *ngFor="let bonus of bonusList">
+                            <div class="pricing-item">
+                                <label>Bonus Dur.</label>
+                                <span>{{bonus.bonusQTY}}</span>
+                            </div>
+                            <div class="pricing-item">
+                                <label>Max Bonus Dur</label>
+                                <span>{{bonus.maximumBonusQTY}}</span>
+                            </div>
+                            <div class="pricing-item">
+                                <label>Min Dur.</label>
+                                <span>{{bonus.minimumQTY}}</span>
+                            </div>
+                            <div class="pricing-item">
+                                <label>Min Order Value</label>
+                                <span>LKR {{bonus.minimumOrderValue}}</span>
+                            </div>
+                            <div class="pricing-item">
+                                <label>Start</label>
+                                <span>{{bonus.startTime | date:'yyyy/MM/dd h:mm'}}</span>
+                            </div>
+                            <div class="pricing-item">
+                                <label>End</label>
+                                <span>{{bonus.endTime | date:'yyyy/MM/dd h:mm'}}</span>
+                            </div>
+                            <div class="status">
+                                <span *ngIf="bonus.isActive" class="active">Active</span>
+                                <span *ngIf="!bonus.isActive" class="deactive">Deactive</span>
+                            </div>
+                            <div class="action-icons">
+                                <i class="fa-regular fa-pen-to-square" style="margin-right: 10px;" title="Edit" (click)="editBonusDetails(bonus)"></i>
+                                <i *ngIf="bonus.isActive" class="fa-solid fa-trash" title="Remove" (click)="changeBonusStatus(bonus.id, false)"></i>
+                                <i *ngIf="!bonus.isActive" class="fa-regular fa-circle-check" title="Active" (click)="changeBonusStatus(bonus.id, true)"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
