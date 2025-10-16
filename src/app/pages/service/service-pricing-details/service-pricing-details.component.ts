@@ -5,6 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { forkJoin } from 'rxjs';
 import { ShopService } from '../services/shop.service';
+import { ImageFile } from 'src/app/models/models';
 
 @Component({
   selector: 'app-service-pricing-details',
@@ -29,6 +30,14 @@ export class ServicePricingDetailsComponent {
   bonusList: any[] = [];
   isEditDiscountData: boolean = false;
   isEditBonusData: boolean = false;
+  loginId: number = this.commonService.user.loginId;
+
+  priceImageDataList: ImageFile[] = [];
+  priceFileData: any[] = [];
+  priceImageUrls: any[] = [];
+  isAddNewPriceFile: boolean = false;
+  priceFormData = new FormData();
+  savedPriceMediaList: any[] = [];
 
   constructor(private formBuilder: FormBuilder,
     private route: ActivatedRoute,
@@ -150,7 +159,7 @@ export class ServicePricingDetailsComponent {
       maximumDiscountValue: ['', Validators.required],
       discountStartTime: ['', Validators.required],
       discountCloseTime: ['', Validators.required],
-      discountIsActive: ['']
+      discountIsActive: ['true']
     });
 
     this.bonusDetails = this.formBuilder.group({
@@ -162,7 +171,7 @@ export class ServicePricingDetailsComponent {
       maximumBonusQuantity: ['', Validators.required],
       bonusStartTime: ['', Validators.required],
       bonusCloseTime: ['', Validators.required],
-      bonusIsActive: ['']
+      bonusIsActive: ['true']
     });
   }
 
@@ -196,15 +205,84 @@ export class ServicePricingDetailsComponent {
     this.Duration.setValue(data.duration);
     this.PriceName.setValue(data.name);
     this.IsDefaultPrice.setValue(data.isDefault);
+
+    // set price image data
+    data.fetcherPriceMedia.forEach((item: any, index: number) => {
+      var image = {
+        id: index,
+        file: '',
+        filePath: item.url,
+        url: ''
+      }
+      this.priceImageDataList.push(image);
+      this.priceImageUrls.push(this.commonService.mediaUrl + item.url);
+
+      var media = {
+        name: item.name,
+        url: item.url,
+        isActive: item.isActive,
+        mediaType: {
+          id: item.mediaType.id
+        }
+      }
+      this.savedPriceMediaList.push(media);
+
+      var file = {
+        name: "uploaded-img"
+      }
+      this.priceFileData.push(file);
+    });
   }
 
   onSavePriceDetails() {
+    this.commonService.isLoading = true;
+    if (this.isAddNewPriceFile) {
+      let count = 0;
+      var newlyAddedFileLength = this.priceFileData.length;
+      this.priceFileData.forEach((file: any, index: number) => {
+        if (file.name == "uploaded-img") {
+          newlyAddedFileLength = newlyAddedFileLength - 1;
+          return;
+        }
+        else {
+          this.priceFormData = new FormData();
+          this.priceFormData.append('file', file);
+          this.commonService.saveMedia(this.loginId, this.priceFormData).subscribe((res: any) => {
+            if (res.code == 200) {
+              var media = {
+                name: file.name,
+                url: res.object,
+                isActive: true,
+                mediaType: {
+                  id: file.type.split("/")[0] == "image" ? 1 : 2
+                }
+              }
+              this.savedPriceMediaList.push(media);
+              count += 1;
+              if (newlyAddedFileLength == count) {
+                this.savePriceDetails();
+              }
+            }
+            else {
+              this.commonService.isLoading = false;
+            }
+          });
+        }
+      });
+    }
+    else {
+      this.savePriceDetails();
+    }
+  }
+
+  savePriceDetails() {
     let priceDetails = {
       "id": this.itemPriceId,
       "duration": this.Duration.value,
       "name": this.PriceName.value,
       "description": this.Description.value,
       "price": this.ServicePrice.value,
+      "fetcherPriceMedia": this.savedPriceMediaList,
       "isDefault": false,
       "isActive": this.IsDefaultPrice.value
     };
@@ -220,6 +298,9 @@ export class ServicePricingDetailsComponent {
         } else {
           this.toastr.success("Price details updated successfully");
         }
+      }
+      else {
+        this.commonService.isLoading = false;
       }
     });
   }
@@ -262,6 +343,9 @@ export class ServicePricingDetailsComponent {
           this.getServiceDetailsById();
           this.discountDetails.reset();
           this.isEditDiscountData = true;
+        }
+        else {
+          this.commonService.isLoading = false;
         }
       });
     }
@@ -311,8 +395,8 @@ export class ServicePricingDetailsComponent {
    this.commonService.isLoading = true;
    if (!this.isBonusExist) {
       this.shopService.saveDiscountDetails(saveDiscountModel).subscribe((res: any) => {
+        this.commonService.isLoading = false;
         if (res.code == 200) {
-          this.commonService.isLoading = false;
           this.isBonusExist = true;
           this.toastr.success("Bonus details added successfully");
           this.getServiceDetailsById();
@@ -382,7 +466,7 @@ export class ServicePricingDetailsComponent {
     this.shopService.activeDiscount(discountId, isActive).subscribe((res: any) => {
       if (res.code == 200) {
         this.getServiceDetailsById();
-        this.toastr.success(`Discount ${isActive ? 'enabled' : 'removed'} successfully`);
+        this.toastr.success(`Discount ${isActive ? 'enabled' : 'disabled'} successfully`);
       }
       else {
         this.toastr.error("Something went wrong");
@@ -396,13 +480,80 @@ export class ServicePricingDetailsComponent {
     this.shopService.activeBonus(bonusId, isActive).subscribe((res: any) => {
       if (res.code == 200) {
         this.getServiceDetailsById();
-        this.toastr.success(`Bonus ${isActive ? 'enabled' : 'removed'} successfully`);
+        this.toastr.success(`Bonus ${isActive ? 'enabled' : 'disabled'} successfully`);
       }
       else {
         this.toastr.error("Something went wrong");
       }
       this.commonService.isLoading = false;
     });
+  }
+
+  deleteDiscount(discountId: number) {
+    this.commonService.isLoading = true;
+    this.shopService.deleteDiscount(discountId).subscribe((res: any) => {
+      if (res.code == 200) {
+        this.getServiceDetailsById();
+        this.toastr.success(`Discount removed successfully`);
+      }
+      else {
+        this.toastr.error("Something went wrong");
+      }
+      this.commonService.isLoading = false;
+    });
+  }
+
+  deleteBonus(bonusId: number) {
+    this.commonService.isLoading = true;
+    this.shopService.deleteBonus(bonusId).subscribe((res: any) => {
+      if (res.code == 200) {
+        this.getServiceDetailsById();
+        this.toastr.success(`Bonus removed successfully`);
+      }
+      else{ 
+        this.toastr.error("Something went wrong");
+      }
+      this.commonService.isLoading = false;
+    });
+  }
+
+  getPriceFile(event: any) {
+    if (event.target.files) {
+      this.isAddNewPriceFile = true;
+      for(let i=0; i < event.target.files.length; i++) {
+        var file = event.target.files[i];
+        this.priceFileData.push(file);
+        this.priceFormData.append('file', file);
+        var filePath = event.target.files[i].name;
+
+        var reader = new FileReader();
+        reader.readAsDataURL(event.target.files[i]);
+        reader.onload=(events:any)=>{
+          this.priceImageUrls.push(events.target.result);
+          var image = {
+            id: this.priceImageDataList.length,
+            file: file,
+            filePath: filePath,
+            url: ''
+          }
+          this.priceImageDataList.push(image);
+        }
+      }
+    }
+  }
+
+  removePriceImage(index: any){
+    this.priceImageDataList.splice(index, 1);
+    this.priceImageUrls.splice(index, 1);
+    this.priceFileData.splice(index, 1);
+    this.savedPriceMediaList.splice(index, 1);
+    var hasNewFile = false;
+    this.priceFileData.forEach((file: any) => {
+      if (file.name != "uploaded-img") {
+        hasNewFile = true;
+      }
+    });
+    this.isAddNewPriceFile = hasNewFile;
   }
 
   formatDateTime(dateStr: string): string {

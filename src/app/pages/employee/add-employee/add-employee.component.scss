@@ -166,6 +166,9 @@
             .form-check-input:focus {
                 box-shadow: none;
             }
+            .form-check-input.active-check:checked {
+                background-color: green;
+            }
         }
     }
     .btn-assign {
@@ -188,6 +191,9 @@
         overflow: hidden;
         margin-right: 5%;
         position: relative;
+        box-shadow: 0px 1px 10px 2px rgba(87, 87, 87, 0.15);
+        border-radius: 10px;
+        padding: 5px;
         img {
             height: 220px;
             width: 100%;
@@ -210,6 +216,14 @@
             font-size: 16px;
             border: none;
             cursor: pointer;
+
+            i {
+                box-shadow: 0px 1px 10px 2px rgba(87, 87, 87, 0.15);
+                background: #fff;
+                padding: 3px;
+                border-radius: 50%;
+                color: var(--danger-color);
+            }
         }
     }
 }

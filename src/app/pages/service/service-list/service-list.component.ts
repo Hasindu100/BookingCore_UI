@@ -129,7 +129,10 @@ export class ServiceListComponent implements OnInit {
         this.toastr.success("Item removed successfully");
         this.getServicesByBranchId(this.outletId, this.pageSize, this.pageNumber - 1, this.searchString);
       }
-    })
+      else {
+        this.commonService.isLoading = false;
+      }
+    });
   }
 
   onClickYesWarningPopup() {

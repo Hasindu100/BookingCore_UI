@@ -91,4 +91,14 @@ export class ShopService {
     let url = environment.apiUrl + `dis_bonus/service_bonus/active?bonusId=${bonusId}&isActive=${isActive}`;
     return this.http.put(url, null);
   }
+
+  deleteDiscount(discountId: number) {
+    let url = environment.apiUrl + `dis_bonus/service_dis/delete?disId=${discountId}`;
+    return this.http.delete(url);
+  }
+
+  deleteBonus(bonusId: number) {
+    let url = environment.apiUrl + `dis_bonus/service_bonus/delete?bonusId=${bonusId}`;
+    return this.http.delete(url);
+  }
 }

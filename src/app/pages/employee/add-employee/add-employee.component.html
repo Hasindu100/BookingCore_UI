@@ -24,7 +24,7 @@
                         <fieldset *ngIf="step == 1">
                             <div class="row">
                                 <div class="col-md-6 group">
-                                    <label>Employee first name</label><br>
+                                    <label>*Employee first name</label><br>
                                     <input 
                                         type="text"
                                         class="form-control"
@@ -36,7 +36,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-6 group">
-                                    <label>Employee last name</label><br>
+                                    <label>*Employee last name</label><br>
                                     <input 
                                         type="text"
                                         class="form-control"
@@ -50,7 +50,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-6 group">
-                                    <label>Public name</label><br>
+                                    <label>*Public name</label><br>
                                     <input 
                                         type="text"
                                         class="form-control"
@@ -62,7 +62,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-6 group">
-                                    <label>NIC Number</label><br>
+                                    <label>*NIC Number</label><br>
                                     <input 
                                         type="text"
                                         class="form-control"
@@ -77,7 +77,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-6 group">
-                                    <label>Email Address</label><br>
+                                    <label>*Email Address</label><br>
                                     <input 
                                         type="text"
                                         class="form-control"
@@ -90,7 +90,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-6 group">
-                                    <label>Mobile Number</label><br>
+                                    <label>*Mobile Number</label><br>
                                     <input 
                                         type="number"
                                         class="form-control"
@@ -107,7 +107,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-12 group">
-                                    <label>Current Address</label><br>
+                                    <label>*Current Address</label><br>
                                     <input 
                                         type="text"
                                         class="form-control"
@@ -339,24 +339,17 @@
                                     <label>Employee Status</label>
                                     <div class="form-check">
                                         <div class="radio-btn">
-                                            <input type="radio" class="form-check-input" id="online" name="status" value="online">
+                                            <input type="radio" class="form-check-input active-check" id="online" name="employeeStatus" formControlName="employeeStatus" value="Active">
                                             <label class="form-check-label" for="online">
                                                 Active
                                             </label>
                                         </div>
                                         <div class="radio-btn">
-                                            <input type="radio" class="form-check-input" id="offline" name="status" value="offline">
+                                            <input type="radio" class="form-check-input" id="offline" name="employeeStatus" formControlName="employeeStatus" value="Deactive">
                                             <label class="form-check-label" for="offline">
                                                 Deactive
                                             </label>
                                         </div>
-                                        <div class="radio-btn">
-                                            <input type="radio" class="form-check-input" id="draft" name="status" value="draft">
-                                            <label class="form-check-label" for="draft">
-                                                Draft
-                                            </label>
-                                        </div>
-                                        
                                     </div>
                                 </div>
                                 <div class="btn-section">

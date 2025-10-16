@@ -32,13 +32,18 @@ export class EmployeeService {
     return this.http.put(url, employeeDetails);
   }
 
-  removeEmployee(employeeId: number) {
+  disableEmployee(employeeId: number) {
     let url = this.baseUrl + "disable?id=" + employeeId;
     return this.http.put(url, null);
   }
 
   enableEmployee(employeeId: number) {
     let url = this.baseUrl + "enable?id=" + employeeId;
+    return this.http.put(url, null);
+  }
+
+  removeEmployee(employeeId: number) {
+    let url = environment.apiUrl + `shop/removeEmployee?shopEmployeeId=${employeeId}`;
     return this.http.put(url, null);
   }
 }

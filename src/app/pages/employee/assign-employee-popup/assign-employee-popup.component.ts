@@ -69,11 +69,11 @@ export class AssignEmployeePopupComponent implements OnInit {
       this.outletService.assignEmployeestoShop(employeeIdList, this.outletService.outletId).subscribe((res: any) => {
         if (res.code == 200) {
           this.toastr.success("Employee assigned successfully");
-          this.commonService.isLoading = false;
           this.employeeService.refreshAssignedEmployeeData.next(null);
           this.dialogRef.close();
         }
-      })
+        this.commonService.isLoading = false;
+      });
     }
   }
   

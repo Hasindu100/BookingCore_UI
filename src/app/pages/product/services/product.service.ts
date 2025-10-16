@@ -93,4 +93,14 @@ export class ProductService {
     return this.http.put(url, null);
   }
 
+  deleteDiscount(discountId: number) {
+    let url = environment.apiUrl + `dis_bonus/item_dis/delete?disId=${discountId}`;
+    return this.http.delete(url);
+  }
+
+  deleteBonus(bonusId: number) {
+    let url = environment.apiUrl + `dis_bonus/item_bonus/delete?bonusId=${bonusId}`;
+    return this.http.delete(url);
+  }
+
 }

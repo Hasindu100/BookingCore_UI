@@ -100,6 +100,10 @@ export class AddEmployeeComponent implements OnInit {
   get EmployeePassword() {
     return this.loginDetails.get('employeePassword');
   }
+
+  get EmployeeStatus() {
+    return this.loginDetails.get('employeeStatus');
+  }
   //#endregion
 
   createFormControllers() {
@@ -122,7 +126,8 @@ export class AddEmployeeComponent implements OnInit {
 
     this.loginDetails = this.formBuilder.group({
       employeeEmail: ['', [Validators.required, Validators.email]],
-      employeePassword: ['', [Validators.required]]
+      employeePassword: ['', [Validators.required]],
+      employeeStatus: ['Active']
     });
   }
 
@@ -157,6 +162,8 @@ export class AddEmployeeComponent implements OnInit {
             name: "uploaded-img"
           }
           this.fileData.push(file);
+
+          this.EmployeeStatus.setValue(data.isActive ? 'Active' : 'Deactive');
         }
       }
       else {
@@ -229,6 +236,9 @@ export class AddEmployeeComponent implements OnInit {
           if (res.code == 200) {
             this.profilePicture = res.object;
             this.updateEmployee();
+          }
+          else {
+            this.commonService.isLoading = false;
           }
         });
       }

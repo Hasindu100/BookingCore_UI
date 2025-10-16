@@ -44,7 +44,7 @@
                       <span class="folder" (click)="openMenu($event); navigateToOutlet(company.id)">Shops</span>
                       <ul class="nested">
                         <li *ngFor="let outlet of company?.outletList">
-                          <span class="folder" (click)="openMenu($event)">{{outlet.name}}</span>
+                          <span class="folder" (click)="openMenu($event, 'outlet')">{{outlet.name}}</span>
                           <ul class="nested">
                             <li>
                               <span class="folder" (click)="openMenu($event)">Orders</span>
@@ -53,10 +53,10 @@
                                 <li class="img" [routerLink]="['/order']">Order List</li>
                               </ul>
                             </li>
-                            <li class="img" (click)="navigateToPages('Product', outlet.id)">Items</li>
-                            <li class="img" [routerLink]="['/service']" [queryParams]="{ outletId: outlet.id}">Services</li>
-                            <li class="img" (click)="navigateToPages('Package', outlet.id)">Packages</li>
-                            <li class="img" (click)="navigateToPages('ShopEmployee', outlet.id)">Employees</li>
+                            <li class="img" (click)="navigateToPages($event, 'Product', outlet.id)">Items</li>
+                            <li class="img" (click)="navigateToPages($event, 'Service', outlet.id)">Services</li>
+                            <li class="img" (click)="navigateToPages($event, 'Package', outlet.id)">Packages</li>
+                            <li class="img" (click)="navigateToPages($event, 'ShopEmployee', outlet.id)">Employees</li>
                           </ul>
                         </li>
                       </ul>

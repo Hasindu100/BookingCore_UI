@@ -36,9 +36,17 @@ export class AddServiceComponent implements OnInit {
   discountId: number = 0;
   bonusId: number = 0;
   isAddedDiscount: boolean = false;
+  isPriceExist: boolean = false;
   isDiscountExist: boolean = false;
   isBonusExist: boolean = false;
   companyTypeId: number = 0;
+
+  priceImageDataList: ImageFile[] = [];
+  priceFileData: any[] = [];
+  priceImageUrls: any[] = [];
+  isAddNewPriceFile: boolean = false;
+  priceFormData = new FormData();
+  savedPriceMediaList: any[] = [];
 
   constructor(private formBuilder: FormBuilder,
     private router: Router,
@@ -179,6 +187,10 @@ export class AddServiceComponent implements OnInit {
     return this.pricingDetails.get('bonusCloseTime');
   }
 
+  get ServiceStatus() {
+    return this.pricingDetails.get('serviceStatus');
+  }
+
   //#endregion
 
   get dynamicFields() {
@@ -217,6 +229,7 @@ export class AddServiceComponent implements OnInit {
       maximumBonusQuantity: ['', Validators.required],
       bonusStartTime: ['', Validators.required],
       bonusCloseTime: ['', Validators.required],
+      serviceStatus: ['Online']
     });
 
     this.customFiledsInfo = this.formBuilder.group({
@@ -263,7 +276,7 @@ export class AddServiceComponent implements OnInit {
   getOutletDetailsById() {
     this.outletService.getOutletById(this.outletId).subscribe((res: any) => {
       if (res.code == 200) {
-        this.companyTypeId = res.object?.company?.companyType?.id;
+        this.companyTypeId = this.outletService.companyTypeId = res.object?.company?.companyType?.id;
       }
     })
   }
@@ -316,12 +329,40 @@ export class AddServiceComponent implements OnInit {
 
           // set pricing data
           if (data.fetcherPrices.length > 0) {
+            this.isPriceExist = true;
             var pricingData = data.fetcherPrices.find((x: any) => x.isDefault == true);;
             this.itemPriceId = pricingData.id;
             this.PriceName.setValue(pricingData.name);
             this.PriceDescription.setValue(pricingData.description);
             this.ServicePrice.setValue(pricingData.price);
             this.Duration.setValue(pricingData.duration);
+
+            // set price image data
+            pricingData.fetcherPriceMedia.forEach((item: any, index: number) => {
+              var image = {
+                id: index,
+                file: '',
+                filePath: item.url,
+                url: ''
+              }
+              this.priceImageDataList.push(image);
+              this.priceImageUrls.push(this.commonService.mediaUrl + item.url);
+
+              var media = {
+                name: item.name,
+                url: item.url,
+                isActive: item.isActive,
+                mediaType: {
+                  id: item.mediaType.id
+                }
+              }
+              this.savedPriceMediaList.push(media);
+
+              var file = {
+                name: "uploaded-img"
+              }
+              this.priceFileData.push(file);
+            });
 
             //set discount data
             if (pricingData.discounts.length > 0) {
@@ -353,6 +394,7 @@ export class AddServiceComponent implements OnInit {
               this.BonusCloseTime.setValue(bonusData.endTime != null ? this.formatDateTime(bonusData.endTime) : bonusData.endTime);
             }
           }
+          this.ServiceStatus.setValue(data.isActive ? 'Online' : 'Offline');
         }
       }
     })
@@ -405,6 +447,31 @@ export class AddServiceComponent implements OnInit {
     }
   }
 
+  getPriceFile(event: any) {
+    if (event.target.files) {
+      this.isAddNewPriceFile = true;
+      for(let i=0; i < event.target.files.length; i++) {
+        var file = event.target.files[i];
+        this.priceFileData.push(file);
+        this.priceFormData.append('file', file);
+        var filePath = event.target.files[i].name;
+
+        var reader = new FileReader();
+        reader.readAsDataURL(event.target.files[i]);
+        reader.onload=(events:any)=>{
+          this.priceImageUrls.push(events.target.result);
+          var image = {
+            id: this.priceImageDataList.length,
+            file: file,
+            filePath: filePath,
+            url: ''
+          }
+          this.priceImageDataList.push(image);
+        }
+      }
+    }
+  }
+
   removeImage(index: any){
     this.imageDataList.splice(index, 1);
     this.imageUrls.splice(index, 1);
@@ -417,6 +484,13 @@ export class AddServiceComponent implements OnInit {
       }
     });
     this.isAddNewFile = hasNewFile;
+  }
+
+  removePriceImage(index: any){
+    this.priceImageDataList.splice(index, 1);
+    this.priceImageUrls.splice(index, 1);
+    this.priceFileData.splice(index, 1);
+    this.savedPriceMediaList.splice(index, 1);
   }
 
   onSave() {
@@ -445,6 +519,9 @@ export class AddServiceComponent implements OnInit {
               if (this.fileData.length == count) {
                 this.saveService();
               }
+            }
+            else {
+              this.commonService.isLoading = false;
             }
           });
         }
@@ -481,17 +558,60 @@ export class AddServiceComponent implements OnInit {
       if (res.code == 200) {
         if (this.formMode == 'Add') {
           this.toastr.success("Product added successfully!");
-          this.savePriceAndDiscountDetails(res.object.id);
+          this.onSavePriceData(res.object.id);
         }
         else {
           this.toastr.success("Product updated successfully!");
-          this.updatePriceAndDiscountDetails(res.object.id);
+          this.onSavePriceData(res.object.id);
         }
         //this.router.navigateByUrl('/product/details');
       } else {
         this.toastr.error("Something went wrong");
       }
     })
+  }
+
+  onSavePriceData(productId: number) {
+    this.commonService.isLoading = true;
+    if (this.isAddNewPriceFile) {
+      let count = 0;
+      var newlyAddedFileLength = this.priceFileData.length;
+      this.priceFileData.forEach((file: any, index: number) => {
+        if (file.name == "uploaded-img") {
+          newlyAddedFileLength = newlyAddedFileLength - 1;
+          return;
+        }
+        else {
+          this.priceFormData = new FormData();
+          this.priceFormData.append('file', file);
+          this.commonService.saveMedia(this.loginId, this.priceFormData).subscribe((res: any) => {
+            if (res.code == 200) {
+              var media = {
+                name: file.name,
+                url: res.object,
+                isActive: true,
+                mediaType: {
+                  id: file.type.split("/")[0] == "image" ? 1 : 2
+                }
+              }
+              this.savedPriceMediaList.push(media);
+              count += 1;
+              if (newlyAddedFileLength == count) {
+                if (this.formMode == "Add" || !this.isPriceExist) { this.savePriceAndDiscountDetails(productId) }
+                else { this.updatePriceAndDiscountDetails(productId) };
+              }
+            }
+            else {
+              this.commonService.isLoading = false;
+            }
+          });
+        }
+      });
+    }
+    else {
+      if (this.formMode == "Add" || !this.isPriceExist) { this.savePriceAndDiscountDetails(productId) }
+      else { this.updatePriceAndDiscountDetails(productId) };
+    }
   }
 
   savePriceAndDiscountDetails(serviceId: number) {
@@ -501,6 +621,7 @@ export class AddServiceComponent implements OnInit {
       "name": this.PriceName.value,
       "description": this.PriceDescription.value,
       "price": this.ServicePrice.value,
+      "fetcherPriceMedia": this.savedPriceMediaList,
       "isDefault": true,
       "isActive": true
     }
@@ -509,6 +630,9 @@ export class AddServiceComponent implements OnInit {
       if (res.code == 200) {
         this.commonService.isLoading = false;
         this.router.navigate(['/service/summary'], { queryParams: { outletId: this.outletId, id: serviceId }});
+      }
+      else {
+        this.commonService.isLoading = false;
       }
     });
   }
@@ -520,6 +644,7 @@ export class AddServiceComponent implements OnInit {
       "name": this.PriceName.value,
       "description": this.PriceDescription.value,
       "price": this.ServicePrice.value,
+      "fetcherPriceMedia": this.savedPriceMediaList,
       "isDefault": true,
       "isActive": true
     }
@@ -528,6 +653,9 @@ export class AddServiceComponent implements OnInit {
       if (res.code == 200) {
         this.commonService.isLoading = false;
         this.router.navigate(['/service/summary'], { queryParams: { outletId: this.outletId, id: serviceId }});
+      }
+      else {
+        this.commonService.isLoading = false;
       }
     });
   }

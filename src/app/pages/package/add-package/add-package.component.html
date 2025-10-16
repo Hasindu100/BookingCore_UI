@@ -289,7 +289,7 @@
                         <fieldset *ngIf="step == 4">
                             <div class="row">
                                 <div class="col-md-4 group">
-                                    <label>Price</label>
+                                    <label>*Price</label>
                                     <input
                                         type="number"
                                         class="form-control"
@@ -301,7 +301,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-4 group">
-                                    <label>Duration</label>
+                                    <label>*Duration</label>
                                     <input
                                         type="number"
                                         class="form-control"
@@ -315,7 +315,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-12 group">
-                                    <label>Package Name</label><br>
+                                    <label>*Package Name</label><br>
                                     <input 
                                         type="text"
                                         class="form-control"
@@ -329,7 +329,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-12 group">
-                                    <label>Package Description</label><br>
+                                    <label>*Package Description</label><br>
                                     <textarea
                                         class="form-control"
                                         formControlName="description"
@@ -367,27 +367,20 @@
                         <div class="row">
                             <div class="footer-btn">
                                 <div class="company-status">
-                                    <label>Product Status</label>
+                                    <label>Package Status</label>
                                     <div class="form-check">
                                         <div class="radio-btn">
-                                            <input type="radio" class="form-check-input" id="online" name="status" value="online">
+                                            <input type="radio" class="form-check-input active-check" id="online" name="packageStatus" formControlName="packageStatus" value="Online">
                                             <label class="form-check-label" for="online">
                                                 Online
                                             </label>
                                         </div>
                                         <div class="radio-btn">
-                                            <input type="radio" class="form-check-input" id="offline" name="status" value="offline">
+                                            <input type="radio" class="form-check-input" id="offline" name="packageStatus" formControlName="packageStatus" value="Offline">
                                             <label class="form-check-label" for="offline">
                                                 Offline
                                             </label>
                                         </div>
-                                        <div class="radio-btn">
-                                            <input type="radio" class="form-check-input" id="draft" name="status" value="draft">
-                                            <label class="form-check-label" for="draft">
-                                                Draft
-                                            </label>
-                                        </div>
-                                        
                                     </div>
                                 </div>
                                 <div class="btn-section">

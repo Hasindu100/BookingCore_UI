@@ -12,6 +12,7 @@ export class OutletService {
   refreshOutletDetails = new Subject();
   refreshOutletDetails$ = this.refreshOutletDetails.asObservable();
   outletId: number = 0;
+  companyTypeId: number = 0;
   
   constructor(private http: HttpClient) { }
 

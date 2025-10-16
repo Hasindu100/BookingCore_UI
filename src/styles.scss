@@ -15,6 +15,8 @@
     --sub-btn-color: rgba(65, 176, 110, 1);
     --label-color: rgba(0, 0, 0, 1);
     --inner-btn-color: rgba(255, 255, 255, 1);
+    --disabled-btn-color: #ccc;
+    --danger-color: #dc3545
 }
 body {
     font-family: "Inter", sans-serif !important;
@@ -106,4 +108,8 @@ input[type=number] {
 
 input[type=text], input[type=number], input[type=email], textarea, select {
     color: var(--main-text-color);
+}
+
+.btn-disabled {
+    background: var(--disabled-btn-color) !important;
 }

@@ -81,6 +81,9 @@ export class ProductListComponent implements OnInit {
 
   onChangeSearch(event: any) {
     var searchString = event;
+    if (searchString != '' && searchString.length <= 3) {
+      return;
+    }
     this.getProductsByBranchId(this.outletId, this.pageSize, this.pageNumber - 1, searchString);
   }
 
@@ -130,6 +133,9 @@ export class ProductListComponent implements OnInit {
         this.isDisplayWarningPopup = false;
         this.toastr.success("Item removed successfully");
         this.getProductsByBranchId(this.outletId, this.pageSize, this.pageNumber - 1, this.searchString);
+      }
+      else {
+        this.commonService.isLoading = false;
       }
     })
   }

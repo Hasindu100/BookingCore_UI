@@ -40,4 +40,9 @@ export class CompanyService {
     let url = environment.apiUrl + "owner/update";
     return this.http.put(url, ownerDeails);
   }
+
+  getCompanyByName(pageSize: number, pageNumber: number, name: string = '') {
+    let url = this.baseUrl + "byName/" + pageSize + "/" + pageNumber + "?name=" + name;
+    return this.http.get(url);
+  }
 }

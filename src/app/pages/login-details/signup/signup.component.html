@@ -16,7 +16,7 @@
                 </div>
                 <form [formGroup]="signUpForm" (submit)="onClickSignUp()">
                     <div class="inputBx group">
-                        <span>Email address</span>
+                        <span>*Email address</span>
                         <input 
                             type="email"
                             class="form-control"
@@ -32,7 +32,7 @@
                     <div class="inputBx">
                         <div class="pwd-section">
                             <div class="pwdBx group">
-                                <span>Password</span>
+                                <span>*Password</span>
                                 <input 
                                     type="password"
                                     class="form-control"
@@ -44,7 +44,7 @@
                                 </div>
                             </div>
                             <div class="pwdBx group">
-                                <span>Confirm Password</span>
+                                <span>*Confirm Password</span>
                                 <input 
                                     type="password"
                                     class="form-control"
@@ -59,7 +59,7 @@
                         </div>
                     </div>
                     <div class="inputBx group">
-                        <span>User Type</span>
+                        <span>*User Type</span>
                         <select
                             class="form-control"
                             [ngClass]="{'is-invalid' : signUpFC.userType.touched && signUpFC.userType.invalid}"
@@ -80,7 +80,7 @@
                         <span>I accept Terms and Conditions</span>
                     </div>
                     <div class="inputBx">
-                        <input type="submit" class="btn btn-primary" value="Sign Up" name="" [disabled]="signUpForm.invalid">
+                        <input type="submit" class="btn btn-primary" value="Sign Up" name="" [ngClass]="{'btn-disabled': signUpForm.invalid}" [disabled]="signUpForm.invalid">
                     </div>
                 </form>
                 <div class="acc-link">
@@ -96,7 +96,7 @@
                 </div>
                 <form [formGroup]="userRegForm" (submit)="onSaveUser()">
                     <div class="inputBx group">
-                        <span>First Name</span>
+                        <span>*First Name</span>
                         <input 
                             type="text" 
                             class="form-control"
@@ -109,7 +109,7 @@
                         </div>
                     </div>
                     <div class="inputBx group">
-                        <span>Last Name</span>
+                        <span>*Last Name</span>
                         <input 
                             type="text"
                             class="form-control"
@@ -122,7 +122,7 @@
                         </div>
                     </div>
                     <div class="inputBx group">
-                        <span>Public Name</span>
+                        <span>*Public Name</span>
                         <input 
                             type="text"
                             class="form-control"
@@ -135,7 +135,7 @@
                         </div>
                     </div>
                     <div class="inputBx group">
-                        <span>Address</span>
+                        <span>*Address</span>
                         <input 
                             type="text"
                             class="form-control"
@@ -148,7 +148,7 @@
                         </div>
                     </div>
                     <div class="inputBx group">
-                        <span>Mobile Number</span>
+                        <span>*Mobile Number</span>
                         <input 
                             type="number" 
                             class="form-control"
@@ -165,7 +165,7 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="inputBx group">
-                                <span>Province</span>
+                                <span>*Province</span>
                                 <ng-select
                                     [ngClass]="{'is-invalid' : userRegFC.province.touched && userRegFC.province.invalid}"
                                     name="province"
@@ -182,7 +182,7 @@
                         </div>
                         <div class="col-md-6">
                             <div class="inputBx group">
-                                <span>District</span>
+                                <span>*District</span>
                                 <ng-select
                                     [ngClass]="{'is-invalid' : userRegFC.district.touched && userRegFC.district.invalid}"
                                     name="district"
@@ -199,7 +199,7 @@
                         </div>
                     </div>
                     <div class="inputBx group">
-                        <span>City</span>
+                        <span>*City</span>
                         <ng-select
                             [ngClass]="{'is-invalid' : userRegFC.city.touched && userRegFC.city.invalid}"
                             name="city"
@@ -227,7 +227,7 @@
                         </div>
                     </div>
                     <div class="inputBx">
-                        <input type="submit" class="btn btn-primary" value="Save" name="" [disabled]="userRegForm.invalid || saveDisabled">
+                        <input type="submit" class="btn btn-primary" value="Save" [ngClass]="{'btn-disabled': userRegForm.invalid || saveDisabled}" [disabled]="userRegForm.invalid || saveDisabled">
                     </div>
                 </form>
             </div>

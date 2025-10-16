@@ -50,8 +50,8 @@ export class PackageListComponent {
       if (res.code == 200) {
         this.packageList = res.object.content;
         this.totalElements = res.object.totalElements;
-        this.commonService.isLoading = false;
       }
+      this.commonService.isLoading = false;
     });
   }
 
@@ -68,12 +68,12 @@ export class PackageListComponent {
   removePackage(id: number) {
     this.packageService.disablePackage(id).subscribe((res: any) => {
       if (res.code == 200) {
-        this.commonService.isLoading = false;
         this.isDisplayWarningPopup = false;
         this.toastr.success("Package removed successfully");
         this.getPackagersByBranchId(this.outletId, this.pageSize, this.pageNumber - 1, this.searchString);
       }
-    })
+      this.commonService.isLoading = false;
+    });
   }
 
   onClickYesWarningPopup() {

@@ -32,6 +32,14 @@ export class CommonService {
   }
 
   saveMedia(loginId: number, formData: any) {
+    // let url = environment.imageUploadUrl + "upload.php";
+    // let headers = new HttpHeaders();
+    // /** In Angular 5, including the header Content-Type can invalidate your request */
+    // headers.append('Content-Type', 'multipart/form-data');
+    // headers.append('Accept', 'application/json');
+    // headers.append('Custom-Header', 'value');
+    // return this.http.post(url, formData , {'headers': headers});
+
     let url = environment.apiUrl + "media/save?loginId=" + loginId;
     let headers = new HttpHeaders();
     /** In Angular 5, including the header Content-Type can invalidate your request */

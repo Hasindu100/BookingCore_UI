@@ -32,6 +32,11 @@ export class AddOutletComponent implements OnInit {
   companyId: number = 0;
   outletLoginId: number = 0;
 
+  
+latitude: number | null = null;
+  longitude: number | null = null;
+
+
   constructor(private formBuilder: FormBuilder,
     private commonService: CommonService,
     private outletService: OutletService,
@@ -167,11 +172,13 @@ export class AddOutletComponent implements OnInit {
           this.CloseTime.setValue(data.branchClose);
           this.Mobile.setValue(data.mobileNumber);
           this.Email.setValue(data.email);
+          this.OrderGapDuration.setValue(data.orderGapDurationKeyWeight);
+          this.EmployeeSelectionEnabled.setValue(data.isESEnabled);
+          this.MultipleEmployeeSelectionEnabled.setValue(data.isMultipleESEnabledBasedOnFet);
           this.ShopEmail.setValue(data.email);
           this.ShopEmail.disable();
           this.ShopPassword.setValue(1234);
           this.ShopPassword.disable();
-          this.OrderGapDuration.setValue(data.orderGapDuration);
           this.getDistrictList(data.city.district.province.id);
           this.getCityList(data.city.district.id);
           data.branchMedia.forEach((item: any) => {
@@ -363,8 +370,8 @@ export class AddOutletComponent implements OnInit {
       "branchClose": this.formMode == 'Add' ? this.CloseTime.value + ":00" : this.CloseTime.value,
       "email": this.Email.value,
       "orderGapDurationKeyWeight": 1,
-      "isESEnabled": false,
-      "isMultipleESEnabledBasedOnFet": false,
+      "isESEnabled": this.EmployeeSelectionEnabled.value,
+      "isMultipleESEnabledBasedOnFet": this.MultipleEmployeeSelectionEnabled.value,
       "city": {
         "id": this.City.value
       },
@@ -430,4 +437,23 @@ export class AddOutletComponent implements OnInit {
       }
     });
   }
+
+  
+getLocation(): void {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          this.latitude = position.coords.latitude;
+          this.longitude = position.coords.longitude;
+        },
+        (error) => {
+          console.error('Error getting location:', error);
+          alert('Unable to retrieve location. Please check permissions.');
+        }
+      );
+    } else {
+      alert('Geolocation is not supported by this browser.');
+    }
+  }
+
 }
