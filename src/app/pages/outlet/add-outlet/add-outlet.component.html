@@ -226,6 +226,18 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <div class="row">
+                                
+                                <!-- location.component.html -->
+                                <button (click)="getLocation()">Get Location</button>
+                                <p *ngIf="latitude && longitude">
+                                Latitude: {{ latitude }} <br>
+                                Longitude: {{ longitude }}
+                                </p>
+
+                            </div>
+
                             <div class="row">
                                 <div class="footer-btn">
                                     <div></div>

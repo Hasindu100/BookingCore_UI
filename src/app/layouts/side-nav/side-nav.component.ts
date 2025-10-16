@@ -130,7 +130,15 @@ export class SideNavComponent implements OnInit {
     if (!element.classList.contains('active-link'))
       element.classList.add('active-link');
 
-    if (pageName != '') {
+    // Remove active sub element
+    if (pageName != 'outlet') {
+      var activeSubElement = document.getElementsByClassName("active-sub-link");
+      if (activeSubElement.length > 0) {
+        activeSubElement[0].classList.remove('active-sub-link');
+      }
+    }
+
+    if (pageName != '' && pageName != 'outlet') {
       this.redirectToPages(pageName);
     }
   }
@@ -139,10 +147,21 @@ export class SideNavComponent implements OnInit {
     this.router.navigateByUrl(pageName);
   }
 
-  navigateToPages(pageName: string, outletId: number) {
+  navigateToPages(event: any, pageName: string, outletId: number) {
+    var element: HTMLElement = event.target;
+    var activeElement = document.getElementsByClassName("active-sub-link");
+    if (activeElement.length > 0) {
+      activeElement[0].classList.remove('active-sub-link');
+    }
+    if (!element.classList.contains('active-sub-link'))
+      element.classList.add('active-sub-link');
+
     switch(pageName) {
       case 'Product':
         this.router.navigate([`/product/`], { queryParams: { outletId: outletId }});
+        break;
+      case 'Service':
+        this.router.navigate([`/service/`], { queryParams: { outletId: outletId }});
         break;
       case 'Package':
         this.router.navigate(['package/'], { queryParams: { outletId: outletId }});

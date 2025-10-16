@@ -12,6 +12,7 @@ export class CompanyDashboardComponent implements OnInit {
   user: any;
   ownerId: number = 0;
   companyList: any[] = [];
+  searchString: string = '';
 
   constructor(private companyService: CompanyService,
     private commonService: CommonService) {}
@@ -23,8 +24,8 @@ export class CompanyDashboardComponent implements OnInit {
   ngOnInit(): void {
     this.user = window?.user;
     setTimeout(() => {
-      var ownerId = this.user?.userId;
-      this.getCompanyListByOwnerId(ownerId);
+      this.ownerId = this.user?.userId;
+      this.getCompanyListByOwnerId(this.ownerId);
     }, 1000);
   }
 
@@ -36,5 +37,29 @@ export class CompanyDashboardComponent implements OnInit {
       }
       this.commonService.isLoading = false;
     });
+  }
+
+  getCompanyListByName(searchString: string) {
+    this.commonService.isLoading = true;
+    this.companyService.getCompanyByName(100, 0, searchString).subscribe((res: any) => {
+      if (res.code == 200) {
+        var companyList = res.object?.content;
+        if (companyList.length > 0) {
+          companyList = companyList.filter((x: any) => x.ownerDetails?.id == this.ownerId);
+          this.companyList = companyList;
+        }
+      }
+      this.commonService.isLoading = false;
+    });
+  }
+
+  onChangeSearch(event: any) {
+    var searchString = event;
+    if (searchString != '') {
+      this.getCompanyListByName(searchString);
+    }
+    else {
+      this.getCompanyListByOwnerId(this.ownerId);
+    }
   }
 }

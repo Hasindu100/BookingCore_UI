@@ -2,11 +2,7 @@
     <div class="company-dashboard">
         <div class="company-menu-bar">
             <div class="browse">
-               <input type="search" placeholder="Search" class="record-search">
-               <label>Sort by</label>
-                <select class="drp-sort" name="" id="">
-                    <option value="">Name</option>
-                </select>
+               <input type="search" placeholder="Search" class="record-search" [(ngModel)]="searchString" (ngModelChange)="onChangeSearch($event)">
             </div>
         </div>
 

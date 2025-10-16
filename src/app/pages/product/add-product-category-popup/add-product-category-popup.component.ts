@@ -4,6 +4,7 @@ import * as $ from 'jquery';
 import { ProductService } from '../services/product.service';
 import { ToastrService } from 'ngx-toastr';
 import { CommonService } from 'src/app/shared/services/common.service';
+import { OutletService } from '../../outlet/services/outlet.service';
 
 @Component({
   selector: 'app-add-product-category-popup',
@@ -22,6 +23,7 @@ export class AddProductCategoryPopupComponent {
   constructor(private dialogRef: DialogRef,
     private productService: ProductService,
     private commonService: CommonService,
+    private outletService: OutletService,
     private toastr: ToastrService) {}
 
   openMyComputer() {
@@ -65,7 +67,10 @@ export class AddProductCategoryPopupComponent {
       "name": this.categoryName,
       "image": this.categoryImage,
       "isVerified": true,
-      "isActive": true
+      "isActive": true,
+      "companyType": {
+        "id": this.outletService.companyTypeId
+      }
     }
 
     this.productService.saveProductCategory(categoryDetails).subscribe((res: any) => {

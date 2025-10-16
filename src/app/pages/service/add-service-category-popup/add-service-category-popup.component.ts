@@ -4,6 +4,7 @@ import { DialogRef } from 'src/app/shared/dialog/dialog-ref';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { ShopService } from '../services/shop.service';
 import * as $ from 'jquery';
+import { OutletService } from '../../outlet/services/outlet.service';
 
 @Component({
   selector: 'app-add-service-category-popup',
@@ -22,6 +23,7 @@ export class AddServiceCategoryPopupComponent {
   constructor(private dialogRef: DialogRef,
     private shopService: ShopService,
     private commonService: CommonService,
+    private outletService: OutletService,
     private toastr: ToastrService) {}
 
   openMyComputer() {
@@ -62,7 +64,10 @@ export class AddServiceCategoryPopupComponent {
       "name": this.categoryName,
       "image": this.categoryImage,
       "isVerified": true,
-      "isActive": true
+      "isActive": true,
+      "companyType": {
+        "id": this.outletService.companyTypeId
+      }
     }
 
     this.shopService.saveServiceCategory(categoryDetails).subscribe((res: any) => {

@@ -14,60 +14,43 @@
               <img [src]="getProductImageUrl(image.url)" alt="shoe image" (click)="changeImage(image.url)">
             </div>
           </div>
-          <!-- <div class = "img-select">
-            <div class = "img-item">
-              <img src="../../../../assets/images/bag1.jpg" alt="shoe image" (click)="changeImage('../../../../assets/images/bag1.jpg')">
-            </div>
-            <div class = "img-item">
-              <img src="../../../../assets/images/bag2.jpg" alt="shoe image" (click)="changeImage('../../../../assets/images/bag2.jpg')">
-            </div>
-            <div class = "img-item">
-              <img src="../../../../assets/images/bag3.jpg" alt="shoe image" (click)="changeImage('../../../../assets/images/bag3.jpg')">
-            </div>
-            <div class = "img-item">
-              <img src="../../../../assets/images/bag4.jpg" alt ="shoe image" (click)="changeImage('../../../../assets/images/bag4.jpg')">
-            </div>
-          </div> -->
         </div>
         <!-- card right -->
         <div class = "product-content">
-          <h2 class = "product-title">{{product.name}}</h2>
-          <div class = "product-rating">
-            <i class = "fas fa-star"></i>
-            <i class = "fas fa-star"></i>
-            <i class = "fas fa-star"></i>
-            <i class = "fas fa-star"></i>
-            <i class = "fas fa-star-half-alt"></i>
-          </div>
-  
-          <div class = "product-price">
-              <p class="discount">{{discountPCT}}% OFF (Discount)</p>
-              <p>Price: <span *ngIf="isDiscountExist" class="last-price">LKR {{productGrossAmt | number: '1.2-2'}}</span><span class="new-price">LKR {{productNetAmt | number: '1.2-2'}}</span></p>
-          </div>
-  
-          <div class = "product-detail">
-            <p>{{product.description}}</p>
-            <div class="specification">
-              <h4>Specifications</h4>
-              <ul>
-                  <div class="row">
-                      <div class="col-md-6">
-                          <li>Place Of Origin : <span>Sri Lanka</span></li>
-                          <li>Manufacturer: <span>{{product.manufacturer}}</span></li>
-                          <li>Features: <div class="features"><span>feature1</span><span>feature2</span></div></li>
-                      </div>
-                      <div class="col-md-6">
-                          <li>Brand: <span>{{product.brand}}</span></li>
-                          <li>Materials: <div class="materials"><span>material1</span><span>material2</span></div>
-                          </li>
-                      </div>
-                  </div>
-                </ul>
+          <div>
+            <h2 class = "product-title">{{product.name}}</h2>
+            <div class = "product-rating">
+              <i class = "fas fa-star"></i>
+              <i class = "fas fa-star"></i>
+              <i class = "fas fa-star"></i>
+              <i class = "fas fa-star"></i>
+              <i class = "fas fa-star-half-alt"></i>
             </div>
-            <div class="functionality">
-              <h4>Product Functionality</h4>
-              <p>Establishment that offers professional hair styling services for men and women. Hair
-                  salons offer hair services including professional hair styling.</p>
+    
+            <div class = "product-price">
+                <p class="discount">{{discountPCT}}% OFF (Discount)</p>
+                <p>Price: <span *ngIf="isDiscountExist" class="last-price">LKR {{productGrossAmt | number: '1.2-2'}}</span><span class="new-price">LKR {{productNetAmt | number: '1.2-2'}}</span></p>
+            </div>
+    
+            <div class = "product-detail">
+              <p>{{product.description}}</p>
+              <div class="specification">
+                <h4>Specifications</h4>
+                <ul>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <li>Place Of Origin : <span>Sri Lanka</span></li>
+                            <li>Manufacturer: <span>{{product.manufacturer}}</span></li>
+                            <li>Features: <div class="features"><span>feature1</span><span>feature2</span></div></li>
+                        </div>
+                        <div class="col-md-6">
+                            <li>Brand: <span>{{product.brand}}</span></li>
+                            <li>Materials: <div class="materials"><span>material1</span><span>material2</span></div>
+                            </li>
+                        </div>
+                    </div>
+                  </ul>
+              </div>
             </div>
           </div>
         </div>
@@ -82,7 +65,7 @@
       </div>
 
       <div class="pricing-details table-responsive">
-        <div class="pricing-data-section" *ngFor="let itemPrice of product.itemPrices">
+        <div class="pricing-data-section" *ngFor="let itemPrice of product?.itemPrices">
           <div class="pricing-item">
             <label>Unit Price</label>
             <span>LKR {{itemPrice.price}}</span>

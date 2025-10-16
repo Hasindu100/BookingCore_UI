@@ -159,9 +159,10 @@ img{
 
 @media screen and (min-width: 992px){
     .card{
+        width: 100%;
         display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        grid-gap: 1.5rem;
+        //grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: 40% 60%;
     }
     .card-wrapper{
         display: flex;

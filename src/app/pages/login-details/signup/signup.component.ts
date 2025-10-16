@@ -82,7 +82,7 @@ export class SignupComponent implements OnInit {
   getUserTypes() {
     this.loginService.getLoginUserTypes().subscribe((res: any) => {
       if (res.code == 200) {
-        this.userTypeList = res.object.filter((x: any) => x.id == 1 || x.id == 4 || x.id == 3);
+        this.userTypeList = res.object.filter((x: any) => x.id == 1 || x.id == 4);
       }
     })
   }

@@ -86,6 +86,10 @@ export class AddPackageComponent implements OnInit {
   get LineDiscount() {
     return this.packageDetails.get('lineDiscount');
   }
+
+  get PackageStatus() {
+    return this.packageDetails.get('packageStatus');
+  }
   //#endregion
 
   createFormGroup() {
@@ -96,7 +100,8 @@ export class AddPackageComponent implements OnInit {
       duration: ['', Validators.required],
       packageName: ['', Validators.required],
       description: ['', Validators.required],
-      lineDiscount: ['']
+      lineDiscount: [''],
+      packageStatus: ['Online']
     });
   }
 
@@ -182,6 +187,7 @@ export class AddPackageComponent implements OnInit {
           this.Duration.setValue(data.duration);
           this.PackageName.setValue(data.name);
           this.Description.setValue(data.description);
+          this.PackageStatus.setValue(data.isActive ? 'Online' : 'Offline');
         }
       }
     })
@@ -360,6 +366,9 @@ export class AddPackageComponent implements OnInit {
               if (this.fileData.length == count) {
                 this.savePackage();
               }
+            }
+            else {
+              this.commonService.isLoading = false;
             }
           });
         }

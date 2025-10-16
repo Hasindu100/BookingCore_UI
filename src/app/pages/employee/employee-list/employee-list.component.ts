@@ -44,12 +44,9 @@ export class EmployeeListComponent implements OnInit {
       if (res.code == 200) {
         this.employeeList = res.object.content;
         this.totalElements = res.object.totalElements;
-        this.commonService.isLoading = false;
       }
-      else {
-        
-      }
-    })
+      this.commonService.isLoading = false;
+    });
   }
   
   checkAllCheckBox(ev: any) {
@@ -78,25 +75,25 @@ export class EmployeeListComponent implements OnInit {
 
   removeEmployee(employeeId: number) {
     this.commonService.isLoading = true;
-    this.employeeService.removeEmployee(employeeId).subscribe((res: any) => {
+    this.employeeService.disableEmployee(employeeId).subscribe((res: any) => {
       if (res.code == 200) {
-        this.commonService.isLoading = false;
         this.isDisplayWarningPopup = false;
         this.toastr.success("Employee removed successfully");
         this.getEmployeeByCompanyId(this.companyId, this.pageSize, this.pageNumber - 1);
       }
-    })
+      this.commonService.isLoading = false;
+    });
   }
 
   enableEmployee(employeeId: number) {
     this.commonService.isLoading = true;
     this.employeeService.enableEmployee(employeeId).subscribe((res: any) => {
       if (res.code == 200) {
-        this.commonService.isLoading = false;
         this.isDisplayWarningPopup = false;
         this.toastr.success("Employee enabled successfully");
         this.getEmployeeByCompanyId(this.companyId, this.pageSize, this.pageNumber - 1);
       }
+      this.commonService.isLoading = false;
     });
   }
 

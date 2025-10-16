@@ -306,7 +306,7 @@ span:not(.root).selected::before {
     position: absolute;
 }
 
-.active-link {
+.active-link, .active-sub-link {
     color: var(--add-btn-color) !important;
 }
 
