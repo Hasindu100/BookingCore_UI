@@ -154,7 +154,7 @@ export class AddCompany2Component implements OnInit {
               url: ''
             }
             this.imageDataList.push(image);
-            this.imageUrls.push(this.commonService.mediaUrl + data.logo);
+            this.imageUrls.push(this.commonService.mediaUrl + `${this.loginId}/${data.logo}`);
 
             this.companyLogo = data.logo;
           }
@@ -177,9 +177,10 @@ export class AddCompany2Component implements OnInit {
     }
     else {
       if (this.isAddNewFile) {
+        this.formData.append('folder', this.loginId.toString());
         this.commonService.saveMedia(this.loginId, this.formData).subscribe((res: any) => {
-          if (res.code == 200) {
-            this.companyLogo = res.object;
+          if (res.success == true) {
+            this.companyLogo = this.loginId + "/" + res.file_name;
             this.saveCompany();
           }
         });
@@ -242,9 +243,10 @@ export class AddCompany2Component implements OnInit {
             if (this.isAddNewFile) {
               this.formData = new FormData();
               this.formData.append('file', this.fileData[0]);
+              this.formData.append('folder', this.loginId.toString());
               this.commonService.saveMedia(this.loginId, this.formData).subscribe((res2: any) => {
-                if (res2.code == 200) {
-                  this.companyLogo = res2.object;
+                if (res2.success == true) {
+                  this.companyLogo = this.loginId + "/" + res2.file_name;
                   this.saveCompany();
                 }
               });
@@ -287,6 +289,7 @@ export class AddCompany2Component implements OnInit {
         var file = event.target.files[i];
         this.fileData.push(file);
         this.formData.append('file', file);
+        this.formData.append('folder', this.loginId.toString());
         var filePath = event.target.files[i].name;
 
         var reader = new FileReader();

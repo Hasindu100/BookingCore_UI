@@ -142,7 +142,7 @@ export class AddEmployeeComponent implements OnInit {
           this.generalInformation.controls['publicName'].setValue(data.publicName);
           this.generalInformation.controls['nic'].setValue(data.nic);
           this.generalInformation.controls['currentAddress'].setValue(data.address);
-          this.generalInformation.controls['mobile'].setValue("0" + data.mobileNumber);
+          this.generalInformation.controls['mobile'].setValue(data.mobileNumber);
           this.generalInformation.controls['email'].setValue(data.email);
           this.loginDetails.controls['employeeEmail'].setValue(data.email);
           this.loginDetails.controls['employeeEmail'].disable();
@@ -192,6 +192,7 @@ export class AddEmployeeComponent implements OnInit {
         var file = event.target.files[i];
         this.fileData.push(file);
         this.formData.append('file', file);
+        this.formData.append('folder', this.loginId.toString());
         var filePath = event.target.files[i].name;
 
         var reader = new FileReader();
@@ -232,9 +233,10 @@ export class AddEmployeeComponent implements OnInit {
       if (this.isAddNewFile) {
         this.formData = new FormData();
         this.formData.append('file', this.fileData[0]);
+        this.formData.append('folder', this.loginId.toString());
         this.commonService.saveMedia(this.loginId, this.formData).subscribe((res: any) => {
-          if (res.code == 200) {
-            this.profilePicture = res.object;
+          if (res.success == true) {
+            this.profilePicture = this.loginId + "/" + res.file_name;
             this.updateEmployee();
           }
           else {
@@ -323,11 +325,11 @@ export class AddEmployeeComponent implements OnInit {
       else if (res.message == 'No User for This email') {
         this.loginService.saveLoginSub(loginDetails).subscribe((res: any) => {
           if (res.code == 200) {
-            this.employeeLoginId = res.object.id;;
+            this.employeeLoginId = res.object.id;
             if (this.isAddNewFile) {
               this.commonService.saveMedia(this.loginId, this.formData).subscribe((res2: any) => {
-                if (res2.code == 200) {
-                  this.profilePicture = res2.object;
+                if (res2.success == true) {
+                  this.profilePicture = this.loginId + "/" + res2.file_name;
                   this.saveEmployee();
                 }
               });

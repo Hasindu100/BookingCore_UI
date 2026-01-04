@@ -7,12 +7,14 @@ import { environment } from 'src/environment';
   providedIn: 'root'
 })
 export class CommonService {
-  baseUrl = environment.apiUrl;
-  mediaUrl = environment.apiUrl + "media/";
   isLoading: boolean = false;
   companyId: number = 0;
   companyName: string = '';
   user: any;
+  loginId: number = 0;
+
+  baseUrl = environment.apiUrl;
+  mediaUrl = environment.imageUploadUrl;
 
   constructor(private http: HttpClient) { }
 
@@ -32,20 +34,20 @@ export class CommonService {
   }
 
   saveMedia(loginId: number, formData: any) {
-    // let url = environment.imageUploadUrl + "upload.php";
-    // let headers = new HttpHeaders();
-    // /** In Angular 5, including the header Content-Type can invalidate your request */
-    // headers.append('Content-Type', 'multipart/form-data');
-    // headers.append('Accept', 'application/json');
-    // headers.append('Custom-Header', 'value');
-    // return this.http.post(url, formData , {'headers': headers});
-
-    let url = environment.apiUrl + "media/save?loginId=" + loginId;
+    let url = environment.imageUploadUrl + "upload.php";
     let headers = new HttpHeaders();
     /** In Angular 5, including the header Content-Type can invalidate your request */
     headers.append('Content-Type', 'multipart/form-data');
     headers.append('Accept', 'application/json');
+    headers.append('Custom-Header', 'value');
     return this.http.post(url, formData , {'headers': headers});
+
+    // let url = environment.apiUrl + "media/save?loginId=" + loginId;
+    // let headers = new HttpHeaders();
+    // /** In Angular 5, including the header Content-Type can invalidate your request */
+    // headers.append('Content-Type', 'multipart/form-data');
+    // headers.append('Accept', 'application/json');
+    // return this.http.post(url, formData , {'headers': headers});
   }
 
   getUserDetailsByUserId(userId: number) {

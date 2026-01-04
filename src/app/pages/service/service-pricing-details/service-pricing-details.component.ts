@@ -190,8 +190,8 @@ export class ServicePricingDetailsComponent {
         var priceData = res.object?.fetcherPrices.find((x: any) => x.id == this.itemPriceId);
         if (priceData != null && priceData != undefined) {
           this.setFormData(priceData);
-          this.discountList = priceData?.discounts;
-          this.bonusList = priceData?.bonuses;
+          this.discountList = priceData?.discounts.filter((d: any) => d.isDeleted == false);
+          this.bonusList = priceData?.bonuses.filter((b: any) => b.isDeleted == false);
         }
       }
     })
@@ -247,11 +247,12 @@ export class ServicePricingDetailsComponent {
         else {
           this.priceFormData = new FormData();
           this.priceFormData.append('file', file);
+          this.priceFormData.append('folder', this.loginId.toString());
           this.commonService.saveMedia(this.loginId, this.priceFormData).subscribe((res: any) => {
-            if (res.code == 200) {
+            if (res.success == true) {
               var media = {
                 name: file.name,
-                url: res.object,
+                url: this.loginId + "/" + res.file_name,
                 isActive: true,
                 mediaType: {
                   id: file.type.split("/")[0] == "image" ? 1 : 2

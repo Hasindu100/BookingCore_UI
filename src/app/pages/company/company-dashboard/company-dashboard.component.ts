@@ -12,6 +12,7 @@ export class CompanyDashboardComponent implements OnInit {
   user: any;
   ownerId: number = 0;
   companyList: any[] = [];
+  notFilteredCompanyList: any[] = [];
   searchString: string = '';
 
   constructor(private companyService: CompanyService,
@@ -33,7 +34,7 @@ export class CompanyDashboardComponent implements OnInit {
     this.commonService.isLoading = true;
     this.companyService.getCompanyDetialsByOwnerId(ownerId).subscribe((res: any) => {
       if (res.code == 200) {
-        this.companyList = res.object;
+        this.notFilteredCompanyList = this.companyList = res.object;
       }
       this.commonService.isLoading = false;
     });
@@ -56,10 +57,12 @@ export class CompanyDashboardComponent implements OnInit {
   onChangeSearch(event: any) {
     var searchString = event;
     if (searchString != '') {
-      this.getCompanyListByName(searchString);
+      this.companyList = this.notFilteredCompanyList.filter(x => x.name.toLowerCase().includes(searchString.toLowerCase()));
+      //this.getCompanyListByName(searchString);
     }
     else {
-      this.getCompanyListByOwnerId(this.ownerId);
+      this.companyList =  this.notFilteredCompanyList;
+      //this.getCompanyListByOwnerId(this.ownerId);
     }
   }
 }

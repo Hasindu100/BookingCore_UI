@@ -205,8 +205,8 @@ export class EditProductPricingDetailsComponent implements OnInit {
         var priceData = res.object?.itemPrices.find((x: any) => x.id == this.itemPriceId);
         if (priceData != null && priceData != undefined) {
           this.setFormData(priceData);
-          this.discountList = priceData?.discounts;
-          this.bonusList = priceData?.bonuses;
+          this.discountList = priceData?.discounts.filter((d: any) => d.isDeleted == false);
+          this.bonusList = priceData?.bonuses.filter((b: any) => b.isDeleted == false);
         }
       }
     })
@@ -272,12 +272,12 @@ export class EditProductPricingDetailsComponent implements OnInit {
         else {
           this.priceFormData = new FormData();
           this.priceFormData.append('file', file);
-          //this.priceFormData.append('folder', this.loginId.toString());
+          this.priceFormData.append('folder', this.loginId.toString());
           this.commonService.saveMedia(this.loginId, this.priceFormData).subscribe((res: any) => {
-            if (res.code == 200) {
+            if (res.success == true) {
               var media = {
                 name: file.name,
-                url: res.object,
+                url: this.loginId + "/" + res.file_name,
                 isActive: true,
                 mediaType: {
                   id: file.type.split("/")[0] == "image" ? 1 : 2
@@ -288,6 +288,9 @@ export class EditProductPricingDetailsComponent implements OnInit {
               if (newlyAddedFileLength == count) {
                 this.savePriceDetails();
               }
+            }
+            else {
+              this.commonService.isLoading = true;
             }
           });
         }
@@ -343,11 +346,12 @@ export class EditProductPricingDetailsComponent implements OnInit {
         else {
           this.discountFormData = new FormData();
           this.discountFormData.append('file', file);
+          this.discountFormData.append('folder', this.loginId.toString());
           this.commonService.saveMedia(this.loginId, this.discountFormData).subscribe((res: any) => {
-            if (res.code == 200) {
+            if (res.success == true) {
               var media = {
                 name: file.name,
-                url: res.object,
+                url: this.loginId + "/" + res.file_name,
                 isActive: true,
                 mediaType: {
                   id: file.type.split("/")[0] == "image" ? 1 : 2

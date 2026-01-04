@@ -504,11 +504,12 @@ export class AddServiceComponent implements OnInit {
         else {
           this.formData = new FormData();
           this.formData.append('file', file);
+          this.formData.append('folder', this.loginId.toString());
           this.commonService.saveMedia(this.loginId, this.formData).subscribe((res: any) => {
-            if (res.code == 200) {
+            if (res.success == true) {
               var media = {
                 name: file.name,
-                url: res.object,
+                url: this.loginId + "/" + res.file_name,
                 isActive: true,
                 mediaType: {
                   id: file.type.split("/")[0] == "image" ? 1 : 2
@@ -584,11 +585,12 @@ export class AddServiceComponent implements OnInit {
         else {
           this.priceFormData = new FormData();
           this.priceFormData.append('file', file);
+          this.formData.append('folder', this.loginId.toString());
           this.commonService.saveMedia(this.loginId, this.priceFormData).subscribe((res: any) => {
-            if (res.code == 200) {
+            if (res.success == true) {
               var media = {
                 name: file.name,
-                url: res.object,
+                url: this.loginId + "/" + res.file_name,
                 isActive: true,
                 mediaType: {
                   id: file.type.split("/")[0] == "image" ? 1 : 2

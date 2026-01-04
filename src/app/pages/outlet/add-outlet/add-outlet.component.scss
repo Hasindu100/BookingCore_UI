@@ -177,6 +177,17 @@
         float: right;
         margin-top: 10px;
     }
+    .btn-location {
+        width: 100%;
+        font-size: 14px;
+        color: var(--inner-btn-color);
+        background-color: rgb(38, 72, 243);
+        margin-top: 10px;
+
+        i {
+            margin-left: 10px;
+        }
+    }
 }
 
 .uploaded-image {
