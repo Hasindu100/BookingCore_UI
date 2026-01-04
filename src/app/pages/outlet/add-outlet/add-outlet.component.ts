@@ -333,11 +333,12 @@ latitude: number | null = null;
         else {
           this.formData = new FormData();
           this.formData.append('file', file);
+          this.formData.append('folder', this.loginId.toString());
           this.commonService.saveMedia(this.loginId, this.formData).subscribe((res: any) => {
-            if (res.code == 200) {
+            if (res.success == true) {
               var media = {
                 name: file.name,
-                url: res.object,
+                url: this.loginId + "/" + res.file_name,
                 isActive: true,
                 mediaType: {
                   id: file.type.split("/")[0] == "image" ? 1 : 2
@@ -439,12 +440,14 @@ latitude: number | null = null;
   }
 
   
-getLocation(): void {
+  getLocation(): void {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           this.latitude = position.coords.latitude;
           this.longitude = position.coords.longitude;
+          this.Latitude.setValue(this.latitude);
+          this.Longitude.setValue(this.longitude);
         },
         (error) => {
           console.error('Error getting location:', error);

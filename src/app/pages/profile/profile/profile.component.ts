@@ -122,6 +122,13 @@ export class ProfileComponent implements OnInit, AfterViewInit, OnDestroy {
       for(let i=0; i < event.target.files.length; i++) {
         var file = event.target.files[i];
         this.formData.append('file', file);
+        this.formData.append('folder', this.loginId.toString());
+
+        var reader = new FileReader();
+        reader.readAsDataURL(event.target.files[i]);
+        reader.onload=(events:any)=>{
+          this.profileImageUrl = events.target.result;
+        }
       }
     }
   }
@@ -138,8 +145,8 @@ export class ProfileComponent implements OnInit, AfterViewInit, OnDestroy {
 
   updateProfilePicture() {
     this.commonService.saveMedia(this.loginId, this.formData).subscribe((res: any) => {
-      if (res.code == 200) {
-        this.profileImage = res.object;
+      if (res.success == true) {
+        this.profileImage = this.loginId + "/" + res.file_name;
         this.updateUserData();
       } else {
         this.toastrService.error("Something went wrong.");

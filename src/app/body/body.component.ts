@@ -25,6 +25,7 @@ export class BodyComponent implements OnInit {
 
   ngOnInit(): void {
     this.user = this.commonService.user = this.loginService.getUser();
+    this.commonService.loginId = this.user.loginId;
     let userType = this.user == null ? 0 : this.user.userTypeId;
     let userId = this.user == null ? 0 : this.user.userId;
     if (userType == 4) {

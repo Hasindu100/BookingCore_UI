@@ -96,6 +96,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-6 group">
+                                    <label>City</label><br>
                                     <ng-select
                                         [ngClass]="{'is-invalid' : City.touched && City.invalid}"
                                         name="city"
@@ -107,6 +108,13 @@
                                     <div *ngIf="City.touched && City.invalid" class="invalid-tooltip">
                                         <div *ngIf="City.errors?.min">Please select city.</div>
                                     </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label></label><br />
+                                    <!-- location.component.html -->
+                                    <button class="btn btn-location" (click)="getLocation()">Click here to get longitude & latitude values of your location
+                                        <i class="fa fa-map-marker"></i>
+                                    </button>
                                 </div>
                             </div>
                             <div class="row">
@@ -225,17 +233,6 @@
                                         <div *ngIf="MultipleEmployeeSelectionEnabled.errors?.required">MultipleEmployeeSelectionEnabled is required.</div>
                                     </div>
                                 </div>
-                            </div>
-
-                            <div class="row">
-                                
-                                <!-- location.component.html -->
-                                <button (click)="getLocation()">Get Location</button>
-                                <p *ngIf="latitude && longitude">
-                                Latitude: {{ latitude }} <br>
-                                Longitude: {{ longitude }}
-                                </p>
-
                             </div>
 
                             <div class="row">
@@ -417,12 +414,6 @@
                                             Offline
                                         </label>
                                     </div>
-                                    <div class="radio-btn">
-                                        <input type="radio" class="form-check-input" id="draft" name="status" value="draft">
-                                        <label class="form-check-label" for="draft">
-                                            Draft
-                                        </label>
-                                    </div>
                                     
                                 </div>
                             </div>
@@ -491,12 +482,6 @@
                                             <input type="radio" class="form-check-input" id="offline" name="status" value="offline">
                                             <label class="form-check-label" for="offline">
                                                 Deactive
-                                            </label>
-                                        </div>
-                                        <div class="radio-btn">
-                                            <input type="radio" class="form-check-input" id="draft" name="status" value="draft">
-                                            <label class="form-check-label" for="draft">
-                                                Draft
                                             </label>
                                         </div>
                                         

@@ -3,12 +3,42 @@
         <div class="packages table-responsive">
             <div class="package-menu-bar">
                 <div class="browse">
-                    <input type="search" placeholder="Search" class="record-search">
+                    <input type="search" placeholder="Search" class="record-search" [(ngModel)]="searchString" (ngModelChange)="onChangeSearch($event)">
+                </div>
+                <div class="filter-section">
+                    <label>Province</label>
+                    <select 
+                        class="drp-sort" 
+                        name="" 
+                        id="" 
+                        [(ngModel)]="provinceId"
+                        (change)="onChangeProvince()">
+                        <option value="0">Choose</option>
+                        <option *ngFor="let province of provinceList" [value]="province.id">{{province.name}}</option>
+                    </select>
+                </div>
+                <div class="filter-section">
+                    <label>District</label>
+                    <select 
+                        class="drp-sort" 
+                        name="" 
+                        id=""
+                        [(ngModel)]="districtId"
+                        (change)="onChangeDistrict()">
+                        <option value="0">Choose</option>
+                        <option *ngFor="let district of districtList" [value]="district.id">{{district.name}}</option>
+                    </select>
                 </div>
                 <div class="filter-section">
                     <label>City</label>
-                    <select class="drp-sort" name="" id="">
-                        <option value="">Choose</option>
+                    <select 
+                        class="drp-sort" 
+                        name="" 
+                        id=""
+                        [(ngModel)]="cityId"
+                        (change)="onChangeCity()">
+                        <option value="0">Choose</option>
+                        <option *ngFor="let city of cityList" [value]="city.id">{{city.name}}</option>
                     </select>
                 </div>
                 <div class="btn-section">
@@ -36,21 +66,21 @@
                         <div class="row">
                             <div class="col-md-6 details">
                                 <label>Category</label><br>
-                                <span>Fashion Accessories</span>
+                                <span>NA</span>
                             </div>
                             <div class="col-md-6 details">
                                 <label>Rating</label><br>
-                                <span>4.9 (10k)</span>
+                                <span>NA</span>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6 details">
                                 <label>Orders</label><br>
-                                <span>458</span>
+                                <span>NA</span>
                             </div>
                             <div class="col-md-6 details">
                                 <label>Employees</label><br>
-                                <span>8</span>
+                                <span>NA</span>
                             </div>
                         </div>
 
@@ -58,31 +88,31 @@
                         <div class="row" style="margin-bottom: 20px;">
                             <div class="col-md-6 details">
                                 <label>Active Products</label><br>
-                                <span>4860</span>
+                                <span>NA</span>
                             </div>
                             <div class="col-md-6 details">
                                 <label>Deactive Products</label><br>
-                                <span>56</span>
+                                <span>NA</span>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6 details">
                                 <label>Active Services</label><br>
-                                <span>17</span>
+                                <span>NA</span>
                             </div>
                             <div class="col-md-6 details">
                                 <label>Deactive Services</label><br>
-                                <span>2</span>
+                                <span>NA</span>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6 details">
                                 <label>Active Packages</label><br>
-                                <span>23</span>
+                                <span>NA</span>
                             </div>
                             <div class="col-md-6 details">
                                 <label>Deactive Packages</label><br>
-                                <span>23</span>
+                                <span>NA</span>
                             </div>
                         </div>
                     </div>

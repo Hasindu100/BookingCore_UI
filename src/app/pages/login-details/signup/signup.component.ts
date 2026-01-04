@@ -171,10 +171,11 @@ export class SignupComponent implements OnInit {
     this.loginService.saveLogin(loginDetails, userTypeId).subscribe((res: any) => {
       if (res.code == 200) {
         this.loginId = res.object.id;
+        this.formData.append('folder', this.loginId.toString());
         this.commonService.saveMedia(this.loginId, this.formData).subscribe({
           next: (res: any) => {
-            if (res.code == 200) {
-              this.profileImage = res.object;
+            if (res.success == true) {
+              this.profileImage = this.loginId + "/" + res.file_name;
               this.saveUserDetails();
             }
             else {

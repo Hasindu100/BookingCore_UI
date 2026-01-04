@@ -34,6 +34,7 @@ export class AddProductCategoryPopupComponent {
     this.isAddNewFile = true;
     var file = event.target.files[0];
     this.formData.append('file', file);
+    this.formData.append('folder', this.loginId.toString());
 
     var id = 0;
     var file = event.target.files[0];
@@ -51,8 +52,8 @@ export class AddProductCategoryPopupComponent {
     this.commonService.isLoading = true;
     if (this.isAddNewFile) {
       this.commonService.saveMedia(this.loginId, this.formData).subscribe((res: any) => {
-        if (res.code == 200) {
-          this.categoryImage = res.object;
+        if (res.success == true) {
+          this.categoryImage = this.loginId + "/" + res.file_name;
           this.saveCategory();
         }
       });
